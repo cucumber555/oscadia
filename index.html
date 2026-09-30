@@ -6,7 +6,8 @@
     name="viewport"
     content="width=device-width, initial-scale=1, viewport-fit=cover"
 >
-<link rel="manifest" href="/oscadia/public/apps/oscadia/manifest.json">
+<!-- manifest -->
+<link rel="manifest" href="/public/apps/oscadia/manifest.json">
 <meta name="theme-color" content="#0b4fd8">
 <title>OSCADIA</title>
 
@@ -348,7 +349,7 @@ main {
 
     <div
         class="logo"
-        onclick="location.href='index.html'"
+        onclick="location.href='/'"
     >
         OSCADIA
     </div>
@@ -809,9 +810,10 @@ addressInput.addEventListener(
 <script>
 if ("serviceWorker" in navigator) {
     window.addEventListener("load", () => {
-        navigator.serviceWorker.register(
-            "/oscadia/public/apps/oscadia/sw.js"
-        ).then(registration => {
+        // Service Worker
+navigator.serviceWorker.register(
+    "/public/apps/oscadia/sw.js"
+).then(registration => {
             console.log("OSCADIA Service Worker registered:", registration.scope);
         }).catch(error => {
             console.error("OSCADIA Service Worker registration failed:", error);
