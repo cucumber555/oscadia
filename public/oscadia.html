@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
+<link rel="manifest" href="/oscadia/public/apps/oscadia/manifest.json">
+<meta name="theme-color" content="#0b4fd8">
+<title>OSCADIA</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    font-family: Arial, "Noto Sans KR", sans-serif;
+    color: #202124;
+    background: #fff;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 10px 28px;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+}
+
+.logo {
+    flex: 0 0 auto;
+    font-size: 25px;
+    font-weight: 700;
+    letter-spacing: -1px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* =========================
+   ADDRESS BAR
+========================= */
+
+.os-cadia-address-bar {
+    flex: 1;
+    min-width: 0;
+    max-width: 600px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.os-cadia-address-bar input {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    height: 40px;
+    border: 1px solid #dfe1e5;
+    border-radius: 20px;
+    padding: 0 15px;
+    outline: none;
+    font-size: 14px;
+    color: #202124;
+    background: #f8f9fa;
+}
+
+.os-cadia-address-bar input:focus {
+    border-color: #aaa;
+    background: #fff;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, .08);
+}
+
+.os-cadia-address-bar button {
+    flex: 0 0 auto;
+    height: 40px;
+    padding: 0 15px;
+    border: 0;
+    border-radius: 20px;
+    background: #222;
+    color: #fff;
+    cursor: pointer;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.os-cadia-address-bar button:hover {
+    background: #444;
+}
+
+/* =========================
+   NAV
+========================= */
+
+nav {
+    flex: 0 0 auto;
+    display: flex;
+    gap: 8px;
+}
+
+nav button {
+    border: 0;
+    background: #fff;
+    padding: 9px 13px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+nav button:hover {
+    background: #f1f3f4;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+main {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 120px 20px 50px;
+}
+
+.brand {
+    text-align: center;
+    font-size: 58px;
+    font-weight: 700;
+    letter-spacing: -3px;
+    margin-bottom: 35px;
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+.search-box {
+    position: relative;
+    width: min(680px, 100%);
+    margin: 0 auto;
+}
+
+.search-box input {
+    width: 100%;
+    height: 55px;
+    border: 1px solid #dfe1e5;
+    border-radius: 28px;
+    padding: 0 60px 0 22px;
+    font-size: 17px;
+    outline: none;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, .08);
+}
+
+.search-box input:focus {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .15);
+}
+
+.search-button {
+    position: absolute;
+    right: 7px;
+    top: 7px;
+    width: 41px;
+    height: 41px;
+    border: 0;
+    border-radius: 50%;
+    background: #222;
+    color: #fff;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.search-button:hover {
+    background: #444;
+}
+
+/* =========================
+   RESULTS
+========================= */
+
+.results {
+    margin-top: 55px;
+}
+
+.info {
+    color: #777;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.result {
+    padding: 17px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.result a {
+    color: #174ea6;
+    text-decoration: none;
+}
+
+.result a:hover {
+    text-decoration: underline;
+}
+
+.result-title {
+    font-size: 19px;
+    margin-bottom: 6px;
+    word-break: break-word;
+}
+
+.result-url {
+    color: #188038;
+    font-size: 13px;
+    margin-bottom: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.result-description {
+    color: #5f6368;
+    font-size: 14px;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+.empty {
+    text-align: center;
+    padding: 50px 10px;
+    color: #777;
+}
+
+.loading {
+    text-align: center;
+    color: #777;
+    padding: 50px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
+
+    header {
+        min-height: auto;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 12px 15px;
+    }
+
+    .logo {
+        font-size: 22px;
+    }
+
+    .os-cadia-address-bar {
+        order: 3;
+        flex-basis: 100%;
+        max-width: none;
+    }
+
+    nav {
+        margin-left: auto;
+    }
+
+    nav button {
+        padding: 8px 11px;
+    }
+
+    main {
+        padding: 75px 15px 40px;
+    }
+
+    .brand {
+        font-size: 45px;
+        letter-spacing: -2px;
+        margin-bottom: 28px;
+    }
+
+    .search-box input {
+        height: 52px;
+        font-size: 16px;
+        padding-left: 18px;
+        padding-right: 58px;
+    }
+
+    .search-button {
+        width: 38px;
+        height: 38px;
+        right: 7px;
+        top: 7px;
+    }
+
+    .results {
+        margin-top: 40px;
+    }
+
+    .result {
+        padding: 15px 0;
+    }
+
+    .result-title {
+        font-size: 17px;
+    }
+
+    .result-description {
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 420px) {
+
+    .brand {
+        font-size: 38px;
+    }
+
+    .os-cadia-address-bar input {
+        font-size: 13px;
+    }
+
+    .os-cadia-address-bar button {
+        padding: 0 13px;
+    }
+
+    main {
+        padding-top: 60px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div
+        class="logo"
+        onclick="location.href='oscadia.html'"
+    >
+        OSCADIA
+    </div>
+
+    <div class="os-cadia-address-bar">
+
+        <input
+            id="osAddressInput"
+            type="text"
+            placeholder="웹 주소를 입력하세요"
+            autocomplete="off"
+            spellcheck="false"
+        >
+
+        <button
+            id="osAddressGo"
+            type="button"
+        >
+            이동
+        </button>
+
+    </div>
+
+    <nav>
+
+        <button
+            type="button"
+            onclick="location.href='osmail.html'"
+        >
+            OSmail
+        </button>
+
+    </nav>
+
+</header>
+
+
+<main>
+
+    <div class="brand">
+        OSCADIA
+    </div>
+
+
+    <div class="search-box">
+
+        <input
+            id="query"
+            type="search"
+            placeholder="웹 검색"
+            autocomplete="off"
+        >
+
+        <button
+            class="search-button"
+            type="button"
+            onclick="search()"
+            aria-label="검색"
+        >
+            ⌕
+        </button>
+
+    </div>
+
+
+    <div
+        id="results"
+        class="results"
+    ></div>
+
+</main>
+
+
+<script>
+
+/* =========================
+   OSCADIA API
+========================= */
+
+const OSCADIA_API =
+    "https://oscadia-api.onrender.com";
+
+
+/* =========================
+   SEARCH
+========================= */
+
+const queryInput =
+    document.getElementById("query");
+
+const results =
+    document.getElementById("results");
+
+
+queryInput.addEventListener(
+    "keydown",
+    event => {
+
+        if (event.key === "Enter") {
+            search();
+        }
+
+    }
+);
+
+
+async function search() {
+
+    const q =
+        queryInput.value.trim();
+
+
+    if (!q) {
+
+        results.innerHTML = "";
+
+        return;
+    }
+
+
+    results.innerHTML = `
+        <div class="loading">
+            검색 중...
+        </div>
+    `;
+
+
+    try {
+
+        const response =
+            await fetch(
+                OSCADIA_API +
+                "/api/search?q=" +
+                encodeURIComponent(q)
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Search failed: " +
+                response.status
+            );
+        }
+
+
+        const data =
+            await response.json();
+
+
+        renderResults(data);
+
+
+    } catch (error) {
+
+        console.error(
+            "OSCADIA 검색 오류:",
+            error
+        );
+
+
+        results.innerHTML = `
+            <div class="empty">
+                검색 서버에 연결할 수 없습니다.
+            </div>
+        `;
+    }
+}
+
+
+/* =========================
+   RESULT RENDERING
+========================= */
+
+function renderResults(data) {
+
+    if (
+        !data.results ||
+        data.results.length === 0
+    ) {
+
+        results.innerHTML = `
+            <div class="empty">
+                "${escapeHtml(data.query || "")}"
+                에 대한 검색 결과가 없습니다.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    let html = `
+        <div class="info">
+            검색 결과 ${data.count}개
+        </div>
+    `;
+
+
+    html += data.results
+        .map(page => `
+
+            <div class="result">
+
+                <div class="result-title">
+
+                    <a
+                        href="${escapeAttribute(page.url)}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        ${escapeHtml(
+                            page.title ||
+                            page.url
+                        )}
+                    </a>
+
+                </div>
+
+
+                <div class="result-url">
+                    ${escapeHtml(page.url)}
+                </div>
+
+
+                <div class="result-description">
+                    ${escapeHtml(
+                        page.description ||
+                        makeSnippet(page)
+                    )}
+                </div>
+
+            </div>
+
+        `)
+        .join("");
+
+
+    results.innerHTML = html;
+}
+
+
+function makeSnippet(page) {
+
+    const text =
+        page.description ||
+        page.content ||
+        "";
+
+    return text.slice(0, 180);
+}
+
+
+/* =========================
+   SECURITY
+========================= */
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+}
+
+
+function escapeAttribute(value) {
+
+    return escapeHtml(value);
+}
+
+
+/* =========================
+   ADDRESS BAR
+========================= */
+
+const addressInput =
+    document.getElementById(
+        "osAddressInput"
+    );
+
+const addressGo =
+    document.getElementById(
+        "osAddressGo"
+    );
+
+
+async function goAddress() {
+
+    let value =
+        addressInput.value.trim();
+
+
+    if (!value) {
+        return;
+    }
+
+
+    /*
+       http:// 또는 https://가
+       없으면 https:// 추가
+    */
+
+    if (
+        !/^https?:\/\//i.test(value)
+    ) {
+
+        value =
+            "https://" + value;
+    }
+
+
+    try {
+
+        console.log(
+            "[OSCADIA] 주소 큐 등록:",
+            value
+        );
+
+
+        const response =
+            await fetch(
+                OSCADIA_API +
+                "/api/crawl/queue",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        url: value
+                    })
+                }
+            );
+
+
+        const text =
+            await response.text();
+
+
+        console.log(
+            "[OSCADIA] 서버 응답:",
+            response.status,
+            text
+        );
+
+
+        let data;
+
+
+        try {
+
+            data =
+                JSON.parse(text);
+
+        } catch {
+
+            alert(
+                "서버에서 올바른 응답을 받지 못했습니다.\n\n" +
+                "HTTP 상태: " +
+                response.status +
+                "\n\n" +
+                text
+            );
+
+            return;
+        }
+
+
+        if (
+            !response.ok ||
+            !data.ok
+        ) {
+
+            alert(
+                data.error ||
+                "주소를 처리할 수 없습니다."
+            );
+
+            return;
+        }
+
+
+        /*
+           큐 등록 성공.
+           이제 사용자가 입력한
+           실제 웹사이트로 이동.
+        */
+
+        window.location.href =
+            value;
+
+
+    } catch (error) {
+
+        console.error(
+            "[OSCADIA] 주소 처리 오류:",
+            error
+        );
+
+
+        alert(
+            "주소를 처리하는 중 오류가 발생했습니다.\n\n" +
+            "오류: " +
+            error.message
+        );
+    }
+}
+
+
+/* =========================
+   ADDRESS EVENTS
+========================= */
+
+addressGo.addEventListener(
+    "click",
+    goAddress
+);
+
+
+addressInput.addEventListener(
+    "keydown",
+    event => {
+
+        if (event.key === "Enter") {
+            goAddress();
+        }
+
+    }
+);
+
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register(
+            "/oscadia/public/apps/oscadia/sw.js"
+        ).then(registration => {
+            console.log("OSCADIA Service Worker registered:", registration.scope);
+        }).catch(error => {
+            console.error("OSCADIA Service Worker registration failed:", error);
+        });
+    });
+}
+</script>
+</body>
+</html>

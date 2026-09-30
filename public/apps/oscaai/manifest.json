@@ -1,0 +1,24 @@
+{
+  "id": "/apps/oscaai/",
+  "name": "OscaAI",
+  "short_name": "OscaAI",
+  "description": "OSCADIA AI 서비스",
+  "lang": "ko",
+  "start_url": "/oscaai.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#5636d9",
+  "icons": [
+    {
+      "src": "/icons/oscaai-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/oscaai-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

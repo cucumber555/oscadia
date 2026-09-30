@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="/apps/translate/manifest.json">
+<meta name="theme-color" content="#0b78d0">
+<title>OscaTranslate</title>
+
+<style>
+*{
+    box-sizing:border-box;
+}
+
+html,body{
+    margin:0;
+    min-height:100%;
+}
+
+body{
+    font-family:
+        Arial,
+        "Noto Sans KR",
+        sans-serif;
+    background:#f5f7fb;
+    color:#18212f;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+header{
+    height:70px;
+    background:#fff;
+    border-bottom:1px solid #e5e7eb;
+
+    display:flex;
+    align-items:center;
+
+    padding:0 30px;
+
+    position:sticky;
+    top:0;
+    z-index:20;
+}
+
+.logo{
+    font-size:25px;
+    font-weight:800;
+    letter-spacing:-1px;
+    cursor:pointer;
+}
+
+.logo span{
+    color:#5b67e8;
+}
+
+.headerRight{
+    margin-left:auto;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.headerButton{
+    border:0;
+    background:#f1f3f8;
+    color:#344054;
+
+    padding:9px 14px;
+    border-radius:9px;
+
+    cursor:pointer;
+}
+
+.headerButton:hover{
+    background:#e8ebf2;
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+main{
+    width:min(1200px, calc(100% - 32px));
+    margin:0 auto;
+
+    padding:45px 0 70px;
+}
+
+.hero{
+    text-align:center;
+    margin-bottom:35px;
+}
+
+.hero h1{
+    margin:0;
+
+    font-size:42px;
+    letter-spacing:-2px;
+}
+
+.hero h1 span{
+    color:#5b67e8;
+}
+
+.hero p{
+    margin:12px 0 0;
+
+    color:#6b7280;
+    font-size:16px;
+}
+
+
+/* =========================
+   TRANSLATOR
+========================= */
+
+.translateBox{
+    background:white;
+
+    border:1px solid #e4e7ec;
+    border-radius:20px;
+
+    box-shadow:
+        0 15px 45px rgba(20,30,50,.07);
+
+    overflow:hidden;
+}
+
+
+/* language bar */
+
+.languageBar{
+    display:grid;
+    grid-template-columns:1fr 64px 1fr;
+
+    border-bottom:1px solid #e6e9ef;
+}
+
+.languageSelect{
+    position:relative;
+}
+
+.languageSelect select{
+    width:100%;
+
+    border:0;
+    outline:0;
+
+    background:white;
+
+    padding:17px 20px;
+
+    font-size:15px;
+    font-weight:700;
+
+    cursor:pointer;
+}
+
+.swapButton{
+    border:0;
+    border-left:1px solid #e6e9ef;
+    border-right:1px solid #e6e9ef;
+
+    background:#fafbfc;
+
+    font-size:20px;
+
+    cursor:pointer;
+}
+
+.swapButton:hover{
+    background:#f0f2f6;
+}
+
+
+/* panels */
+
+.panels{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+}
+
+.panel{
+    min-height:390px;
+    position:relative;
+}
+
+.panel + .panel{
+    border-left:1px solid #e6e9ef;
+}
+
+textarea{
+    width:100%;
+    height:340px;
+
+    border:0;
+    outline:0;
+
+    resize:none;
+
+    padding:25px;
+
+    font-size:19px;
+    line-height:1.7;
+
+    font-family:inherit;
+}
+
+textarea::placeholder{
+    color:#a0a7b4;
+}
+
+.result{
+    height:340px;
+
+    padding:25px;
+
+    font-size:19px;
+    line-height:1.7;
+
+    white-space:pre-wrap;
+    word-break:break-word;
+
+    overflow:auto;
+
+    color:#18212f;
+}
+
+.result.empty{
+    color:#a0a7b4;
+}
+
+
+/* bottom controls */
+
+.panelBottom{
+    position:absolute;
+
+    left:0;
+    right:0;
+    bottom:0;
+
+    height:50px;
+
+    display:flex;
+    align-items:center;
+
+    padding:0 15px;
+
+    color:#7b8492;
+    font-size:13px;
+}
+
+.charCount{
+    margin-left:auto;
+}
+
+.controlButton{
+    border:0;
+    background:transparent;
+
+    padding:7px 9px;
+
+    color:#667085;
+
+    border-radius:7px;
+
+    cursor:pointer;
+}
+
+.controlButton:hover{
+    background:#f1f3f7;
+}
+
+
+/* =========================
+   TRANSLATE BUTTON
+========================= */
+
+.translateAction{
+    padding:18px;
+
+    border-top:1px solid #e6e9ef;
+
+    display:flex;
+    justify-content:flex-end;
+}
+
+.translateButton{
+    border:0;
+
+    background:#5b67e8;
+    color:white;
+
+    padding:13px 25px;
+
+    border-radius:10px;
+
+    font-size:15px;
+    font-weight:700;
+
+    cursor:pointer;
+}
+
+.translateButton:hover{
+    background:#4d59d5;
+}
+
+.translateButton:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+
+/* =========================
+   QUICK LANGUAGES
+========================= */
+
+.quick{
+    margin-top:20px;
+
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+
+    justify-content:center;
+}
+
+.quick button{
+    border:1px solid #dfe3ea;
+
+    background:white;
+
+    padding:8px 13px;
+
+    border-radius:20px;
+
+    color:#4b5563;
+
+    cursor:pointer;
+}
+
+.quick button:hover{
+    border-color:#5b67e8;
+    color:#5b67e8;
+}
+
+
+/* =========================
+   INFO
+========================= */
+
+.infoGrid{
+    display:grid;
+
+    grid-template-columns:
+        repeat(3,1fr);
+
+    gap:15px;
+
+    margin-top:30px;
+}
+
+.infoCard{
+    background:white;
+
+    border:1px solid #e5e7eb;
+
+    border-radius:15px;
+
+    padding:22px;
+}
+
+.infoCard h3{
+    margin:0 0 8px;
+    font-size:16px;
+}
+
+.infoCard p{
+    margin:0;
+
+    color:#6b7280;
+
+    line-height:1.6;
+
+    font-size:14px;
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+#toast{
+    position:fixed;
+
+    left:50%;
+    bottom:25px;
+
+    transform:
+        translateX(-50%)
+        translateY(20px);
+
+    background:#111827;
+    color:white;
+
+    padding:12px 18px;
+
+    border-radius:10px;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.2s;
+
+    z-index:100;
+}
+
+#toast.show{
+    opacity:1;
+
+    transform:
+        translateX(-50%)
+        translateY(0);
+}
+
+
+/* =========================
+   LOADING
+========================= */
+
+.loading{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+}
+
+.dot{
+    width:7px;
+    height:7px;
+
+    border-radius:50%;
+
+    background:#7c86ee;
+
+    animation:pulse 1s infinite;
+}
+
+.dot:nth-child(2){
+    animation-delay:.15s;
+}
+
+.dot:nth-child(3){
+    animation-delay:.3s;
+}
+
+@keyframes pulse{
+
+    0%,100%{
+        opacity:.3;
+    }
+
+    50%{
+        opacity:1;
+    }
+}
+
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:800px){
+
+    header{
+        padding:0 16px;
+    }
+
+    main{
+        width:min(100% - 20px, 700px);
+        padding-top:30px;
+    }
+
+    .hero h1{
+        font-size:32px;
+    }
+
+    .hero p{
+        font-size:14px;
+    }
+
+    .languageBar{
+        grid-template-columns:
+            1fr 52px 1fr;
+    }
+
+    .languageSelect select{
+        padding:15px 10px;
+        font-size:14px;
+    }
+
+    .panels{
+        grid-template-columns:1fr;
+    }
+
+    .panel{
+        min-height:320px;
+    }
+
+    .panel + .panel{
+        border-left:0;
+        border-top:1px solid #e6e9ef;
+    }
+
+    textarea,
+    .result{
+        height:270px;
+        font-size:17px;
+        padding:20px;
+    }
+
+    .infoGrid{
+        grid-template-columns:1fr;
+    }
+
+    .headerButton{
+        display:none;
+    }
+}
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+    <div
+        class="logo"
+        onclick="goHome()"
+    >
+        Osca<span>Translate</span>
+    </div>
+
+    <div class="headerRight">
+
+        <button
+            class="headerButton"
+            onclick="clearAll()"
+        >
+            초기화
+        </button>
+
+        <button
+            class="headerButton"
+            onclick="copyResult()"
+        >
+            결과 복사
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<main>
+
+
+    <section class="hero">
+
+        <h1>
+            Osca<span>Translate</span>
+        </h1>
+
+        <p>
+            간단하고 깔끔한 다국어 번역 도구
+        </p>
+
+    </section>
+
+
+    <section class="translateBox">
+
+
+        <!-- 언어 선택 -->
+
+        <div class="languageBar">
+
+            <div class="languageSelect">
+
+                <select id="sourceLanguage">
+
+                    <option value="auto">
+                        언어 자동 감지
+                    </option>
+
+                    <option value="ko">
+                        한국어
+                    </option>
+
+                    <option value="en">
+                        영어
+                    </option>
+
+                    <option value="ja">
+                        일본어
+                    </option>
+
+                    <option value="zh">
+                        중국어
+                    </option>
+
+                    <option value="de">
+                        독일어
+                    </option>
+
+                    <option value="fr">
+                        프랑스어
+                    </option>
+
+                    <option value="es">
+                        스페인어
+                    </option>
+
+                    <option value="it">
+                        이탈리아어
+                    </option>
+
+                    <option value="pt">
+                        포르투갈어
+                    </option>
+
+                    <option value="ru">
+                        러시아어
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <button
+                class="swapButton"
+                onclick="swapLanguages()"
+                title="언어 바꾸기"
+            >
+                ⇄
+            </button>
+
+
+            <div class="languageSelect">
+
+                <select id="targetLanguage">
+
+                    <option value="en">
+                        영어
+                    </option>
+
+                    <option value="ko">
+                        한국어
+                    </option>
+
+                    <option value="ja">
+                        일본어
+                    </option>
+
+                    <option value="zh">
+                        중국어
+                    </option>
+
+                    <option value="de">
+                        독일어
+                    </option>
+
+                    <option value="fr">
+                        프랑스어
+                    </option>
+
+                    <option value="es">
+                        스페인어
+                    </option>
+
+                    <option value="it">
+                        이탈리아어
+                    </option>
+
+                    <option value="pt">
+                        포르투갈어
+                    </option>
+
+                    <option value="ru">
+                        러시아어
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <!-- 번역 영역 -->
+
+        <div class="panels">
+
+
+            <!-- 입력 -->
+
+            <div class="panel">
+
+                <textarea
+                    id="sourceText"
+                    maxlength="5000"
+                    placeholder="번역할 내용을 입력하세요."
+                    oninput="updateCharCount()"
+                ></textarea>
+
+
+                <div class="panelBottom">
+
+                    <button
+                        class="controlButton"
+                        onclick="clearInput()"
+                    >
+                        지우기
+                    </button>
+
+                    <span
+                        class="charCount"
+                        id="charCount"
+                    >
+                        0 / 5000
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- 결과 -->
+
+            <div class="panel">
+
+                <div
+                    id="result"
+                    class="result empty"
+                >
+                    번역 결과가 여기에 표시됩니다.
+                </div>
+
+
+                <div class="panelBottom">
+
+                    <button
+                        class="controlButton"
+                        onclick="copyResult()"
+                    >
+                        복사
+                    </button>
+
+                    <button
+                        class="controlButton"
+                        onclick="speakResult()"
+                    >
+                        듣기
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- 번역 버튼 -->
+
+        <div class="translateAction">
+
+            <button
+                id="translateButton"
+                class="translateButton"
+                onclick="translateText()"
+            >
+                번역하기
+            </button>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- 빠른 언어 선택 -->
+
+    <div class="quick">
+
+        <button onclick="quickLanguage('ko')">
+            한국어
+        </button>
+
+        <button onclick="quickLanguage('en')">
+            영어
+        </button>
+
+        <button onclick="quickLanguage('ja')">
+            일본어
+        </button>
+
+        <button onclick="quickLanguage('zh')">
+            중국어
+        </button>
+
+        <button onclick="quickLanguage('de')">
+            독일어
+        </button>
+
+        <button onclick="quickLanguage('fr')">
+            프랑스어
+        </button>
+
+        <button onclick="quickLanguage('es')">
+            스페인어
+        </button>
+
+    </div>
+
+
+    <!-- 안내 카드 -->
+
+    <section class="infoGrid">
+
+        <div class="infoCard">
+
+            <h3>
+                자동 언어 감지
+            </h3>
+
+            <p>
+                입력한 문장의 언어를 자동으로 감지할 수 있도록 설계되어 있습니다.
+            </p>
+
+        </div>
+
+
+        <div class="infoCard">
+
+            <h3>
+                빠른 복사
+            </h3>
+
+            <p>
+                번역 결과를 한 번의 클릭으로 클립보드에 복사할 수 있습니다.
+            </p>
+
+        </div>
+
+
+        <div class="infoCard">
+
+            <h3>
+                모바일 지원
+            </h3>
+
+            <p>
+                PC와 스마트폰 화면에 맞춰 자동으로 레이아웃이 변경됩니다.
+            </p>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<div id="toast"></div>
+
+
+<script>
+
+/* =========================================
+   설정
+========================================= */
+
+/*
+ * 실제 번역 API를 연결할 주소.
+ *
+ * 현재는 비워두었다.
+ *
+ * 나중에 네가 만든 번역 서버가 생기면
+ * 예:
+ *
+ * const TRANSLATE_API =
+ *     "https://your-server.com/api/translate";
+ *
+ * 형태로 바꾸면 된다.
+ */
+
+const TRANSLATE_API = "https://oscadia-api.onrender.com/api/translate";
+
+
+/* =========================================
+   ELEMENT
+========================================= */
+
+const sourceLanguage =
+    document.getElementById("sourceLanguage");
+
+const targetLanguage =
+    document.getElementById("targetLanguage");
+
+const sourceText =
+    document.getElementById("sourceText");
+
+const result =
+    document.getElementById("result");
+
+const translateButton =
+    document.getElementById("translateButton");
+
+
+/* =========================================
+   TOAST
+========================================= */
+
+function toast(message){
+
+    const el =
+        document.getElementById("toast");
+
+    el.textContent = message;
+
+    el.classList.add("show");
+
+    setTimeout(() => {
+
+        el.classList.remove("show");
+
+    },2500);
+}
+
+
+/* =========================================
+   글자 수
+========================================= */
+
+function updateCharCount(){
+
+    document.getElementById("charCount")
+        .textContent =
+        `${sourceText.value.length} / 5000`;
+}
+
+
+/* =========================================
+   언어 교체
+========================================= */
+
+function swapLanguages(){
+
+    if(sourceLanguage.value === "auto"){
+
+        toast("자동 감지 상태에서는 언어를 교체할 수 없습니다.");
+
+        return;
+    }
+
+    const oldSource =
+        sourceLanguage.value;
+
+    sourceLanguage.value =
+        targetLanguage.value;
+
+    targetLanguage.value =
+        oldSource;
+
+
+    if(result.classList.contains("empty")){
+        return;
+    }
+
+    const oldText =
+        sourceText.value;
+
+    sourceText.value =
+        result.textContent;
+
+    result.textContent =
+        oldText;
+
+    result.classList.remove("empty");
+
+    updateCharCount();
+}
+
+
+/* =========================================
+   빠른 언어
+========================================= */
+
+function quickLanguage(language){
+
+    targetLanguage.value =
+        language;
+
+    targetLanguage.focus();
+}
+
+
+/* =========================================
+   번역
+========================================= */
+
+async function translateText(){
+
+    const text =
+        sourceText.value.trim();
+
+    if(!text){
+
+        toast("번역할 내용을 입력해주세요.");
+
+        sourceText.focus();
+
+        return;
+    }
+
+
+    if(
+        sourceLanguage.value ===
+        targetLanguage.value
+    ){
+
+        result.textContent =
+            text;
+
+        result.classList.remove("empty");
+
+        return;
+    }
+
+
+    /*
+     * 실제 번역 서버가 연결되어 있는 경우
+     */
+
+    if(TRANSLATE_API){
+
+        translateButton.disabled = true;
+
+        result.classList.remove("empty");
+
+        result.innerHTML = `
+            <span class="loading">
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+                번역 중...
+            </span>
+        `;
+
+
+        try{
+
+            const response =
+                await fetch(
+                    TRANSLATE_API,
+                    {
+                        method:"POST",
+
+                        headers:{
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body:JSON.stringify({
+
+                            q:text,
+
+                            source:
+                                sourceLanguage.value,
+
+                            target:
+                                targetLanguage.value
+
+                        })
+                    }
+                );
+
+
+            if(!response.ok){
+
+                throw new Error(
+                    "번역 서버 오류"
+                );
+            }
+
+
+            const data =
+                await response.json();
+
+
+            const translated =
+                data.translatedText ||
+                data.translation ||
+                data.result;
+
+
+            if(!translated){
+
+                throw new Error(
+                    "번역 결과가 없습니다."
+                );
+            }
+
+
+            result.textContent =
+                translated;
+
+            result.classList.remove("empty");
+
+
+        }catch(error){
+
+            console.error(error);
+
+            result.textContent =
+                "번역 서버에 연결할 수 없습니다.";
+
+            result.classList.remove("empty");
+
+            toast(
+                "번역 서버 연결에 실패했습니다."
+            );
+
+        }finally{
+
+            translateButton.disabled =
+                false;
+        }
+
+        return;
+    }
+
+
+    /*
+     * 아직 번역 서버를 연결하지 않은 경우
+     */
+
+    result.textContent =
+        "번역 엔진이 아직 연결되지 않았습니다.\n\n" +
+        "OscaTranslate 화면은 완성되어 있으며, " +
+        "번역 API를 연결하면 실제 번역이 작동합니다.";
+
+    result.classList.remove("empty");
+
+    toast(
+        "번역 엔진 연결이 필요합니다."
+    );
+}
+
+
+/* =========================================
+   복사
+========================================= */
+
+async function copyResult(){
+
+    const text =
+        result.textContent.trim();
+
+    if(
+        !text ||
+        result.classList.contains("empty")
+    ){
+
+        toast("복사할 번역 결과가 없습니다.");
+
+        return;
+    }
+
+
+    try{
+
+        await navigator.clipboard.writeText(text);
+
+        toast("번역 결과를 복사했습니다.");
+
+    }catch(error){
+
+        toast("복사할 수 없습니다.");
+    }
+}
+
+
+/* =========================================
+   음성
+========================================= */
+
+function speakResult(){
+
+    const text =
+        result.textContent.trim();
+
+    if(
+        !text ||
+        result.classList.contains("empty")
+    ){
+
+        toast("읽어줄 번역 결과가 없습니다.");
+
+        return;
+    }
+
+
+    if(!("speechSynthesis" in window)){
+
+        toast("이 브라우저에서는 음성 기능을 지원하지 않습니다.");
+
+        return;
+    }
+
+
+    const utterance =
+        new SpeechSynthesisUtterance(text);
+
+
+    const langMap = {
+
+        ko:"ko-KR",
+        en:"en-US",
+        ja:"ja-JP",
+        zh:"zh-CN",
+        de:"de-DE",
+        fr:"fr-FR",
+        es:"es-ES",
+        it:"it-IT",
+        pt:"pt-PT",
+        ru:"ru-RU"
+
+    };
+
+
+    utterance.lang =
+        langMap[targetLanguage.value] ||
+        "en-US";
+
+
+    window.speechSynthesis.cancel();
+
+    window.speechSynthesis.speak(
+        utterance
+    );
+}
+
+
+/* =========================================
+   입력 지우기
+========================================= */
+
+function clearInput(){
+
+    sourceText.value = "";
+
+    updateCharCount();
+
+    sourceText.focus();
+}
+
+
+/* =========================================
+   전체 초기화
+========================================= */
+
+function clearAll(){
+
+    sourceText.value = "";
+
+    result.textContent =
+        "번역 결과가 여기에 표시됩니다.";
+
+    result.classList.add("empty");
+
+    sourceLanguage.value =
+        "auto";
+
+    targetLanguage.value =
+        "en";
+
+    updateCharCount();
+
+    toast("초기화했습니다.");
+}
+
+
+/* =========================================
+   홈
+========================================= */
+
+function goHome(){
+
+    /*
+     * 네 홈페이지 구조에 맞게
+     * 필요하면 이 부분의 주소만 수정하면 된다.
+     */
+
+    if(
+        document.referrer &&
+        document.referrer.includes(
+            location.hostname
+        )
+    ){
+
+        history.back();
+
+    }else{
+
+        window.location.href =
+            "oscatranslate.html";
+    }
+}
+
+
+/* =========================================
+   Ctrl + Enter
+========================================= */
+
+sourceText.addEventListener(
+    "keydown",
+    function(event){
+
+        if(
+            event.ctrlKey &&
+            event.key === "Enter"
+        ){
+
+            translateText();
+        }
+
+    }
+);
+
+
+/* =========================================
+   시작
+========================================= */
+
+updateCharCount();
+
+</script>
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/apps/translate/sw.js")
+    .catch(error => {
+      console.error("Osca Translate Service Worker:", error);
+    });
+}
+</script>
+</body>
+</html>

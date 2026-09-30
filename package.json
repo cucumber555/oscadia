@@ -1,0 +1,22 @@
+{
+  "name": "oscadia",
+  "version": "1.0.0",
+  "description": "OSCADIA Search Engine",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "crawl": "node server/crawler.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.117.1",
+    "bcryptjs": "^3.0.3",
+    "cheerio": "^1.2.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "nodemailer": "^10.0.10",
+    "openai": "^7.23.0",
+    "pg": "^8.23.0",
+    "robots-parser": "^3.0.1"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "/apps/translate/",
+  "name": "Osca Translate",
+  "short_name": "Translate",
+  "description": "OSCADIA 번역 서비스",
+  "lang": "ko",
+  "start_url": "/oscatranslate.html",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0b78d0",
+  "icons": [
+    {
+      "src": "/icons/translate-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/translate-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

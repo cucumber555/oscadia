@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+
+<title>OSCADIA Apps</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,"Noto Sans KR",sans-serif;
+  background:#f5f8fc;
+  color:#101828;
+}
+
+header{
+  position:sticky;
+  top:0;
+  z-index:20;
+  height:64px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid #e4eaf2;
+}
+
+.logo{
+  font-size:22px;
+  font-weight:800;
+  color:#0b4fd8;
+  cursor:pointer;
+}
+
+.header-link{
+  text-decoration:none;
+  color:#475467;
+  font-size:14px;
+}
+
+.hero{
+  max-width:1100px;
+  margin:0 auto;
+  padding:80px 24px 45px;
+}
+
+.hero small{
+  color:#0b4fd8;
+  font-weight:700;
+  letter-spacing:.08em;
+}
+
+.hero h1{
+  margin:12px 0;
+  font-size:52px;
+  letter-spacing:-.04em;
+}
+
+.hero p{
+  margin:0;
+  color:#667085;
+  font-size:18px;
+}
+
+.apps{
+  max-width:1100px;
+  margin:0 auto;
+  padding:10px 24px 80px;
+}
+
+.app-card{
+  width:100%;
+  display:flex;
+  align-items:center;
+  gap:20px;
+  padding:24px;
+  margin-bottom:14px;
+  background:#fff;
+  border:1px solid #e4eaf2;
+  border-radius:20px;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.app-card:hover{
+  transform:translateY(-2px);
+  border-color:#b8c9e8;
+  box-shadow:0 12px 35px rgba(16,24,40,.08);
+}
+
+.app-icon{
+  width:64px;
+  height:64px;
+  flex:0 0 64px;
+  display:grid;
+  place-items:center;
+  border-radius:17px;
+  background:#edf4ff;
+  color:#0b4fd8;
+  font-weight:800;
+  font-size:20px;
+}
+
+.app-info{
+  flex:1;
+}
+
+.app-name{
+  font-size:20px;
+  font-weight:750;
+}
+
+.app-description{
+  margin-top:5px;
+  color:#667085;
+  font-size:14px;
+}
+
+.arrow{
+  color:#98a2b3;
+  font-size:25px;
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(15,23,42,.48);
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  width:min(460px,100%);
+  background:#fff;
+  border-radius:24px;
+  padding:28px;
+  box-shadow:0 25px 80px rgba(0,0,0,.2);
+}
+
+.modal-title{
+  font-size:26px;
+  font-weight:800;
+}
+
+.modal-description{
+  margin:8px 0 25px;
+  color:#667085;
+}
+
+.platform{
+  width:100%;
+  padding:17px;
+  margin-top:10px;
+  border:1px solid #d9e2ef;
+  border-radius:14px;
+  background:#fff;
+  text-align:left;
+  cursor:pointer;
+  font-size:16px;
+  font-weight:700;
+}
+
+.platform:hover{
+  background:#f5f8ff;
+  border-color:#8fb0e5;
+}
+
+.platform span{
+  display:block;
+  margin-top:4px;
+  color:#667085;
+  font-size:12px;
+  font-weight:400;
+}
+
+.close{
+  width:100%;
+  margin-top:18px;
+  padding:14px;
+  border:0;
+  border-radius:13px;
+  background:#eef2f6;
+  cursor:pointer;
+}
+
+@media(max-width:600px){
+  .hero h1{
+    font-size:38px;
+  }
+
+  .hero{
+    padding-top:55px;
+  }
+
+  .app-card{
+    padding:18px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo" onclick="location.href='oscadia.html'">
+    OSCADIA
+  </div>
+
+  <a class="header-link" href="oscadia.html">
+    웹으로 돌아가기
+  </a>
+</header>
+
+<section class="hero">
+  <small>OSCADIA APPS</small>
+
+  <h1>Your apps.<br>Everywhere.</h1>
+
+  <p>
+    OSCADIA의 서비스를 Android, Windows, Web에서 이용하세요.
+  </p>
+</section>
+
+<section class="apps">
+
+  <div class="app-card" onclick="openApp('oscadia')">
+    <div class="app-icon">O</div>
+    <div class="app-info">
+      <div class="app-name">OSCADIA</div>
+      <div class="app-description">
+        검색과 OSCADIA 서비스를 한곳에서
+      </div>
+    </div>
+    <div class="arrow">›</div>
+  </div>
+
+  <div class="app-card" onclick="openApp('osmail')">
+    <div class="app-icon">M</div>
+    <div class="app-info">
+      <div class="app-name">OSmail</div>
+      <div class="app-description">
+        OSCADIA 이메일 서비스
+      </div>
+    </div>
+    <div class="arrow">›</div>
+  </div>
+
+  <div class="app-card" onclick="openApp('oscaai')">
+    <div class="app-icon">AI</div>
+    <div class="app-info">
+      <div class="app-name">OscaAI</div>
+      <div class="app-description">
+        OSCADIA AI 서비스
+      </div>
+    </div>
+    <div class="arrow">›</div>
+  </div>
+
+  <div class="app-card" onclick="openApp('translate')">
+    <div class="app-icon">T</div>
+    <div class="app-info">
+      <div class="app-name">Osca Translate</div>
+      <div class="app-description">
+        빠르고 간편한 언어 번역 서비스
+      </div>
+    </div>
+    <div class="arrow">›</div>
+  </div>
+
+  <div class="app-card" onclick="openApp('meteor')">
+    <div class="app-icon">MS</div>
+    <div class="app-info">
+      <div class="app-name">운석 서바이버</div>
+      <div class="app-description">
+        운석을 피하며 살아남는 서바이벌 게임
+      </div>
+    </div>
+    <div class="arrow">›</div>
+  </div>
+
+<div class="modal" id="modal">
+  <div class="modal-box">
+
+    <div class="modal-title" id="modalTitle"></div>
+
+    <div class="modal-description" id="modalDescription"></div>
+
+    <button class="platform" onclick="useApp('android')">
+      Android
+      <span>앱처럼 설치</span>
+    </button>
+
+    <button class="platform" onclick="useApp('windows')">
+      Windows
+      <span>PC에서 앱처럼 설치</span>
+    </button>
+
+    <button class="platform" onclick="useApp('web')">
+      Web
+      <span>브라우저에서 바로 사용</span>
+    </button>
+
+    <button class="close" onclick="closeModal()">
+      닫기
+    </button>
+
+  </div>
+</div>
+
+<script>
+
+const apps = {
+
+  oscadia:{
+    name:"OSCADIA",
+    description:"검색과 OSCADIA 서비스를 한곳에서",
+    manifest:"/apps/oscadia/manifest.json",
+    web:"oscadia.html"
+  },
+
+  osmail:{
+    name:"OSmail",
+    description:"OSCADIA 이메일 서비스",
+    manifest:"/apps/osmail/manifest.json",
+    web:"osmail.html"
+  },
+
+  oscaai:{
+    name:"OscaAI",
+    description:"OSCADIA AI 서비스",
+    manifest:"/apps/oscaai/manifest.json",
+    web:"oscaai.html"
+  },
+
+  translate:{
+    name:"Osca Translate",
+    description:"빠르고 간편한 언어 번역 서비스",
+    manifest:"/apps/translate/manifest.json",
+    web:"translate.html"
+  },
+
+  meteor:{
+    name:"운석 서바이버",
+    description:"운석을 피하며 살아남는 서바이벌 게임",
+    manifest:"/apps/meteor/manifest.json",
+    web:"/54/game.html"
+  }
+};
+
+let currentApp = null;
+
+function openApp(id){
+
+  currentApp = apps[id];
+
+  document.getElementById("modalTitle").textContent =
+    currentApp.name;
+
+  document.getElementById("modalDescription").textContent =
+    currentApp.description;
+
+  document.getElementById("modal").classList.add("show");
+}
+
+function closeModal(){
+
+  document.getElementById("modal").classList.remove("show");
+
+  currentApp = null;
+}
+
+function useApp(platform){
+
+  if(!currentApp) return;
+
+  if(platform === "web"){
+
+    location.href = currentApp.web;
+
+    return;
+  }
+
+  installPWA(currentApp);
+
+}
+
+async function installPWA(app){
+
+  /*
+    PWA 설치는 브라우저가 제공하는 설치 기능을 사용한다.
+    실제 APK/EXE 파일을 다운로드하는 방식은 아니다.
+  */
+
+  if(deferredPrompt){
+
+    deferredPrompt.prompt();
+
+    const result =
+      await deferredPrompt.userChoice;
+
+    console.log(
+      app.name,
+      result.outcome
+    );
+
+    deferredPrompt = null;
+
+    closeModal();
+
+    return;
+  }
+
+  alert(
+    app.name +
+    "은(는) 현재 브라우저에서 자동 설치 창을 사용할 수 없습니다.\n\n" +
+    "브라우저 메뉴에서 '앱 설치' 또는 '홈 화면에 추가'를 선택해주세요."
+  );
+}
+
+let deferredPrompt = null;
+
+window.addEventListener(
+  "beforeinstallprompt",
+  event => {
+
+    event.preventDefault();
+
+    deferredPrompt = event;
+
+  }
+);
+
+document
+  .getElementById("modal")
+  .addEventListener("click", event => {
+
+    if(event.target.id === "modal"){
+      closeModal();
+    }
+
+  });
+
+</script>
+
+</body>
+</html>
