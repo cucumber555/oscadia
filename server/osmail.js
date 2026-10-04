@@ -638,7 +638,7 @@ export async function sendExternalMail(
         ).trim();
 
     const emailPattern =
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if(
         !emailPattern.test(
