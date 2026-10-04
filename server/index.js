@@ -14,6 +14,7 @@ import {
     createOSmailProfile,
     sendInternalMail,
     sendExternalMail,
+    receiveExternalMail,
     getEmails,
     markAsRead,
     deleteEmail,
@@ -44,7 +45,133 @@ const app = express();
 const PORT = process.env.PORT || 10000;
 
 app.use(cors());
+// ========================================
+// Resend 외부 이메일 수신
+// ========================================
 
+app.post(
+    "/api/osmail/inbound",
+    express.json({
+        limit: "20mb"
+    }),
+    async (req, res) => {
+
+        try {
+
+            const event =
+                req.body;
+
+            if(
+                event?.type !==
+                "email.received"
+            ){
+
+                return res.json({
+                    ok:true
+                });
+
+            }
+
+            const data =
+                event.data || {};
+
+            const recipients =
+                Array.isArray(data.to)
+                    ? data.to
+                    : [];
+
+            /*
+             * Resend가 webhook에 제공하는
+             * email_id를 이용해 실제 메일 내용을
+             * API에서 가져온다.
+             */
+
+            let text =
+                data.text || "";
+
+            let html =
+                data.html || "";
+
+            if(
+                (!text && !html) &&
+                data.email_id &&
+                process.env.RESEND_API_KEY
+            ){
+
+                const response =
+                    await fetch(
+                        `https://api.resend.com/emails/${data.email_id}`,
+                        {
+                            headers:{
+                                Authorization:
+                                    `Bearer ${process.env.RESEND_API_KEY}`
+                            }
+                        }
+                    );
+
+                if(response.ok){
+
+                    const email =
+                        await response.json();
+
+                    text =
+                        email.text ||
+                        "";
+
+                    html =
+                        email.html ||
+                        "";
+
+                }
+
+            }
+
+            await receiveExternalMail({
+
+                from:
+                    data.from || "",
+
+                to:
+                    recipients,
+
+                subject:
+                    data.subject || "",
+
+                text,
+
+                html,
+
+                messageId:
+                    data.message_id ||
+                    data.email_id ||
+                    null
+
+            });
+
+            return res.json({
+                ok:true
+            });
+
+        } catch(error){
+
+            console.error(
+                "[OSMAIL INBOUND ERROR]",
+                error
+            );
+
+            return res.status(500).json({
+
+                ok:false,
+
+                error:
+                    error.message
+
+            });
+
+        }
+
+    }
+);
 app.use(
     express.json({
         limit: "10mb"

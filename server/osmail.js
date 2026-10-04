@@ -3,7 +3,7 @@ import { createClient } from "@supabase/supabase-js";
 
 
 /* =========================================
-   기본 Supabase 설정
+   기본 설정
 ========================================= */
 
 const SUPABASE_URL =
@@ -11,6 +11,32 @@ const SUPABASE_URL =
 
 const SUPABASE_ANON_KEY =
     process.env.SUPABASE_ANON_KEY;
+
+const SUPABASE_SERVICE_ROLE_KEY =
+    process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+const OSMAIL_DOMAIN =
+    "oscadia.net";
+
+
+/* =========================================
+   Supabase 관리자 클라이언트
+========================================= */
+
+const adminSupabase =
+    SUPABASE_URL &&
+    SUPABASE_SERVICE_ROLE_KEY
+        ? createClient(
+            SUPABASE_URL,
+            SUPABASE_SERVICE_ROLE_KEY,
+            {
+                auth:{
+                    autoRefreshToken:false,
+                    persistSession:false
+                }
+            }
+        )
+        : null;
 
 
 /* =========================================
@@ -20,22 +46,27 @@ const SUPABASE_ANON_KEY =
 const transporter =
     nodemailer.createTransport({
 
-        host: process.env.SMTP_HOST,
+        host:
+            process.env.SMTP_HOST ||
+            "smtp.resend.com",
 
         port:
             Number(
-                process.env.SMTP_PORT || 587
+                process.env.SMTP_PORT ||
+                465
             ),
 
         secure:
             String(
-                process.env.SMTP_SECURE
+                process.env.SMTP_SECURE ??
+                "true"
             ).toLowerCase() === "true",
 
         auth: {
 
             user:
-                process.env.SMTP_USER,
+                process.env.SMTP_USER ||
+                "resend",
 
             pass:
                 process.env.SMTP_PASS
@@ -52,6 +83,14 @@ const transporter =
 export async function verifySMTP(){
 
     try{
+
+        if(!process.env.SMTP_PASS){
+
+            throw new Error(
+                "SMTP_PASS가 설정되지 않았습니다."
+            );
+
+        }
 
         await transporter.verify();
 
@@ -103,15 +142,6 @@ async function getAuthContext(req){
 
     }
 
-
-    /*
-     * 사용자 토큰으로 Supabase client 생성.
-     *
-     * 이 부분이 중요하다.
-     * 단순히 서버의 anon key로만 DB를 호출하면
-     * RLS에서 사용자를 제대로 인식하지 못할 수 있다.
-     */
-
     const userSupabase =
         createClient(
             SUPABASE_URL,
@@ -126,7 +156,6 @@ async function getAuthContext(req){
             }
         );
 
-
     const {
         data,
         error
@@ -134,7 +163,6 @@ async function getAuthContext(req){
         await userSupabase.auth.getUser(
             token
         );
-
 
     if(
         error ||
@@ -146,7 +174,6 @@ async function getAuthContext(req){
         );
 
     }
-
 
     return {
 
@@ -180,7 +207,6 @@ async function getProfile(
             .eq("id", userId)
             .maybeSingle();
 
-
     if(error){
 
         throw new Error(
@@ -188,7 +214,6 @@ async function getProfile(
         );
 
     }
-
 
     return data;
 
@@ -199,7 +224,7 @@ async function getProfile(
    주소 처리
 ========================================= */
 
-function normalizeOSmailAddress(
+function normalizeAddress(
     address
 ){
 
@@ -211,13 +236,15 @@ function normalizeOSmailAddress(
 }
 
 
-function isInternalAddress(
+function isOSmailAddress(
     address
 ){
 
-    return normalizeOSmailAddress(
+    return normalizeAddress(
         address
-    ).endsWith("@osmail");
+    ).endsWith(
+        `@${OSMAIL_DOMAIN}`
+    );
 
 }
 
@@ -226,10 +253,14 @@ function getOSmailId(
     address
 ){
 
-    return normalizeOSmailAddress(
-        address
-    ).replace(
-        /@osmail$/,
+    const normalized =
+        normalizeAddress(address);
+
+    return normalized.replace(
+        new RegExp(
+            `@${OSMAIL_DOMAIN.replace(".", "\\.")}$`,
+            "i"
+        ),
         ""
     );
 
@@ -240,7 +271,9 @@ function makeOSmailAddress(
     osmailId
 ){
 
-    return `${osmailId}@osmail`;
+    return `${String(
+        osmailId || ""
+    ).trim().toLowerCase()}@${OSMAIL_DOMAIN}`;
 
 }
 
@@ -257,13 +290,11 @@ export async function getMyOSmail(req){
     } =
         await getAuthContext(req);
 
-
     const profile =
         await getProfile(
             supabase,
             user.id
         );
-
 
     return {
 
@@ -299,7 +330,6 @@ export async function createOSmailProfile(
     } =
         await getAuthContext(req);
 
-
     osmailId =
         String(
             osmailId || ""
@@ -307,13 +337,11 @@ export async function createOSmailProfile(
         .trim()
         .toLowerCase();
 
-
     displayName =
         String(
             displayName || ""
         )
         .trim();
-
 
     if(
         !/^[A-Za-z0-9_]{3,20}$/.test(
@@ -326,11 +354,6 @@ export async function createOSmailProfile(
         );
 
     }
-
-
-    /*
-     * ID 중복 확인
-     */
 
     const {
         data: existing,
@@ -345,7 +368,6 @@ export async function createOSmailProfile(
             )
             .maybeSingle();
 
-
     if(existingError){
 
         throw new Error(
@@ -353,7 +375,6 @@ export async function createOSmailProfile(
         );
 
     }
-
 
     if(
         existing &&
@@ -365,11 +386,6 @@ export async function createOSmailProfile(
         );
 
     }
-
-
-    /*
-     * 프로필 생성
-     */
 
     const {
         data,
@@ -386,13 +402,11 @@ export async function createOSmailProfile(
                     osmailId,
 
                 display_name:
-                    displayName ||
-                    null
+                    displayName || null
 
             })
             .select()
             .single();
-
 
     if(error){
 
@@ -401,7 +415,6 @@ export async function createOSmailProfile(
         );
 
     }
-
 
     return {
 
@@ -437,13 +450,11 @@ export async function sendInternalMail(
     } =
         await getAuthContext(req);
 
-
     const senderProfile =
         await getProfile(
             supabase,
             user.id
         );
-
 
     if(!senderProfile){
 
@@ -453,31 +464,25 @@ export async function sendInternalMail(
 
     }
 
-
     const recipientAddress =
-        normalizeOSmailAddress(
-            to
-        );
-
+        normalizeAddress(to);
 
     if(
-        !isInternalAddress(
+        !isOSmailAddress(
             recipientAddress
         )
     ){
 
         throw new Error(
-            "내부 OSmail 주소가 아닙니다."
+            "올바른 @oscadia.net OSmail 주소가 아닙니다."
         );
 
     }
-
 
     const recipientOSmailId =
         getOSmailId(
             recipientAddress
         );
-
 
     const {
         data: recipientProfile,
@@ -492,7 +497,6 @@ export async function sendInternalMail(
             )
             .maybeSingle();
 
-
     if(recipientError){
 
         throw new Error(
@@ -500,7 +504,6 @@ export async function sendInternalMail(
         );
 
     }
-
 
     if(!recipientProfile){
 
@@ -510,24 +513,15 @@ export async function sendInternalMail(
 
     }
 
-
-    const senderAddress =
-        makeOSmailAddress(
-            senderProfile.osmail_id
-        );
-
-
     const finalSubject =
         String(
             subject || ""
         ).trim();
 
-
     const finalBody =
         String(
             body || ""
         );
-
 
     if(!finalSubject){
 
@@ -537,7 +531,6 @@ export async function sendInternalMail(
 
     }
 
-
     if(!finalBody.trim()){
 
         throw new Error(
@@ -545,7 +538,6 @@ export async function sendInternalMail(
         );
 
     }
-
 
     const {
         data,
@@ -562,7 +554,9 @@ export async function sendInternalMail(
                     recipientProfile.id,
 
                 sender_address:
-                    senderAddress,
+                    makeOSmailAddress(
+                        senderProfile.osmail_id
+                    ),
 
                 recipient_address:
                     recipientAddress,
@@ -592,7 +586,6 @@ export async function sendInternalMail(
             .select()
             .single();
 
-
     if(error){
 
         throw new Error(
@@ -600,7 +593,6 @@ export async function sendInternalMail(
         );
 
     }
-
 
     return data;
 
@@ -626,13 +618,11 @@ export async function sendExternalMail(
     } =
         await getAuthContext(req);
 
-
     const senderProfile =
         await getProfile(
             supabase,
             user.id
         );
-
 
     if(!senderProfile){
 
@@ -642,25 +632,13 @@ export async function sendExternalMail(
 
     }
 
-
     const recipientAddress =
         String(
             to || ""
         ).trim();
 
-
-    if(!recipientAddress){
-
-        throw new Error(
-            "받는 사람 이메일을 입력하세요."
-        );
-
-    }
-
-
     const emailPattern =
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 
     if(
         !emailPattern.test(
@@ -674,37 +652,15 @@ export async function sendExternalMail(
 
     }
 
-
-    if(
-        isInternalAddress(
-            recipientAddress
-        )
-    ){
-
-        throw new Error(
-            "내부 OSmail 주소입니다. 내부 메일 전송을 사용하세요."
-        );
-
-    }
-
-
-    const senderAddress =
-        makeOSmailAddress(
-            senderProfile.osmail_id
-        );
-
-
     const finalSubject =
         String(
             subject || ""
         ).trim();
 
-
     const finalBody =
         String(
             body || ""
         );
-
 
     if(!finalSubject){
 
@@ -714,7 +670,6 @@ export async function sendExternalMail(
 
     }
 
-
     if(!finalBody.trim()){
 
         throw new Error(
@@ -723,23 +678,20 @@ export async function sendExternalMail(
 
     }
 
-
-    const fromAddress =
-        process.env.SMTP_FROM ||
-        process.env.SMTP_USER;
-
-
-    if(!fromAddress){
+    if(!process.env.SMTP_PASS){
 
         throw new Error(
-            "SMTP_FROM 또는 SMTP_USER가 설정되지 않았습니다."
+            "SMTP_PASS가 설정되지 않았습니다."
         );
 
     }
 
+    const senderAddress =
+        makeOSmailAddress(
+            senderProfile.osmail_id
+        );
 
     let info;
-
 
     try{
 
@@ -747,7 +699,7 @@ export async function sendExternalMail(
             await transporter.sendMail({
 
                 from:
-                    fromAddress,
+                    senderAddress,
 
                 to:
                     recipientAddress,
@@ -759,7 +711,7 @@ export async function sendExternalMail(
                     finalBody,
 
                 replyTo:
-                    fromAddress,
+                    senderAddress,
 
                 headers:{
                     "X-OSmail":
@@ -775,19 +727,12 @@ export async function sendExternalMail(
             error
         );
 
-
         throw new Error(
             "외부 이메일 전송에 실패했습니다: " +
             error.message
         );
 
     }
-
-
-    /*
-     * 외부 전송 성공 후
-     * 보낸 편지함에도 저장
-     */
 
     const {
         data,
@@ -828,13 +773,11 @@ export async function sendExternalMail(
                     true,
 
                 external_message_id:
-                    info.messageId ||
-                    null
+                    info.messageId || null
 
             })
             .select()
             .single();
-
 
     if(error){
 
@@ -843,13 +786,11 @@ export async function sendExternalMail(
             error
         );
 
-
         throw new Error(
-            "메일은 외부로 전송되었지만 보낸 편지함 저장에 실패했습니다."
+            "메일은 전송되었지만 보낸 편지함 저장에 실패했습니다."
         );
 
     }
-
 
     return {
 
@@ -859,6 +800,199 @@ export async function sendExternalMail(
         messageId:
             info.messageId
 
+    };
+
+}
+
+
+/* =========================================
+   외부에서 받은 이메일 저장
+========================================= */
+
+export async function receiveExternalMail(
+    {
+        from,
+        to,
+        subject,
+        text,
+        html,
+        messageId
+    }
+){
+
+    if(!adminSupabase){
+
+        throw new Error(
+            "SUPABASE_SERVICE_ROLE_KEY가 설정되지 않았습니다."
+        );
+
+    }
+
+    const recipients =
+        Array.isArray(to)
+            ? to
+            : [to];
+
+    const cleanFrom =
+        String(
+            from || ""
+        ).trim();
+
+    const finalSubject =
+        String(
+            subject || ""
+        ).trim() ||
+        "(제목 없음)";
+
+    const finalBody =
+        String(
+            text ||
+            html ||
+            ""
+        );
+
+    for(
+        const recipientAddressRaw
+        of recipients
+    ){
+
+        const recipientAddress =
+            normalizeAddress(
+                recipientAddressRaw
+            );
+
+        if(
+            !isOSmailAddress(
+                recipientAddress
+            )
+        ){
+
+            continue;
+
+        }
+
+        const osmailId =
+            getOSmailId(
+                recipientAddress
+            );
+
+        const {
+            data: profile,
+            error: profileError
+        } =
+            await adminSupabase
+                .from("osmail_profiles")
+                .select("id,osmail_id")
+                .eq(
+                    "osmail_id",
+                    osmailId
+                )
+                .maybeSingle();
+
+        if(profileError){
+
+            throw new Error(
+                profileError.message
+            );
+
+        }
+
+        if(!profile){
+
+            console.warn(
+                "Unknown OSmail recipient:",
+                recipientAddress
+            );
+
+            continue;
+
+        }
+
+        if(messageId){
+
+            const {
+                data: duplicate,
+                error: duplicateError
+            } =
+                await adminSupabase
+                    .from("osmail_emails")
+                    .select("id")
+                    .eq(
+                        "external_message_id",
+                        messageId
+                    )
+                    .maybeSingle();
+
+            if(duplicateError){
+
+                throw new Error(
+                    duplicateError.message
+                );
+
+            }
+
+            if(duplicate){
+
+                continue;
+
+            }
+
+        }
+
+        const {
+            error
+        } =
+            await adminSupabase
+                .from("osmail_emails")
+                .insert({
+
+                    sender_id:
+                        null,
+
+                    recipient_id:
+                        profile.id,
+
+                    sender_address:
+                        cleanFrom,
+
+                    recipient_address:
+                        recipientAddress,
+
+                    subject:
+                        finalSubject,
+
+                    body:
+                        finalBody,
+
+                    is_read:
+                        false,
+
+                    sender_deleted:
+                        false,
+
+                    recipient_deleted:
+                        false,
+
+                    is_external:
+                        true,
+
+                    external_message_id:
+                        messageId || null
+
+                });
+
+        if(error){
+
+            throw new Error(
+                error.message
+            );
+
+        }
+
+    }
+
+    return {
+        ok:true
     };
 
 }
@@ -875,7 +1009,6 @@ export async function getEmails(req){
         supabase
     } =
         await getAuthContext(req);
-
 
     const {
         data,
@@ -894,7 +1027,6 @@ export async function getEmails(req){
                 }
             );
 
-
     if(error){
 
         throw new Error(
@@ -902,7 +1034,6 @@ export async function getEmails(req){
         );
 
     }
-
 
     return data || [];
 
@@ -924,7 +1055,6 @@ export async function markAsRead(
     } =
         await getAuthContext(req);
 
-
     const {
         data: email,
         error: findError
@@ -938,7 +1068,6 @@ export async function markAsRead(
             )
             .single();
 
-
     if(
         findError ||
         !email
@@ -950,7 +1079,6 @@ export async function markAsRead(
 
     }
 
-
     if(
         email.recipient_id !==
         user.id
@@ -961,7 +1089,6 @@ export async function markAsRead(
         );
 
     }
-
 
     const {
         data,
@@ -979,7 +1106,6 @@ export async function markAsRead(
             .select()
             .single();
 
-
     if(error){
 
         throw new Error(
@@ -987,7 +1113,6 @@ export async function markAsRead(
         );
 
     }
-
 
     return data;
 
@@ -1009,7 +1134,6 @@ export async function deleteEmail(
     } =
         await getAuthContext(req);
 
-
     const {
         data: email,
         error: findError
@@ -1023,7 +1147,6 @@ export async function deleteEmail(
             )
             .single();
 
-
     if(
         findError ||
         !email
@@ -1035,9 +1158,7 @@ export async function deleteEmail(
 
     }
 
-
     const update = {};
-
 
     if(
         email.sender_id ===
@@ -1049,7 +1170,6 @@ export async function deleteEmail(
 
     }
 
-
     if(
         email.recipient_id ===
         user.id
@@ -1060,7 +1180,6 @@ export async function deleteEmail(
 
     }
 
-
     if(
         Object.keys(update).length === 0
     ){
@@ -1070,7 +1189,6 @@ export async function deleteEmail(
         );
 
     }
-
 
     const {
         data,
@@ -1086,7 +1204,6 @@ export async function deleteEmail(
             .select()
             .single();
 
-
     if(error){
 
         throw new Error(
@@ -1094,7 +1211,6 @@ export async function deleteEmail(
         );
 
     }
-
 
     return data;
 
@@ -1116,7 +1232,6 @@ export async function restoreEmail(
     } =
         await getAuthContext(req);
 
-
     const {
         data: email,
         error: findError
@@ -1130,7 +1245,6 @@ export async function restoreEmail(
             )
             .single();
 
-
     if(
         findError ||
         !email
@@ -1142,9 +1256,7 @@ export async function restoreEmail(
 
     }
 
-
     const update = {};
-
 
     if(
         email.sender_id ===
@@ -1156,7 +1268,6 @@ export async function restoreEmail(
 
     }
 
-
     if(
         email.recipient_id ===
         user.id
@@ -1167,7 +1278,6 @@ export async function restoreEmail(
 
     }
 
-
     if(
         Object.keys(update).length === 0
     ){
@@ -1177,7 +1287,6 @@ export async function restoreEmail(
         );
 
     }
-
 
     const {
         data,
@@ -1193,7 +1302,6 @@ export async function restoreEmail(
             .select()
             .single();
 
-
     if(error){
 
         throw new Error(
@@ -1201,7 +1309,6 @@ export async function restoreEmail(
         );
 
     }
-
 
     return data;
 
@@ -1218,7 +1325,6 @@ export function getAddressFromProfile(
 
     if(!profile)
         return null;
-
 
     return makeOSmailAddress(
         profile.osmail_id
