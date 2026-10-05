@@ -1975,6 +1975,12 @@ app.post(
                 body
             } = req.body || {};
 
+            console.log("[OSMAIL REQUEST]", {
+                to,
+                subject,
+                body
+            });
+
             if (!to) {
                 return res.status(400).json({
                     ok: false,
