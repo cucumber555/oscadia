@@ -45,14 +45,25 @@ const app = express();
 const PORT = process.env.PORT || 10000;
 
 app.use(cors({
-    origin: [
-        "https://oscadia.net",
-        "https://www.oscadia.net",
-        "https://cucumber555.github.io"
-    ],
+    origin: function(origin, callback) {
+        const allowedOrigins = [
+            "https://oscadia.net",
+            "https://www.oscadia.net",
+            "https://cucumber555.github.io"
+        ];
+
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("CORS blocked"));
+        }
+    },
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
 }));
+
+app.options("*", cors());
 // ========================================
 // Resend 외부 이메일 수신
 // ========================================
