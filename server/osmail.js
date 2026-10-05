@@ -731,10 +731,9 @@ export async function sendExternalMail(req, data){
     }
 
     const {
-        data,
-        error
-    } =
-        await supabase
+    data: savedEmail,
+    error
+} = await supabase
             .from("osmail_emails")
             .insert({
 
