@@ -88,6 +88,10 @@ app.post(
                 Array.isArray(data.to)
                     ? data.to
                     : [];
+                    console.log(
+    "[OSMAIL INBOUND DATA]",
+    JSON.stringify(data, null, 2)
+);
 
             /*
              * Resend가 webhook에 제공하는
