@@ -776,26 +776,21 @@ export async function sendExternalMail(req, data){
 
     if(error){
 
-        console.error(
-            "External mail sent but DB save failed:",
-            error
-        );
+    console.error(
+        "External mail sent but DB save failed:",
+        error
+    );
 
-        throw new Error(
-            "메일은 전송되었지만 보낸 편지함 저장에 실패했습니다."
-        );
+    throw new Error(
+        "메일은 전송되었지만 보낸 편지함 저장에 실패했습니다."
+    );
 
-    }
+}
 
-    return {
-
-        email:
-            data,
-
-        messageId:
-            info.messageId
-
-    };
+return {
+    email: savedEmail,
+    messageId: info.messageId
+};
 
 }
 

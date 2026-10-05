@@ -1915,10 +1915,10 @@ async function sendMail(){
                             "Bearer " + accessToken
                     },
 
-                    body:JSON.stringify({
+  body: JSON.stringify({
     to,
     subject,
-    body:body
+    body: body
 })
                 }
             );
