@@ -53,6 +53,7 @@ app.use(cors({
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
+app.use(express.json());
 // ========================================
 // Resend 외부 이메일 수신
 // ========================================
