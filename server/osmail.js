@@ -1,4 +1,3 @@
-import nodemailer from "nodemailer";
 import { createClient } from "@supabase/supabase-js";
 
 
@@ -43,37 +42,6 @@ const adminSupabase =
    SMTP
 ========================================= */
 
-const transporter =
-    nodemailer.createTransport({
-
-        host:
-            process.env.SMTP_HOST ||
-            "smtp.resend.com",
-
-        port:
-            Number(
-                process.env.SMTP_PORT ||
-                465
-            ),
-
-        secure:
-            String(
-                process.env.SMTP_SECURE ??
-                "true"
-            ).toLowerCase() === "true",
-
-        auth: {
-
-            user:
-                process.env.SMTP_USER ||
-                "resend",
-
-            pass:
-                process.env.SMTP_PASS
-
-        }
-
-    });
 
 
 /* =========================================
@@ -603,7 +571,12 @@ export async function sendInternalMail(
    외부 이메일 전송
 ========================================= */
 
+/* =========================================
+   외부 이메일 전송
+========================================= */
+
 export async function sendExternalMail(req, data){
+
     const to = data?.to;
     const subject = data?.subject;
     const body = data?.body;
@@ -611,8 +584,7 @@ export async function sendExternalMail(req, data){
     const {
         user,
         supabase
-    } =
-        await getAuthContext(req);
+    } = await getAuthContext(req);
 
     const senderProfile =
         await getProfile(
@@ -621,65 +593,48 @@ export async function sendExternalMail(req, data){
         );
 
     if(!senderProfile){
-
         throw new Error(
             "먼저 OSmail 주소를 만들어야 합니다."
         );
-
     }
 
     const recipientAddress =
-        String(
-            to || ""
-        ).trim();
+        String(to || "").trim();
 
     const emailPattern =
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if(
-        !emailPattern.test(
-            recipientAddress
-        )
-    ){
-
+    if(!emailPattern.test(recipientAddress)){
         throw new Error(
             "올바른 이메일 주소를 입력하세요."
         );
-
     }
 
     const finalSubject =
-        String(
-            subject || ""
-        ).trim();
+        String(subject || "").trim();
 
     const finalBody =
-        String(
-            body || ""
-        );
+        String(body || "");
 
     if(!finalSubject){
-
         throw new Error(
             "제목을 입력하세요."
         );
-
     }
 
     if(!finalBody.trim()){
-
         throw new Error(
             "내용을 입력하세요."
         );
-
     }
 
-    if(!process.env.SMTP_PASS){
+    const resendApiKey =
+        process.env.RESEND_API_KEY;
 
+    if(!resendApiKey){
         throw new Error(
-            "SMTP_PASS가 설정되지 않았습니다."
+            "RESEND_API_KEY가 설정되지 않았습니다."
         );
-
     }
 
     const senderAddress =
@@ -687,34 +642,69 @@ export async function sendExternalMail(req, data){
             senderProfile.osmail_id
         );
 
-    let info;
+    let resendResult;
 
     try{
 
-        info =
-            await transporter.sendMail({
+        const response =
+            await fetch(
+                "https://api.resend.com/emails",
+                {
+                    method: "POST",
 
-                from:
-                    senderAddress,
+                    headers: {
+                        "Authorization":
+                            `Bearer ${resendApiKey}`,
 
-                to:
-                    recipientAddress,
+                        "Content-Type":
+                            "application/json"
+                    },
 
-                subject:
-                    finalSubject,
+                    body: JSON.stringify({
+                        from:
+                            senderAddress,
 
-                text:
-                    finalBody,
+                        to: [
+                            recipientAddress
+                        ],
 
-                replyTo:
-                    senderAddress,
+                        subject:
+                            finalSubject,
 
-                headers:{
-                    "X-OSmail":
-                        "OSmail"
+                        text:
+                            finalBody,
+
+                        reply_to:
+                            senderAddress,
+
+                        headers: {
+                            "X-OSmail":
+                                "OSmail"
+                        }
+                    })
                 }
+            );
 
-            });
+        const result =
+            await response.json()
+                .catch(() => ({}));
+
+        if(!response.ok){
+
+            console.error(
+                "Resend API error:",
+                result
+            );
+
+            throw new Error(
+                result?.message ||
+                result?.error ||
+                `Resend API 오류 (${response.status})`
+            );
+        }
+
+        resendResult =
+            result;
 
     }catch(error){
 
@@ -727,71 +717,74 @@ export async function sendExternalMail(req, data){
             "외부 이메일 전송에 실패했습니다: " +
             error.message
         );
-
     }
 
+    const messageId =
+        resendResult?.id || null;
+
     const {
-    data: savedEmail,
-    error
-} = await supabase
-            .from("osmail_emails")
-            .insert({
+        data: savedEmail,
+        error
+    } = await supabase
+        .from("osmail_emails")
+        .insert({
 
-                sender_id:
-                    user.id,
+            sender_id:
+                user.id,
 
-                recipient_id:
-                    null,
+            recipient_id:
+                null,
 
-                sender_address:
-                    senderAddress,
+            sender_address:
+                senderAddress,
 
-                recipient_address:
-                    recipientAddress,
+            recipient_address:
+                recipientAddress,
 
-                subject:
-                    finalSubject,
+            subject:
+                finalSubject,
 
-                body:
-                    finalBody,
+            body:
+                finalBody,
 
-                is_read:
-                    true,
+            is_read:
+                true,
 
-                sender_deleted:
-                    false,
+            sender_deleted:
+                false,
 
-                recipient_deleted:
-                    false,
+            recipient_deleted:
+                false,
 
-                is_external:
-                    true,
+            is_external:
+                true,
 
-                external_message_id:
-                    info.messageId || null
-
-            })
-            .select()
-            .single();
+            external_message_id:
+                messageId
+        })
+        .select()
+        .single();
 
     if(error){
 
-    console.error(
-        "External mail sent but DB save failed:",
-        error
-    );
+        console.error(
+            "External mail sent but DB save failed:",
+            error
+        );
 
-    throw new Error(
-        "메일은 전송되었지만 보낸 편지함 저장에 실패했습니다."
-    );
+        throw new Error(
+            "메일은 전송되었지만 보낸 편지함 저장에 실패했습니다."
+        );
+    }
 
-}
+    return {
 
-return {
-    email: savedEmail,
-    messageId: info.messageId
-};
+        email:
+            savedEmail,
 
+        messageId:
+            messageId
+    };
 }
 
 
