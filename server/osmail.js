@@ -603,14 +603,10 @@ export async function sendInternalMail(
    외부 이메일 전송
 ========================================= */
 
-export async function sendExternalMail(
-    req,
-    {
-        to,
-        subject,
-        body
-    }
-){
+export async function sendExternalMail(req, data){
+    const to = data?.to;
+    const subject = data?.subject;
+    const body = data?.body;
 
     const {
         user,
