@@ -113,7 +113,7 @@ app.post(
 
                 const response =
                     await fetch(
-                        `https://api.resend.com/emails/${data.email_id}`,
+                        `https://api.resend.com/emails/receiving/${data.email_id}`,
                         {
                             headers:{
                                 Authorization:
