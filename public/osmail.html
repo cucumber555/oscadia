@@ -1,2143 +1,4104 @@
 <!DOCTYPE html>
+
 <html lang="ko">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <link rel="manifest" href="/apps/osmail/manifest.json">
+
 <meta name="theme-color" content="#1769ff">
+
 <title>OSmail</title>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
+
 <style>
+
 *{
+
     box-sizing:border-box;
+
 }
+
+
 
 body{
+
     margin:0;
+
     font-family:Arial,"Noto Sans KR",sans-serif;
+
     background:#f4f7fb;
+
     color:#18212f;
+
 }
+
+
 
 button,
+
 input,
+
 textarea{
+
     font:inherit;
+
 }
+
+
 
 button{
+
     cursor:pointer;
+
 }
+
+
 
 .hidden{
+
     display:none !important;
+
 }
 
 
+
+
+
 /* ==============================
+
    AUTH
+
 ================================ */
+
+
 
 #authPage{
+
     min-height:100vh;
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
+
     padding:20px;
+
 }
+
+
 
 .authBox{
+
     width:100%;
+
     max-width:430px;
+
     background:white;
+
     border-radius:20px;
+
     padding:35px;
+
     box-shadow:0 15px 45px rgba(0,0,0,.08);
+
 }
+
+
 
 .logo{
+
     font-size:32px;
+
     font-weight:800;
+
     letter-spacing:-1px;
+
     margin-bottom:8px;
+
 }
+
+
 
 .logo span{
+
     color:#f3c400;
+
 }
+
+
 
 .subtitle{
+
     color:#6b7280;
+
     margin-bottom:28px;
+
 }
+
+
 
 .authBox input,
+
 .setupBox input{
+
     width:100%;
+
     padding:14px;
+
     border:1px solid #d9dee7;
+
     border-radius:10px;
+
     margin-bottom:12px;
+
     outline:none;
+
 }
+
+
 
 .authBox input:focus,
+
 .setupBox input:focus{
+
     border-color:#4f7cff;
+
 }
+
+
 
 .primary{
+
     width:100%;
+
     padding:14px;
+
     border:0;
+
     border-radius:10px;
+
     background:#1f5eff;
+
     color:white;
+
     font-weight:700;
+
 }
+
+
 
 .secondary{
+
     width:100%;
+
     padding:13px;
+
     border:1px solid #d8dee8;
+
     background:white;
+
     border-radius:10px;
+
     margin-top:10px;
+
 }
+
+
 
 .authSwitch{
+
     text-align:center;
+
     margin-top:20px;
+
     color:#667085;
+
 }
+
+
 
 .authSwitch button{
+
     border:0;
+
     background:none;
+
     color:#1f5eff;
+
     font-weight:700;
+
 }
 
 
+
+
+
 /* ==============================
+
    SETUP
+
 ================================ */
+
+
 
 #setupPage{
+
     min-height:100vh;
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
+
     padding:20px;
+
 }
+
+
 
 .setupBox{
+
     width:100%;
+
     max-width:470px;
+
     background:white;
+
     border-radius:20px;
+
     padding:35px;
+
     box-shadow:0 15px 45px rgba(0,0,0,.08);
+
 }
+
+
 
 .setupBox h1{
+
     margin-top:0;
+
 }
+
+
 
 .help{
+
     color:#667085;
+
     font-size:14px;
+
     line-height:1.6;
+
     margin-bottom:20px;
+
 }
 
 
+
+
+
 /* ==============================
+
    APP
+
 ================================ */
+
+
 
 #appPage{
+
     min-height:100vh;
+
     display:flex;
+
 }
+
+
 
 .sidebar{
+
     width:250px;
+
     background:#111827;
+
     color:white;
+
     min-height:100vh;
+
     padding:24px 16px;
+
     flex-shrink:0;
+
 }
+
+
 
 .sideLogo{
+
     font-size:28px;
+
     font-weight:800;
+
     padding:5px 10px 25px;
+
 }
+
+
 
 .sideLogo span{
+
     color:#f3c400;
+
 }
+
+
 
 .userInfo{
+
     padding:14px;
+
     background:#1f2937;
+
     border-radius:12px;
+
     margin-bottom:20px;
+
 }
+
+
 
 .userName{
+
     font-weight:700;
+
 }
+
+
 
 .userAddress{
+
     font-size:13px;
+
     color:#aeb7c5;
+
     margin-top:5px;
+
     word-break:break-all;
+
 }
+
+
 
 .nav{
+
     display:flex;
+
     flex-direction:column;
+
     gap:5px;
+
 }
+
+
 
 .nav button{
+
     text-align:left;
+
     border:0;
+
     background:transparent;
+
     color:#d6dbe3;
+
     padding:13px 14px;
+
     border-radius:9px;
+
 }
+
+
 
 .nav button:hover,
+
 .nav button.active{
+
     background:#263244;
+
     color:white;
+
 }
+
+
 
 .logout{
+
     margin-top:20px;
+
     border:1px solid #374151;
+
     background:transparent;
+
     color:#cbd5e1;
+
     width:100%;
+
     padding:11px;
+
     border-radius:9px;
+
 }
+
+
 
 .main{
+
     flex:1;
+
     min-width:0;
+
 }
+
+
 
 .topbar{
+
     height:70px;
+
     background:white;
+
     border-bottom:1px solid #e5e7eb;
+
     display:flex;
+
     align-items:center;
+
     padding:0 25px;
+
     gap:15px;
+
 }
+
+
 
 .topbar h1{
+
     margin:0;
+
     font-size:22px;
+
 }
+
+
 
 .search{
+
     margin-left:auto;
+
     width:min(350px,45%);
+
     padding:11px 14px;
+
     border:1px solid #d9dee7;
+
     border-radius:9px;
+
     outline:none;
+
 }
+
+
 
 .content{
+
     padding:25px;
+
 }
 
 
+
+
+
 /* ==============================
+
    MAIL LIST
+
 ================================ */
+
+
 
 .mailBox{
+
     background:white;
+
     border-radius:15px;
+
     border:1px solid #e6e9ef;
+
     overflow:hidden;
+
 }
+
+
 
 .mailHeader{
+
     padding:17px 20px;
+
     border-bottom:1px solid #e8ebf0;
+
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
+
 }
+
+
 
 .composeBtn{
+
     border:0;
+
     background:#1f5eff;
+
     color:white;
+
     padding:11px 17px;
+
     border-radius:9px;
+
     font-weight:700;
+
 }
+
+
 
 .mailRow{
+
     padding:16px 20px;
+
     border-bottom:1px solid #eef0f4;
+
     display:grid;
+
     grid-template-columns:190px 1fr 130px;
+
     gap:15px;
+
     align-items:center;
+
     cursor:pointer;
+
 }
+
+
 
 .mailRow:hover{
+
     background:#f8fafc;
+
 }
+
+
 
 .mailRow.unread{
+
     background:#f4f7ff;
+
     font-weight:700;
+
 }
+
+
 
 .mailSender{
+
     overflow:hidden;
+
     text-overflow:ellipsis;
+
     white-space:nowrap;
+
 }
+
+
 
 .mailSubject{
+
     overflow:hidden;
+
     text-overflow:ellipsis;
+
     white-space:nowrap;
+
 }
+
+
 
 .mailDate{
+
     text-align:right;
+
     color:#7b8492;
+
     font-size:13px;
+
 }
+
+
 
 .empty{
+
     text-align:center;
+
     padding:70px 20px;
+
     color:#7b8492;
+
 }
 
 
+
+
+
 /* ==============================
+
    COMPOSE
+
 ================================ */
+
+
 
 .modal{
+
     position:fixed;
+
     inset:0;
+
     background:rgba(15,23,42,.45);
+
     display:flex;
+
     align-items:center;
+
     justify-content:center;
+
     padding:20px;
+
     z-index:100;
+
 }
+
+
 
 .modalBox{
+
     background:white;
+
     width:100%;
+
     max-width:650px;
+
     border-radius:16px;
+
     padding:24px;
+
     box-shadow:0 20px 70px rgba(0,0,0,.2);
+
 }
+
+
 
 .modalHeader{
+
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
+
     margin-bottom:18px;
+
 }
+
+
 
 .modalHeader h2{
+
     margin:0;
+
 }
+
+
 
 .close{
+
     border:0;
+
     background:#f1f3f6;
+
     width:35px;
+
     height:35px;
+
     border-radius:8px;
+
 }
+
+
 
 .modal input,
-.modal textarea{
-    width:100%;
-    border:1px solid #d9dee7;
-    border-radius:9px;
-    padding:12px;
-    margin-bottom:11px;
-    outline:none;
-}
 
 .modal textarea{
-    min-height:250px;
-    resize:vertical;
+
+    width:100%;
+
+    border:1px solid #d9dee7;
+
+    border-radius:9px;
+
+    padding:12px;
+
+    margin-bottom:11px;
+
+    outline:none;
+
 }
+
+
+
+.modal textarea{
+
+    min-height:250px;
+
+    resize:vertical;
+
+}
+
+
 
 .modalActions{
+
     display:flex;
+
     justify-content:flex-end;
+
     gap:8px;
+
 }
 
 
+
+
+
 /* ==============================
+
    DETAIL
+
 ================================ */
+
+
 
 .detail{
+
     background:white;
+
     border:1px solid #e6e9ef;
+
     border-radius:15px;
+
     padding:25px;
+
 }
+
+
 
 .detailHead{
+
     border-bottom:1px solid #e8ebf0;
+
     padding-bottom:20px;
+
     margin-bottom:20px;
+
 }
+
+
 
 .detailSubject{
+
     font-size:25px;
+
     font-weight:800;
+
     margin-bottom:15px;
+
 }
+
+
 
 .detailMeta{
+
     color:#6b7280;
+
     font-size:14px;
+
     line-height:1.8;
+
 }
+
+
 
 .detailBody{
+
     white-space:pre-wrap;
+
     line-height:1.8;
+
     min-height:200px;
+
 }
+
+
 
 .detailActions{
+
     display:flex;
+
     gap:8px;
+
     margin-top:25px;
+
 }
+
+
 
 .actionBtn{
+
     padding:10px 15px;
+
     border:1px solid #d9dee7;
+
     background:white;
+
     border-radius:8px;
+
 }
 
 
+
+
+
 /* ==============================
+
    TOAST
+
 ================================ */
+
+
 
 #toast{
+
     position:fixed;
+
     bottom:25px;
+
     left:50%;
+
     transform:translateX(-50%);
+
     background:#111827;
+
     color:white;
+
     padding:12px 18px;
+
     border-radius:10px;
+
     opacity:0;
+
     pointer-events:none;
+
     transition:.2s;
+
     z-index:999;
+
 }
 
+
+
 #toast.show{
+
     opacity:1;
+
 }
+
+
+
 
 
 /* ==============================
+
    MOBILE
+
 ================================ */
+
+
 
 @media(max-width:760px){
 
+
+
     .modalBox{
+
         max-height:90vh;
+
         overflow-y:auto;
+
     }
 
+
+
     .modalActions{
+
         flex-wrap:wrap;
+
     }
+
+
+
+
 
 
 
     #appPage{
+
         display:block;
+
     }
+
+
 
     .sidebar{
+
         min-height:auto;
+
         width:100%;
+
         padding:12px;
+
     }
+
+
 
     .sideLogo{
+
         padding:5px 8px 12px;
+
     }
+
+
 
     .userInfo{
+
         display:none;
+
     }
+
+
 
     .nav{
+
         flex-direction:row;
+
         overflow-x:auto;
+
     }
+
+
 
     .nav button{
+
         white-space:nowrap;
+
     }
+
+
 
     .logout{
+
         margin-top:8px;
+
     }
+
+
 
     .topbar{
+
         padding:0 15px;
+
     }
+
+
 
     .search{
+
         width:45%;
+
     }
+
+
 
     .content{
+
         padding:12px;
+
     }
+
+
 
     .mailRow{
+
         grid-template-columns:1fr;
+
         gap:5px;
+
         padding:15px;
+
     }
+
+
 
     .mailDate{
+
         text-align:left;
+
     }
 
+
+
     .detail{
+
         padding:18px;
+
     }
+
 }
+
 </style>
+
 </head>
+
+
 
 <body>
 
 
+
+
+
 <!-- =========================================
+
      AUTH
+
 ========================================= -->
 
+
+
 <section id="authPage">
-
     <div class="authBox">
-
         <div class="logo">OS<span>mail</span></div>
+        <div class="subtitle" id="authSubtitle">OSmail 사용자끼리 안전하게 메일을 주고받으세요.</div>
 
-        <div class="subtitle">
-            OSmail 사용자끼리 안전하게 메일을 주고받으세요.
+        <div id="loginFields">
+            <input id="authEmail" type="text" autocomplete="username" placeholder="OSmail 주소 또는 ID">
         </div>
 
-        <input id="authEmail"
-               type="email"
-               placeholder="로그인 이메일">
+        <div id="signupFields" class="hidden">
+            <input id="authOSmailId" type="text" maxlength="20" autocomplete="username" placeholder="OSmail ID">
+            <input id="authDisplayName" type="text" maxlength="30" placeholder="표시 이름">
+        </div>
 
-        <input id="authPassword"
-               type="password"
-               placeholder="비밀번호">
+        <input id="authPassword" type="password" autocomplete="current-password" placeholder="비밀번호">
 
-        <button id="authButton"
-                class="primary"
-                onclick="submitAuth()">
-            로그인
-        </button>
-
-        <button class="secondary"
-                onclick="forgotPassword()">
-            비밀번호 재설정
-        </button>
+        <button id="authButton" class="primary" onclick="submitAuth()">로그인</button>
+        <button id="resetButton" class="secondary" onclick="forgotPassword()">비밀번호 재설정</button>
 
         <div class="authSwitch">
             <span id="authSwitchText">계정이 없나요?</span>
-            <button onclick="toggleAuthMode()"
-                    id="authSwitchButton">
-                회원가입
-            </button>
+            <button onclick="toggleAuthMode()" id="authSwitchButton">회원가입</button>
         </div>
-
     </div>
-
 </section>
 
 
+
+
+
 <!-- =========================================
+
      PROFILE SETUP
+
 ========================================= -->
+
+
 
 <section id="setupPage" class="hidden">
 
+
+
     <div class="setupBox">
+
+
 
         <div class="logo">OS<span>mail</span></div>
 
+
+
         <h1>OSmail 주소 만들기</h1>
 
+
+
         <div class="help">
+
             OSmail에서 사용할 아이디를 만들어주세요.<br>
+
             다른 OSmail 사용자에게 이 주소로 메일을 받을 수 있습니다.<br><br>
+
             예: <b>cucu@oscadia.net</b>
+
         </div>
 
+
+
         <input id="osmailId"
+
                maxlength="20"
+
                placeholder="OSmail ID">
 
+
+
         <input id="displayName"
+
                maxlength="30"
+
                placeholder="표시 이름">
 
+
+
         <button class="primary"
+
                 onclick="createProfile()">
+
             OSmail 시작하기
+
         </button>
 
+
+
     </div>
+
+
 
 </section>
 
 
+
+
+
 <!-- =========================================
+
      APP
+
 ========================================= -->
+
+
 
 <section id="appPage" class="hidden">
 
+
+
     <aside class="sidebar">
 
+
+
         <div class="sideLogo">
+
             OS<span>mail</span>
+
         </div>
 
+
+
         <div class="userInfo">
+
             <div class="userName" id="sideName"></div>
+
             <div class="userAddress" id="sideAddress"></div>
+
         </div>
+
+
 
         <div class="nav">
 
+
+
             <button id="navInbox"
+
                     class="active"
+
                     onclick="showFolder('inbox')">
+
                 받은메일함
+
             </button>
+
+
 
             <button id="navSent"
+
                     onclick="showFolder('sent')">
+
                 보낸메일함
+
             </button>
+
+
 
             <button id="navTrash"
+
                     onclick="showFolder('trash')">
+
                 휴지통
+
             </button>
+
+
 
             <button onclick="openCompose()">
+
                 메일 쓰기
+
             </button>
 
+
+
             <button onclick="openOscaAISettings()">
+
                 OscaAI 설정
+
             </button>
+
+
 
         </div>
 
+
+
         <button class="logout"
+
                 onclick="logout()">
+
             로그아웃
+
         </button>
+
+
 
     </aside>
 
 
+
+
+
     <main class="main">
+
+
 
         <header class="topbar">
 
+
+
             <h1 id="pageTitle">받은메일함</h1>
 
+
+
             <input id="searchInput"
+
                    class="search"
+
                    placeholder="메일 검색"
+
                    oninput="renderCurrentFolder()">
+
+
 
         </header>
 
 
+
+
+
         <div class="content">
 
+
+
             <div id="mailListView"
+
                  class="mailBox">
+
+
 
                 <div class="mailHeader">
 
+
+
                     <strong id="mailCount">
+
                         받은메일
+
                     </strong>
 
+
+
                     <button class="composeBtn"
+
                             onclick="openCompose()">
+
                         메일 쓰기
+
                     </button>
 
+
+
                 </div>
+
+
 
                 <div id="mailList"></div>
 
+
+
             </div>
+
+
+
 
 
             <div id="mailDetailView"
+
                  class="hidden">
+
+
 
                 <div class="detail">
 
+
+
                     <div class="detailHead">
 
+
+
                         <div class="detailSubject"
+
                              id="detailSubject">
+
                         </div>
+
+
 
                         <div class="detailMeta"
+
                              id="detailMeta">
+
                         </div>
 
+
+
                     </div>
 
+
+
                     <div class="detailBody"
+
                          id="detailBody">
+
                     </div>
+
+
 
                     <div class="detailActions">
 
-                        <button class="actionBtn"
-                                onclick="backToList()">
-                            목록
-                        </button>
+
 
                         <button class="actionBtn"
-                                id="detailDeleteButton"
-                                onclick="deleteCurrentMail()">
-                            삭제
+
+                                onclick="backToList()">
+
+                            목록
+
                         </button>
+
+
+
+                        <button class="actionBtn"
+
+                                id="detailDeleteButton"
+
+                                onclick="deleteCurrentMail()">
+
+                            삭제
+
+                        </button>
+
+
 
                         <button class="actionBtn hidden"
+
                                 id="detailRestoreButton"
+
                                 onclick="restoreCurrentMail()">
+
                             복구
+
                         </button>
+
+
 
                     </div>
 
+
+
                 </div>
+
+
 
             </div>
 
+
+
         </div>
 
+
+
     </main>
+
+
 
 </section>
 
 
+
+
+
 <!-- =========================================
+
      COMPOSE
+
 ========================================= -->
 
+
+
 <div id="composeModal"
+
      class="modal hidden">
+
+
 
     <div class="modalBox">
 
+
+
         <div class="modalHeader">
+
+
 
             <h2>메일 쓰기</h2>
 
+
+
             <button class="close"
+
                     onclick="closeCompose()">
+
                 ×
+
             </button>
+
+
 
         </div>
 
+
+
         <input id="composeTo"
+
        placeholder="받는 사람 (예: friend@oscadia.net)">
 
+
+
         <input id="composeSubject"
+
                placeholder="제목">
 
+
+
         <textarea id="composeBody"
+
                   placeholder="내용을 입력하세요."></textarea>
+
+
 
         <div class="modalActions">
 
+
+
             <button class="actionBtn"
+
                     onclick="closeCompose()">
+
                 취소
+
             </button>
 
+
+
             <button class="composeBtn"
+
                     onclick="sendMail()">
+
                 보내기
+
             </button>
+
+
 
         </div>
 
+
+
     </div>
 
+
+
 </div>
+
+
+
+
 
 
 
 <!-- =========================================
+
      OSCAAI PASSWORD SETTINGS
+
 ========================================= -->
 
+
+
 <div id="oscaAISettingsModal"
+
      class="modal hidden">
+
+
 
     <div class="modalBox">
 
+
+
         <div class="modalHeader">
+
+
 
             <h2>OscaAI 설정</h2>
 
+
+
             <button class="close"
+
                     onclick="closeOscaAISettings()">
+
                 ×
+
             </button>
 
+
+
         </div>
+
+
 
         <div style="color:#667085;line-height:1.7;margin-bottom:18px;">
+
             OSmail에 로그인한 계정과 OscaAI 계정을 연결합니다.
+
             <br>
+
             설정한 비밀번호는 OscaAI 로그인에 사용됩니다.
+
         </div>
 
+
+
         <input
+
             id="oscaAIId"
+
             type="text"
+
             placeholder="OSmail ID (예: cucu)"
+
             autocomplete="username"
+
         >
 
+
+
         <input
+
             id="oscaPassword"
+
             type="password"
+
             placeholder="OscaAI 비밀번호 (8~100자)"
+
             autocomplete="new-password"
+
         >
 
+
+
         <input
+
             id="oscaPasswordConfirm"
+
             type="password"
+
             placeholder="OscaAI 비밀번호 확인"
+
             autocomplete="new-password"
+
         >
+
+
 
         <div class="modalActions">
 
+
+
             <button class="actionBtn"
+
                     onclick="closeOscaAISettings()">
+
                 취소
+
             </button>
 
+
+
             <button class="composeBtn"
+
                     id="oscaPasswordButton"
+
                     onclick="setOscaPassword()">
+
                 비밀번호 설정
+
             </button>
+
+
 
         </div>
 
+
+
     </div>
 
+
+
 </div>
+
+
+
 
 
 <div id="toast"></div>
 
 
+
+
+
 <script>
 
+
+
 /* =========================================
+
    SUPABASE
+
 ========================================= */
 
+
+
 const SUPABASE_URL =
+
     "https://mujmwouyopgxwtezhlzv.supabase.co";
 
+
+
 const SUPABASE_ANON_KEY =
+
     "sb_publishable_uiChi46cHC53f6QAm8TALQ_MGknEOQ9";
 
+
+
 const supabaseClient =
+
     window.supabase.createClient(
+
         SUPABASE_URL,
+
         SUPABASE_ANON_KEY
+
     );
 
 
+
+
+
 /* =========================================
+
    STATE
+
 ========================================= */
+
+
 
 let authMode = "login";
 
+
+
 let currentUser = null;
+
 let currentProfile = null;
 
+
+
 let currentFolder = "inbox";
+
 let currentMail = null;
 
+
+
 let allMails = [];
+let profileMap = new Map();
+
+
+
 
 
 /* =========================================
+
    ELEMENTS
+
 ========================================= */
 
+
+
 const authPage =
+
     document.getElementById("authPage");
 
+
+
 const setupPage =
+
     document.getElementById("setupPage");
 
+
+
 const appPage =
+
     document.getElementById("appPage");
 
 
+
+
+
 /* =========================================
+
    TOAST
+
 ========================================= */
+
+
 
 function toast(message){
 
+
+
     const el =
+
         document.getElementById("toast");
+
+
 
     el.textContent = message;
 
+
+
     el.classList.add("show");
 
+
+
     setTimeout(()=>{
+
         el.classList.remove("show");
+
     },2500);
+
 }
 
 
+
+
+
 /* =========================================
+
    AUTH MODE
+
 ========================================= */
 
-function toggleAuthMode(){
 
-    authMode =
-        authMode === "login"
-            ? "signup"
-            : "login";
 
-    const button =
-        document.getElementById("authButton");
+function setAuthMode(mode){
+    authMode = mode;
+    const button = document.getElementById("authButton");
+    const switchButton = document.getElementById("authSwitchButton");
+    const switchText = document.getElementById("authSwitchText");
+    const loginFields = document.getElementById("loginFields");
+    const signupFields = document.getElementById("signupFields");
+    const resetButton = document.getElementById("resetButton");
+    const password = document.getElementById("authPassword");
 
-    const switchButton =
-        document.getElementById("authSwitchButton");
-
-    const switchText =
-        document.getElementById("authSwitchText");
-
-    if(authMode === "login"){
-
+    if(mode === "login"){
         button.textContent = "로그인";
         switchText.textContent = "계정이 없나요?";
         switchButton.textContent = "회원가입";
-
+        loginFields.classList.remove("hidden");
+        signupFields.classList.add("hidden");
+        resetButton.classList.remove("hidden");
+        password.autocomplete = "current-password";
     }else{
-
         button.textContent = "회원가입";
         switchText.textContent = "이미 계정이 있나요?";
         switchButton.textContent = "로그인";
+        loginFields.classList.add("hidden");
+        signupFields.classList.remove("hidden");
+        resetButton.classList.add("hidden");
+        password.autocomplete = "new-password";
     }
 }
 
+function toggleAuthMode(){
+    setAuthMode(authMode === "login" ? "signup" : "login");
+}
 
-/* =========================================
-   SIGNUP / LOGIN
-========================================= */
+function normalizeOSmailEmail(value){
+    const v = value.trim().toLowerCase();
+    return v.includes("@") ? v : `${v}@oscadia.net`;
+}
 
 async function submitAuth(){
+    const password = document.getElementById("authPassword").value;
+    if(!password){ toast("비밀번호를 입력해주세요."); return; }
 
-    const email =
-        document.getElementById("authEmail")
-        .value
-        .trim();
+    if(authMode === "signup"){
+        const osmailId = document.getElementById("authOSmailId").value.trim().toLowerCase();
+        const displayName = document.getElementById("authDisplayName").value.trim();
 
-    const password =
-        document.getElementById("authPassword")
-        .value;
+        if(!/^[a-z0-9_]{3,20}$/.test(osmailId)){
+            toast("OSmail ID는 영문 소문자, 숫자, _만 사용하며 3~20자여야 합니다."); return;
+        }
+        if(!displayName){ toast("표시 이름을 입력해주세요."); return; }
 
-    if(!email || !password){
+        const email = `${osmailId}@oscadia.net`;
+        const {data: existing, error: existingError} = await supabaseClient
+            .from("osmail_profiles").select("id").eq("osmail_id", osmailId).maybeSingle();
+        if(existingError){ console.error(existingError); toast("OSmail ID를 확인하지 못했습니다."); return; }
+        if(existing){ toast("이미 사용 중인 OSmail ID입니다."); return; }
 
-        toast("이메일과 비밀번호를 입력해주세요.");
+        const {data, error} = await supabaseClient.auth.signUp({email, password});
+        if(error){ toast(error.message); return; }
+        if(!data.user){ toast("회원가입에 실패했습니다."); return; }
+
+        if(!data.session){
+            toast("회원가입되었습니다. 이메일 인증이 필요한 경우 인증 후 로그인해주세요.");
+            document.getElementById("authEmail").value = osmailId;
+            setAuthMode("login");
+            return;
+        }
+
+        const {error: profileError} = await supabaseClient.from("osmail_profiles").insert({
+            id:data.user.id, osmail_id:osmailId, display_name:displayName
+        });
+        if(profileError){ console.error(profileError); toast("계정은 만들어졌지만 OSmail 프로필 생성에 실패했습니다."); return; }
+        await initialize();
         return;
     }
 
-
-    if(authMode === "signup"){
-
-        const {
-            data,
-            error
-        } =
-        await supabaseClient.auth.signUp({
-            email,
-            password
-        });
-
-        if(error){
-
-            toast(error.message);
-            return;
-        }
-
-        /*
-         * Supabase에서 이메일 인증이 켜져 있으면
-         * session이 없을 수 있다.
-         */
-
-        if(!data.session){
-
-            toast(
-                "회원가입되었습니다. 이메일 인증이 필요한 경우 인증 후 로그인해주세요."
-            );
-
-            authMode = "login";
-
-            document.getElementById("authButton")
-                .textContent = "로그인";
-
-            return;
-        }
-
-        await initialize();
-
-    }else{
-
-        const {
-            data,
-            error
-        } =
-        await supabaseClient.auth.signInWithPassword({
-            email,
-            password
-        });
-
-        if(error){
-
-            toast(error.message);
-            return;
-        }
-
-        await initialize();
-    }
+    const loginValue = document.getElementById("authEmail").value.trim();
+    if(!loginValue){ toast("OSmail 주소 또는 ID를 입력해주세요."); return; }
+    const email = normalizeOSmailEmail(loginValue);
+    const {error} = await supabaseClient.auth.signInWithPassword({email, password});
+    if(error){ toast(error.message); return; }
+    await initialize();
 }
 
 
 /* =========================================
+
    PASSWORD RESET
+
 ========================================= */
+
+
 
 async function forgotPassword(){
 
+
+
     const email =
+
         document.getElementById("authEmail")
+
         .value
+
         .trim();
+
+
 
     if(!email){
 
+
+
         toast("이메일을 입력해주세요.");
+
         return;
+
     }
 
+
+
     const {
+
         error
+
     } =
+
     await supabaseClient.auth.resetPasswordForEmail(
+
         email,
+
         {
+
             redirectTo:
+
                 window.location.href
+
         }
+
     );
+
+
 
     if(error){
 
+
+
         toast(error.message);
+
         return;
+
     }
 
+
+
     toast("비밀번호 재설정 메일을 확인해주세요.");
+
 }
 
 
+
+
+
 /* =========================================
+
    INITIALIZE
+
 ========================================= */
+
+
 
 async function initialize(){
 
+
+
     const {
+
         data
+
     } =
+
     await supabaseClient.auth.getSession();
 
+
+
     currentUser =
+
         data.session?.user || null;
+
+
 
     if(!currentUser){
 
+
+
         showAuth();
+
         return;
+
     }
 
+
+
     await loadProfile();
+
 }
 
 
+
+
+
 /* =========================================
+
    LOAD PROFILE
+
 ========================================= */
+
+
 
 async function loadProfile(){
 
+
+
     const {
+
         data,
+
         error
+
     } =
+
     await supabaseClient
+
         .from("osmail_profiles")
+
         .select("*")
+
         .eq("id", currentUser.id)
+
         .maybeSingle();
 
+
+
     if(error){
+
+
 
         console.error(error);
 
+
+
         toast("프로필을 불러오지 못했습니다.");
+
         return;
+
     }
+
+
 
     if(!data){
 
+
+
         showSetup();
+
         return;
+
     }
+
+
 
     currentProfile = data;
 
+
+
     showApp();
+
 }
 
 
+
+
+
 /* =========================================
+
    PROFILE CREATE
+
 ========================================= */
+
+
 
 async function createProfile(){
 
+
+
     let osmailId =
+
         document.getElementById("osmailId")
+
         .value
+
         .trim()
+
         .toLowerCase();
 
+
+
     const displayName =
+
         document.getElementById("displayName")
+
         .value
+
         .trim();
+
+
 
     if(!/^[a-z0-9_]{3,20}$/.test(osmailId)){
 
+
+
         toast(
+
             "ID는 영문 소문자, 숫자, _만 사용하며 3~20자여야 합니다."
+
         );
 
+
+
         return;
+
     }
+
+
 
     if(!displayName){
 
+
+
         toast("표시 이름을 입력해주세요.");
+
         return;
+
     }
 
+
+
     const {
+
         data,
+
         error
+
     } =
+
     await supabaseClient
+
         .from("osmail_profiles")
+
         .insert({
+
             id: currentUser.id,
+
             osmail_id: osmailId,
+
             display_name: displayName
+
         })
+
         .select()
+
         .single();
+
+
 
     if(error){
 
+
+
         if(error.code === "23505"){
+
+
 
             toast("이미 사용 중인 OSmail ID입니다.");
 
+
+
         }else{
 
+
+
             console.error(error);
+
             toast(error.message);
+
         }
 
+
+
         return;
+
     }
+
+
 
     currentProfile = data;
 
+
+
     toast("OSmail 주소가 만들어졌습니다.");
 
+
+
     showApp();
+
 }
+
+
+
 
 
 /* =========================================
+
    UI
+
 ========================================= */
+
+
 
 function hideAllPages(){
 
+
+
     authPage.classList.add("hidden");
+
     setupPage.classList.add("hidden");
+
     appPage.classList.add("hidden");
+
 }
+
+
+
 
 
 function showAuth(){
 
+
+
     hideAllPages();
 
+
+
     authPage.classList.remove("hidden");
+
 }
+
+
+
 
 
 function showSetup(){
 
+
+
     hideAllPages();
 
+
+
     setupPage.classList.remove("hidden");
+
 }
+
+
+
 
 
 function showApp(){
 
+
+
     hideAllPages();
+
+
 
     appPage.classList.remove("hidden");
 
+
+
     document.getElementById("sideName")
+
         .textContent =
+
         currentProfile.display_name;
 
+
+
     document.getElementById("sideAddress")
+
         .textContent =
+
         currentProfile.osmail_id + "@oscadia.net";
 
+
+
     showFolder("inbox");
+
 }
 
 
+
+
+
 /* =========================================
+
    FOLDER
+
 ========================================= */
+
+
 
 async function showFolder(folder){
 
+
+
     currentFolder = folder;
 
+
+
     document.getElementById("mailListView")
+
         .classList.remove("hidden");
 
+
+
     document.getElementById("mailDetailView")
+
         .classList.add("hidden");
 
+
+
     document.getElementById("navInbox")
+
         .classList.remove("active");
+
+
 
     document.getElementById("navSent")
+
         .classList.remove("active");
 
+
+
     document.getElementById("navTrash")
+
         .classList.remove("active");
+
+
+
 
 
     if(folder === "inbox"){
 
+
+
         document.getElementById("navInbox")
+
             .classList.add("active");
 
+
+
         document.getElementById("pageTitle")
+
             .textContent = "받은메일함";
 
+
+
     }
+
+
 
     if(folder === "sent"){
 
+
+
         document.getElementById("navSent")
+
             .classList.add("active");
 
+
+
         document.getElementById("pageTitle")
+
             .textContent = "보낸메일함";
 
+
+
     }
+
+
 
     if(folder === "trash"){
 
+
+
         document.getElementById("navTrash")
+
             .classList.add("active");
 
+
+
         document.getElementById("pageTitle")
+
             .textContent = "휴지통";
+
     }
 
+
+
     await loadMails();
+
 }
 
 
+
+
+
 /* =========================================
+
    LOAD MAILS
+
 ========================================= */
+
+
 
 async function loadMails(){
 
+
+
     const {
+
         data,
+
         error
+
     } =
+
     await supabaseClient
+
         .from("osmail_emails")
+
         .select("*")
+
         .or(
+
             `sender_id.eq.${currentUser.id},recipient_id.eq.${currentUser.id}`
+
         )
+
         .order("created_at", {
+
             ascending:false
+
         });
+
+
 
     if(error){
 
+
+
         console.error(error);
 
+
+
         toast("메일을 불러오지 못했습니다.");
+
         return;
+
     }
+
+
 
     allMails = data || [];
 
+    const profileIds = [...new Set(
+        allMails.flatMap(mail => [mail.sender_id, mail.recipient_id]).filter(Boolean)
+    )];
+
+    profileMap = new Map();
+    if(profileIds.length){
+        const {data: profiles, error: profileError} = await supabaseClient
+            .from("osmail_profiles")
+            .select("id,osmail_id,display_name")
+            .in("id", profileIds);
+        if(profileError){
+            console.error("프로필 조회 오류:", profileError);
+        }else{
+            (profiles || []).forEach(profile => profileMap.set(profile.id, profile));
+        }
+    }
+
     renderCurrentFolder();
+
 }
 
 
+
+
+
 /* =========================================
+
    RENDER
+
 ========================================= */
+
+
 
 function renderCurrentFolder(){
 
+
+
     const search =
+
         document.getElementById("searchInput")
+
         .value
+
         .trim()
+
         .toLowerCase();
+
+
 
     let mails = allMails.filter(mail => {
 
+
+
         const isSender =
+
             mail.sender_id === currentUser.id;
 
+
+
         const isRecipient =
+
             mail.recipient_id === currentUser.id;
+
+
+
 
 
         if(currentFolder === "inbox"){
 
+
+
             if(!isRecipient) return false;
 
+
+
             if(mail.recipient_deleted) return false;
+
         }
+
+
+
 
 
         if(currentFolder === "sent"){
 
+
+
             if(!isSender) return false;
 
+
+
             if(mail.sender_deleted) return false;
+
         }
+
+
+
 
 
         if(currentFolder === "trash"){
 
+
+
             if(isSender && mail.sender_deleted){
+
+
 
             }else if(isRecipient && mail.recipient_deleted){
 
+
+
             }else{
 
+
+
                 return false;
+
             }
+
         }
+
+
+
 
 
         if(search){
 
+
+
             const text = (
+
                 mail.subject +
+
                 " " +
+
                 mail.body +
+
                 " " +
+
                 mail.sender_address +
+
                 " " +
+
                 mail.recipient_address
+
             ).toLowerCase();
 
+
+
             if(!text.includes(search)){
+
                 return false;
+
             }
+
         }
 
+
+
         return true;
+
     });
 
 
+
+
+
     const list =
+
         document.getElementById("mailList");
 
+
+
     document.getElementById("mailCount")
+
         .textContent =
+
         `${currentFolder === "inbox" ? "받은메일" :
+
           currentFolder === "sent" ? "보낸메일" :
+
           "휴지통"} ${mails.length}`;
+
+
+
 
 
     if(!mails.length){
 
+
+
         list.innerHTML =
+
             `<div class="empty">메일이 없습니다.</div>`;
 
+
+
         return;
+
     }
 
 
+
+
+
     list.innerHTML =
+
         mails.map(mail => {
 
+
+
             const isInbox =
+
                 mail.recipient_id === currentUser.id;
 
-            const otherAddress =
-                isInbox
-                    ? mail.sender_address
-                    : mail.recipient_address;
+
+
+            const otherId = isInbox ? mail.sender_id : mail.recipient_id;
+            const otherAddress = isInbox ? mail.sender_address : mail.recipient_address;
+            const otherProfile = otherId ? profileMap.get(otherId) : null;
+            const otherName = otherProfile?.display_name || otherProfile?.osmail_id || otherAddress || "알 수 없음";
+
+
 
             const unread =
+
                 isInbox &&
+
                 !mail.is_read;
 
+
+
             const date =
+
                 new Date(mail.created_at)
+
                     .toLocaleString("ko-KR",{
+
                         year:"numeric",
+
                         month:"numeric",
+
                         day:"numeric",
+
                         hour:"2-digit",
+
                         minute:"2-digit"
+
                     });
 
+
+
             return `
+
                 <div
+
                     class="mailRow ${unread ? "unread" : ""}"
+
                     onclick="openMail('${mail.id}')"
+
                 >
 
+
+
                     <div class="mailSender">
-                        ${escapeHTML(otherAddress)}
+
+                        ${escapeHTML(otherName)}
+
                     </div>
+
+
 
                     <div class="mailSubject">
+
                         ${escapeHTML(mail.subject || "(제목 없음)")}
+
                     </div>
+
+
 
                     <div class="mailDate">
+
                         ${date}
+
                     </div>
 
+
+
                 </div>
+
             `;
 
+
+
         }).join("");
+
 }
 
 
+
+
+
 /* =========================================
+
    OPEN MAIL
+
 ========================================= */
+
+
 
 async function openMail(id){
 
+
+
     const mail =
+
         allMails.find(x => x.id === id);
 
+
+
     if(!mail) return;
+
+
 
     currentMail = mail;
 
 
+
+
+
     if(
+
         mail.recipient_id === currentUser.id &&
+
         !mail.is_read
+
     ){
 
+
+
         const {
+
             error
+
         } =
+
         await supabaseClient
+
             .from("osmail_emails")
+
             .update({
+
                 is_read:true
+
             })
+
             .eq("id",mail.id);
+
+
 
         if(!error){
 
+
+
             mail.is_read = true;
+
         }
+
     }
 
 
+
+
+
     document.getElementById("mailListView")
+
         .classList.add("hidden");
 
+
+
     document.getElementById("mailDetailView")
+
         .classList.remove("hidden");
 
 
+
+
+
     document.getElementById("detailSubject")
+
         .textContent =
+
         mail.subject || "(제목 없음)";
 
+
+
+
+
+    const senderProfile = mail.sender_id ? profileMap.get(mail.sender_id) : null;
+    const recipientProfile = mail.recipient_id ? profileMap.get(mail.recipient_id) : null;
+    const senderName = senderProfile?.display_name || senderProfile?.osmail_id || mail.sender_address || "알 수 없음";
+    const recipientName = recipientProfile?.display_name || recipientProfile?.osmail_id || mail.recipient_address || "알 수 없음";
 
     document.getElementById("detailMeta")
         .innerHTML =
         `
-        보낸 사람: ${escapeHTML(mail.sender_address)}<br>
-        받는 사람: ${escapeHTML(mail.recipient_address)}<br>
+        보낸 사람: ${escapeHTML(senderName)} &lt;${escapeHTML(mail.sender_address || "주소 없음")}&gt;<br>
+        받는 사람: ${escapeHTML(recipientName)} &lt;${escapeHTML(mail.recipient_address || "주소 없음")}&gt;<br>
         날짜: ${new Date(mail.created_at).toLocaleString("ko-KR")}
         `;
 
 
+
+
+
     document.getElementById("detailBody")
+
         .textContent =
+
         mail.body;
 
 
+
+
+
     const isTrash =
+
         (
+
             mail.sender_id === currentUser.id &&
+
             mail.sender_deleted
+
         ) ||
+
         (
+
             mail.recipient_id === currentUser.id &&
+
             mail.recipient_deleted
+
         );
+
+
+
 
 
     document.getElementById("detailDeleteButton")
+
         .classList.toggle(
+
             "hidden",
+
             isTrash
+
         );
 
+
+
     document.getElementById("detailRestoreButton")
+
         .classList.toggle(
+
             "hidden",
+
             !isTrash
+
         );
+
 }
 
 
+
+
+
 /* =========================================
+
    BACK
+
 ========================================= */
+
+
 
 function backToList(){
 
+
+
     currentMail = null;
 
+
+
     document.getElementById("mailDetailView")
+
         .classList.add("hidden");
 
+
+
     document.getElementById("mailListView")
+
         .classList.remove("hidden");
 
+
+
     renderCurrentFolder();
+
 }
+
+
+
 
 
 /* =========================================
+
    COMPOSE
+
 ========================================= */
+
+
 
 function openCompose(){
 
+
+
     document.getElementById("composeModal")
+
         .classList.remove("hidden");
 
+
+
     document.getElementById("composeTo")
+
         .focus();
+
 }
+
+
+
 
 
 function closeCompose(){
 
+
+
     document.getElementById("composeModal")
+
         .classList.add("hidden");
 
+
+
     document.getElementById("composeTo")
+
         .value = "";
+
+
 
     document.getElementById("composeSubject")
+
         .value = "";
 
+
+
     document.getElementById("composeBody")
+
         .value = "";
+
 }
 
 
+
+
+
 /* =========================================
+
    SEND MAIL
+
 ========================================= */
+
+
+
 
 
 function openOscaAISettings(){
 
+
+
     const modal =
+
         document.getElementById(
+
             "oscaAISettingsModal"
+
         );
+
+
 
     modal.classList.remove("hidden");
 
+
+
 }
+
+
+
 
 
 function closeOscaAISettings(){
 
+
+
     const modal =
+
         document.getElementById(
+
             "oscaAISettingsModal"
+
         );
+
+
 
     modal.classList.add("hidden");
 
+
+
 }
+
+
+
 
 
 async function setOscaPassword(){
+
     const password=document.getElementById("oscaPassword").value;
+
     const confirmPassword=document.getElementById("oscaPasswordConfirm").value;
 
+
+
     if(password.length<8 || password.length>100){
+
         toast("비밀번호는 8~100자로 입력해주세요.");
+
         return;
+
     }
+
     if(password!==confirmPassword){
+
         toast("비밀번호가 서로 다릅니다.");
+
         return;
+
     }
+
+
 
     const {data:{session}}=await supabaseClient.auth.getSession();
+
     if(!session?.access_token){
+
         toast("먼저 OSmail에 로그인하세요.");
+
         return;
+
     }
+
+
 
     const button=document.getElementById("oscaPasswordButton");
+
     button.disabled=true;
+
     button.textContent="설정 중...";
 
+
+
     try{
+
         const response=await fetch("https://oscadia-api.onrender.com/api/oscaai/password/set",{
+
             method:"POST",
+
             headers:{
+
                 "Content-Type":"application/json",
+
                 "Authorization":"Bearer "+session.access_token
+
             },
+
             body:JSON.stringify({password})
+
         });
+
         const data=await response.json().catch(()=>({}));
+
         if(!response.ok || !data.ok){
+
             throw new Error(data.error || "OscaAI 비밀번호 설정에 실패했습니다.");
+
         }
+
         document.getElementById("oscaPassword").value="";
+
         document.getElementById("oscaPasswordConfirm").value="";
+
         closeOscaAISettings();
+
         toast("OscaAI 비밀번호가 설정되었습니다.");
+
     }catch(error){
+
         console.error("OscaAI password error:",error);
+
         toast(error.message || "서버와 연결할 수 없습니다.");
+
     }finally{
+
         button.disabled=false;
+
         button.textContent="비밀번호 설정";
+
     }
+
 }
+
+
 
 async function sendMail(){
 
+
+
     const to =
+
         document.getElementById("composeTo")
+
         .value
+
         .trim()
+
         .toLowerCase();
 
+
+
     const subject =
+
         document.getElementById("composeSubject")
+
         .value
+
         .trim();
 
+
+
     const body =
+
         document.getElementById("composeBody")
+
         .value;
+
         console.log("메일 내용:", body);
+
+
+
 
 
     if(!to){
 
+
+
         toast("받는 사람을 입력해주세요.");
+
         return;
+
     }
 
 
+
+
+
     if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)){
+
     toast("올바른 이메일 주소를 입력해주세요.");
+
     return;
+
 }
+
+
+
 
 
     if(!body.trim() && !subject){
 
+
+
         toast("제목이나 내용을 입력해주세요.");
+
         return;
+
     }
 
 
+
+
+
     /*
+
      * OSmail 내부 메일
+
      * @oscadia.net이면 기존 방식으로 바로 저장
+
      */
+
+
 
     if(to.endsWith("@oscadia.net")){
 
+
+
         const id =
+
             to.substring(
+
                 0,
+
                 to.length - "@oscadia.net".length
+
             );
+
+
+
 
 
         if(!/^[a-z0-9_]{3,20}$/.test(id)){
 
+
+
             toast("올바른 OSmail 주소가 아닙니다.");
+
             return;
+
         }
 
 
+
+
+
         const {
+
             data:recipient,
+
             error:recipientError
+
         } =
+
         await supabaseClient
+
             .from("osmail_profiles")
+
             .select("id,osmail_id")
+
             .eq("osmail_id",id)
+
             .maybeSingle();
+
+
+
 
 
         if(recipientError){
 
+
+
             console.error(recipientError);
 
+
+
             toast("받는 사람을 확인하지 못했습니다.");
+
             return;
+
         }
+
+
+
 
 
         if(!recipient){
 
+
+
             toast("존재하지 않는 OSmail 주소입니다.");
+
             return;
+
         }
+
+
+
 
 
         if(recipient.id === currentUser.id){
 
+
+
             toast("자기 자신에게도 메일을 보낼 수 있습니다.");
+
         }
 
 
+
+
+
         const {
+
             error
+
         } =
+
         await supabaseClient
+
             .from("osmail_emails")
+
             .insert({
 
+
+
                 sender_id:
+
                     currentUser.id,
 
+
+
                 recipient_id:
+
                     recipient.id,
 
+
+
                 sender_address:
+
                     currentProfile.osmail_id + "@oscadia.net",
 
+
+
                 recipient_address:
+
                     recipient.osmail_id + "@oscadia.net",
 
+
+
                 subject:
+
                     subject,
 
+
+
                 body:
+
                     body
+
             });
+
+
+
 
 
         if(error){
 
+
+
             console.error(error);
 
+
+
             toast("메일 보내기에 실패했습니다.");
+
             return;
+
         }
+
+
+
 
 
         toast("OSmail 메일을 보냈습니다.");
 
+
+
         closeCompose();
+
+
 
         await loadMails();
 
+
+
         return;
+
     }
 
 
+
+
+
     /*
+
      * 외부 이메일
+
      * Gmail / Naver / Outlook 등
+
      */
 
+
+
     const {
+
         data:sessionData
+
     } =
+
     await supabaseClient.auth.getSession();
 
 
+
+
+
     const accessToken =
+
         sessionData.session?.access_token;
+
+
+
 
 
     if(!accessToken){
 
+
+
         toast("로그인 세션이 만료되었습니다.");
+
         return;
+
     }
+
+
+
 
 
    try{
 
+
+
     const requestData = {
+
         to: to,
+
         subject: subject,
+
         body: body
+
     };
 
+
+
     console.log("실제 전송 데이터:", requestData);
+
     console.log("실제 JSON:", JSON.stringify(requestData));
 
+
+
     const response =
+
         await fetch(
+
             "https://oscadia-api.onrender.com/api/osmail/send-external",
+
             {
+
                 method: "POST",
+
                 headers: {
+
                     "Content-Type": "application/json",
+
                     "Authorization":
+
                         "Bearer " + accessToken
+
                 },
+
                 body: JSON.stringify(requestData)
+
             }
+
         );
 
+
+
     const result =
+
         await response.json()
+
             .catch(() => ({}));
+
+
 
     if(!response.ok || !result.ok){
 
+
+
         throw new Error(
+
             result.error ||
+
             "외부 이메일 보내기에 실패했습니다."
+
         );
+
     }
+
+
 
     toast("외부 이메일을 보냈습니다.");
 
+
+
     closeCompose();
+
+
 
     await loadMails();
 
+
+
 }catch(error){
 
+
+
     console.error(
+
         "External mail error:",
+
         error
+
     );
+
+
 
     toast(
+
         error.message ||
+
         "외부 이메일을 보내지 못했습니다."
+
     );
+
 }
+
 }
+
 /* =========================================
+
    DELETE
+
 ========================================= */
 
+
+
 async function deleteCurrentMail(){
+
+
 
     if(!currentMail) return;
 
 
+
+
+
     const isSender =
+
         currentMail.sender_id === currentUser.id;
 
 
+
+
+
     const isRecipient =
+
         currentMail.recipient_id === currentUser.id;
+
+
+
 
 
     const update = {};
 
 
+
+
+
     if(isSender){
+
         update.sender_deleted = true;
+
     }
 
+
+
     if(isRecipient){
+
         update.recipient_deleted = true;
+
     }
+
+
+
 
 
     const {
+
         error
+
     } =
+
     await supabaseClient
+
         .from("osmail_emails")
+
         .update(update)
+
         .eq("id",currentMail.id);
+
+
+
 
 
     if(error){
 
+
+
         console.error(error);
 
+
+
         toast("삭제하지 못했습니다.");
+
         return;
+
     }
+
+
+
 
 
     toast("메일을 휴지통으로 이동했습니다.");
 
+
+
     await loadMails();
 
+
+
     backToList();
+
 }
 
 
+
+
+
 /* =========================================
+
    RESTORE
+
 ========================================= */
+
+
 
 async function restoreCurrentMail(){
 
+
+
     if(!currentMail) return;
+
+
+
 
 
     const update = {};
 
 
+
+
+
     if(currentMail.sender_id === currentUser.id){
 
+
+
         update.sender_deleted = false;
+
     }
+
+
 
     if(currentMail.recipient_id === currentUser.id){
 
+
+
         update.recipient_deleted = false;
+
     }
 
 
+
+
+
     const {
+
         error
+
     } =
+
     await supabaseClient
+
         .from("osmail_emails")
+
         .update(update)
+
         .eq("id",currentMail.id);
+
+
+
 
 
     if(error){
 
+
+
         console.error(error);
 
+
+
         toast("복구하지 못했습니다.");
+
         return;
+
     }
+
+
+
 
 
     toast("메일을 복구했습니다.");
 
+
+
     await loadMails();
 
+
+
     backToList();
+
 }
 
 
+
+
+
 /* =========================================
+
    LOGOUT
+
 ========================================= */
+
+
 
 async function logout(){
 
+
+
     await supabaseClient.auth.signOut();
 
+
+
     currentUser = null;
+
     currentProfile = null;
+
     allMails = [];
 
+
+
     showAuth();
+
 }
 
 
+
+
+
 /* =========================================
+
    AUTH STATE
+
 ========================================= */
 
+
+
 supabaseClient.auth.onAuthStateChange(
+
     async (event, session) => {
+
+
 
         if(event === "SIGNED_OUT"){
 
+
+
             currentUser = null;
+
             currentProfile = null;
 
+
+
             showAuth();
+
         }
+
+
 
         if(event === "SIGNED_IN"){
 
+
+
             currentUser =
+
                 session?.user || null;
+
+
 
             if(currentUser){
 
+
+
                 setTimeout(
+
                     () => loadProfile(),
+
                     0
+
                 );
+
             }
+
         }
+
     }
+
 );
 
 
+
+
+
 /* =========================================
+
    ESCAPE HTML
+
 ========================================= */
+
+
 
 function escapeHTML(value){
 
+
+
     return String(value ?? "")
+
         .replaceAll("&","&amp;")
+
         .replaceAll("<","&lt;")
+
         .replaceAll(">","&gt;")
+
         .replaceAll('"',"&quot;")
+
         .replaceAll("'","&#039;");
+
 }
+
+
+
 
 
 /* =========================================
+
    START
+
 ========================================= */
+
+
+
+setAuthMode("login");
 
 initialize();
 
+
+
 </script>
+
 <script>
+
 if ("serviceWorker" in navigator) {
+
   navigator.serviceWorker.register("/apps/osmail/sw.js")
+
     .catch(error => {
+
       console.error("OSmail Service Worker:", error);
+
     });
+
 }
+
 </script>
+
 </body>
+
 </html>
