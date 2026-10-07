@@ -1105,23 +1105,14 @@ function escapeAttribute(value){
 
 function openOSmail(){
 
-    const returnUrl =
-        window.location.href;
-
     location.href =
-        "public/osmail.html?returnTo=" +
-        encodeURIComponent(returnUrl);
+        "public/osmail.html";
 }
 
 function openOSmailLogin(){
 
-    const returnUrl =
-        window.location.href;
-
     location.href =
-        "public/osmail.html?returnTo=" +
-        encodeURIComponent(returnUrl) +
-        "&login=1";
+        "public/osmail.html?return=oscadia&login=1";
 }
 
 /* =========================

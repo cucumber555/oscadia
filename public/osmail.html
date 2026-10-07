@@ -1928,52 +1928,189 @@ function normalizeOSmailEmail(value){
 }
 
 async function submitAuth(){
-    const password = document.getElementById("authPassword").value;
-    if(!password){ toast("비밀번호를 입력해주세요."); return; }
 
-    if(authMode === "signup"){
-        const osmailId = document.getElementById("authOSmailId").value.trim().toLowerCase();
-        const displayName = document.getElementById("authDisplayName").value.trim();
+    const password =
+        document.getElementById("authPassword")
+        .value;
 
-        if(!/^[a-z0-9_]{3,20}$/.test(osmailId)){
-            toast("OSmail ID는 영문 소문자, 숫자, _만 사용하며 3~20자여야 합니다."); return;
-        }
-        if(!displayName){ toast("표시 이름을 입력해주세요."); return; }
+    if(!password){
 
-        const email = `${osmailId}@oscadia.net`;
-        const {data: existing, error: existingError} = await supabaseClient
-            .from("osmail_profiles").select("id").eq("osmail_id", osmailId).maybeSingle();
-        if(existingError){ console.error(existingError); toast("OSmail ID를 확인하지 못했습니다."); return; }
-        if(existing){ toast("이미 사용 중인 OSmail ID입니다."); return; }
+        toast(
+            "비밀번호를 입력해주세요."
+        );
 
-        const {data, error} = await supabaseClient.auth.signUp({email, password});
-        if(error){ toast(error.message); return; }
-        if(!data.user){ toast("회원가입에 실패했습니다."); return; }
-
-        if(!data.session){
-            toast("회원가입되었습니다. 이메일 인증이 필요한 경우 인증 후 로그인해주세요.");
-            document.getElementById("authEmail").value = osmailId;
-            setAuthMode("login");
-            return;
-        }
-
-        const {error: profileError} = await supabaseClient.from("osmail_profiles").insert({
-            id:data.user.id, osmail_id:osmailId, display_name:displayName
-        });
-        if(profileError){ console.error(profileError); toast("계정은 만들어졌지만 OSmail 프로필 생성에 실패했습니다."); return; }
-        await initialize();
         return;
     }
 
-    const loginValue = document.getElementById("authEmail").value.trim();
-    if(!loginValue){ toast("OSmail 주소 또는 ID를 입력해주세요."); return; }
-    const email = normalizeOSmailEmail(loginValue);
-    const {error} = await supabaseClient.auth.signInWithPassword({email, password});
-    if(error){ toast(error.message); return; }
+
+    /* =========================
+       회원가입
+    ========================= */
+
+    if(authMode === "signup"){
+
+        const signupValue =
+            document.getElementById("authEmail")
+            .value
+            .trim();
+
+
+        if(!signupValue){
+
+            toast(
+                "OSmail 주소 또는 ID를 입력해주세요."
+            );
+
+            return;
+        }
+
+
+        const email =
+            normalizeOSmailEmail(signupValue);
+
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient.auth.signUp({
+
+            email,
+
+            password
+
+        });
+
+
+        if(error){
+
+            toast(error.message);
+
+            return;
+        }
+
+
+        currentUser =
+            data.user || null;
+
+
+        if(currentUser){
+
+            const displayName =
+                currentUser.user_metadata
+                ?.display_name || "";
+
+
+            await supabaseClient
+                .from("osmail_profiles")
+                .upsert({
+
+                    id: currentUser.id,
+
+                    osmail_id:
+                        email.split("@")[0],
+
+                    display_name:
+                        displayName ||
+                        email.split("@")[0]
+
+                });
+        }
+
+
+        /* =========================
+           OSCADIA에서 시작했는지 확인
+        ========================= */
+
+        const returnTarget =
+            new URLSearchParams(
+                window.location.search
+            ).get("return");
+
+
+        if(returnTarget === "oscadia"){
+
+            window.location.replace(
+                "https://oscadia.net/"
+            );
+
+            return;
+        }
+
+
+        await initialize();
+
+        return;
+    }
+
+
+    /* =========================
+       로그인
+    ========================= */
+
+    const loginValue =
+        document.getElementById("authEmail")
+        .value
+        .trim();
+
+
+    if(!loginValue){
+
+        toast(
+            "OSmail 주소 또는 ID를 입력해주세요."
+        );
+
+        return;
+    }
+
+
+    const email =
+        normalizeOSmailEmail(loginValue);
+
+
+    const {
+        error
+    } =
+    await supabaseClient.auth.signInWithPassword({
+
+        email,
+
+        password
+
+    });
+
+
+    if(error){
+
+        toast(error.message);
+
+        return;
+    }
+
+
+    /* =========================
+       OSCADIA에서 시작했는지 확인
+    ========================= */
+
+    const returnTarget =
+        new URLSearchParams(
+            window.location.search
+        ).get("return");
+
+
+    if(returnTarget === "oscadia"){
+
+        window.location.replace(
+            "https://oscadia.net/"
+        );
+
+        return;
+    }
+
+
     await initialize();
+
 }
-
-
 /* =========================================
 
    PASSWORD RESET
