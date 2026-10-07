@@ -1927,6 +1927,7 @@ function normalizeOSmailEmail(value){
     return v.includes("@") ? v : `${v}@oscadia.net`;
 }
 
+
 async function submitAuth(){
 
     const password =
@@ -1934,12 +1935,9 @@ async function submitAuth(){
         .value;
 
     if(!password){
-
         toast("비밀번호를 입력해주세요.");
-
         return;
     }
-
 
     /* =========================
        회원가입
@@ -1947,75 +1945,66 @@ async function submitAuth(){
 
     if(authMode === "signup"){
 
-        const signupValue =
-            document.getElementById("authEmail")
+        const signupId =
+            document.getElementById("authOSmailId")
             .value
             .trim();
 
+        const displayName =
+            document.getElementById("authDisplayName")
+            .value
+            .trim();
 
-        if(!signupValue){
-
-            toast("OSmail 주소 또는 ID를 입력해주세요.");
-
+        if(!signupId){
+            toast("OSmail 아이디를 입력해주세요.");
             return;
         }
 
+        if(!displayName){
+            toast("표시 이름을 입력해주세요.");
+            return;
+        }
 
         const email =
-            normalizeOSmailEmail(signupValue);
-
+            normalizeOSmailEmail(signupId);
 
         const {
             data,
             error
         } =
         await supabaseClient.auth.signUp({
-
             email,
-
-            password
-
+            password,
+            options: {
+                data: {
+                    display_name: displayName
+                }
+            }
         });
 
-
         if(error){
-
             toast(error.message);
-
             return;
         }
-
 
         currentUser =
             data.user || null;
 
-
         if(currentUser){
-
-            const displayName =
-                currentUser.user_metadata
-                ?.display_name || "";
-
 
             await supabaseClient
                 .from("osmail_profiles")
                 .upsert({
-
                     id: currentUser.id,
-
                     osmail_id:
-                        email.split("@")[0],
-
+                        signupId.toLowerCase(),
                     display_name:
-                        displayName ||
-                        email.split("@")[0]
-
+                        displayName
                 });
         }
 
-
         /* =========================
-           OSCADIA 로그인에서 들어왔는지
+           OSCADIA에서 시작했는지 확인
         ========================= */
 
         const params =
@@ -2023,29 +2012,23 @@ async function submitAuth(){
                 window.location.search
             );
 
-
         const returnTarget =
             params.get("return");
 
         const from =
             params.get("from");
 
-
         if(
             returnTarget === "oscadia" ||
             from === "oscadia"
         ){
-
             window.location.replace(
                 "https://oscadia.net/"
             );
-
             return;
         }
 
-
         await initialize();
-
         return;
     }
 
@@ -2059,43 +2042,29 @@ async function submitAuth(){
         .value
         .trim();
 
-
     if(!loginValue){
-
-        toast(
-            "OSmail 주소 또는 ID를 입력해주세요."
-        );
-
+        toast("OSmail 주소 또는 ID를 입력해주세요.");
         return;
     }
 
-
     const email =
         normalizeOSmailEmail(loginValue);
-
 
     const {
         error
     } =
     await supabaseClient.auth.signInWithPassword({
-
         email,
-
         password
-
     });
 
-
     if(error){
-
         toast(error.message);
-
         return;
     }
 
-
     /* =========================
-       OSCADIA 로그인에서 들어왔는지
+       OSCADIA에서 시작했는지 확인
     ========================= */
 
     const params =
@@ -2103,30 +2072,25 @@ async function submitAuth(){
             window.location.search
         );
 
-
     const returnTarget =
         params.get("return");
 
     const from =
         params.get("from");
 
-
     if(
         returnTarget === "oscadia" ||
         from === "oscadia"
     ){
-
         window.location.replace(
             "https://oscadia.net/"
         );
-
         return;
     }
 
-
     await initialize();
-
 }
+
 /* =========================================
 
    PASSWORD RESET
