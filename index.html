@@ -1,17 +1,30 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
+
 <meta charset="UTF-8">
+
 <meta
     name="viewport"
     content="width=device-width, initial-scale=1, viewport-fit=cover"
 >
-<!-- manifest -->
-<link rel="manifest" href="/public/apps/oscadia/manifest.json">
-<meta name="theme-color" content="#0b4fd8">
+
+<link
+    rel="manifest"
+    href="/public/apps/oscadia/manifest.json"
+>
+
+<meta
+    name="theme-color"
+    content="#0b4fd8"
+>
+
 <title>OSCADIA</title>
 
+
 <style>
+
 * {
     box-sizing: border-box;
 }
@@ -29,6 +42,7 @@ body {
     background: #fff;
 }
 
+
 /* =========================
    HEADER
 ========================= */
@@ -41,6 +55,8 @@ header {
     padding: 10px 28px;
     border-bottom: 1px solid #eee;
     background: #fff;
+    position: relative;
+    z-index: 100;
 }
 
 .logo {
@@ -51,6 +67,7 @@ header {
     cursor: pointer;
     white-space: nowrap;
 }
+
 
 /* =========================
    ADDRESS BAR
@@ -102,6 +119,7 @@ header {
     background: #444;
 }
 
+
 /* =========================
    NAV
 ========================= */
@@ -109,14 +127,16 @@ header {
 nav {
     flex: 0 0 auto;
     display: flex;
-    gap: 8px;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
 }
 
 nav button {
     border: 0;
     background: #fff;
     padding: 9px 13px;
-    border-radius: 8px;
+    border-radius: 9px;
     cursor: pointer;
     font-size: 14px;
     white-space: nowrap;
@@ -125,6 +145,260 @@ nav button {
 nav button:hover {
     background: #f1f3f4;
 }
+
+
+/* =========================
+   PROFILE BUTTON
+========================= */
+
+.profile-button {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.profile-avatar-small {
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #e8eaed;
+    display: none;
+}
+
+.profile-button.logged-in .profile-avatar-small {
+    display: block;
+}
+
+.profile-name {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* =========================
+   SERVICE BUTTON
+========================= */
+
+.service-button {
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.service-dots {
+    width: 18px;
+    height: 18px;
+    display: grid;
+    grid-template-columns: repeat(3, 4px);
+    grid-template-rows: repeat(3, 4px);
+    gap: 3px;
+}
+
+.service-dots span {
+    width: 4px;
+    height: 4px;
+    background: #444;
+    border-radius: 50%;
+}
+
+
+/* =========================
+   SIDE PANELS
+========================= */
+
+.side-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 350px;
+    max-width: 92vw;
+    height: 100vh;
+    background: #fff;
+    box-shadow: -8px 0 30px rgba(0, 0, 0, .14);
+    z-index: 1000;
+    transform: translateX(110%);
+    transition: transform .22s ease;
+    overflow-y: auto;
+}
+
+.side-panel.open {
+    transform: translateX(0);
+}
+
+.panel-header {
+    height: 70px;
+    padding: 0 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 2;
+}
+
+.panel-title {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.panel-close {
+    width: 38px;
+    height: 38px;
+    border: 0;
+    background: #f1f3f4;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.panel-close:hover {
+    background: #e5e7e9;
+}
+
+.panel-content {
+    padding: 22px;
+}
+
+
+/* =========================
+   PANEL OVERLAY
+========================= */
+
+.panel-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .22);
+    z-index: 900;
+    display: none;
+}
+
+.panel-overlay.show {
+    display: block;
+}
+
+
+/* =========================
+   PROFILE PANEL
+========================= */
+
+.profile-card {
+    text-align: center;
+    padding: 10px 0 25px;
+    border-bottom: 1px solid #eee;
+}
+
+.profile-avatar-large {
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #eef1f5;
+    margin-bottom: 12px;
+}
+
+.profile-card-name {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.profile-card-id {
+    color: #777;
+    font-size: 13px;
+    margin-top: 5px;
+}
+
+.login-message {
+    text-align: center;
+    padding: 25px 0;
+    color: #666;
+    line-height: 1.6;
+}
+
+.panel-action {
+    width: 100%;
+    min-height: 48px;
+    border: 0;
+    background: #fff;
+    border-radius: 10px;
+    text-align: left;
+    padding: 12px 14px;
+    cursor: pointer;
+    font-size: 15px;
+    margin-top: 6px;
+}
+
+.panel-action:hover {
+    background: #f5f6f7;
+}
+
+.panel-action.danger {
+    color: #d93025;
+}
+
+
+/* =========================
+   SERVICE PANEL
+========================= */
+
+.service-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.service-item {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    width: 100%;
+    min-height: 62px;
+    padding: 9px 12px;
+    border: 0;
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    text-align: left;
+}
+
+.service-item:hover {
+    background: #f5f6f7;
+}
+
+.service-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: #f1f3f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.service-info {
+    min-width: 0;
+}
+
+.service-name {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.service-description {
+    color: #777;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
 
 /* =========================
    MAIN
@@ -144,6 +418,7 @@ main {
     letter-spacing: -3px;
     margin-bottom: 35px;
 }
+
 
 /* =========================
    SEARCH
@@ -188,12 +463,174 @@ main {
     background: #444;
 }
 
+
+/* =========================
+   SEARCH SUGGESTIONS
+========================= */
+
+.suggestions {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 8px);
+    background: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, .10);
+    overflow: hidden;
+    display: none;
+    z-index: 50;
+}
+
+.suggestions.show {
+    display: block;
+}
+
+.suggestion-item {
+    min-height: 44px;
+    padding: 11px 18px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.suggestion-item:hover {
+    background: #f5f6f7;
+}
+
+
+/* =========================
+   SHORTCUTS
+========================= */
+
+.shortcuts {
+    width: min(680px, 100%);
+    margin: 32px auto 0;
+}
+
+.shortcuts-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.shortcuts-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+}
+
+.add-shortcut-button {
+    border: 0;
+    background: #f1f3f4;
+    border-radius: 8px;
+    padding: 7px 10px;
+    cursor: pointer;
+}
+
+.add-shortcut-button:hover {
+    background: #e5e7e9;
+}
+
+.shortcut-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.shortcut-item {
+    width: 105px;
+    min-height: 82px;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    cursor: pointer;
+    position: relative;
+}
+
+.shortcut-item:hover {
+    background: #f7f8f9;
+}
+
+.shortcut-icon {
+    width: 31px;
+    height: 31px;
+    border-radius: 8px;
+    background: #f1f3f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.shortcut-name {
+    max-width: 85px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 12px;
+}
+
+.shortcut-delete {
+    position: absolute;
+    top: 4px;
+    right: 5px;
+    border: 0;
+    background: transparent;
+    color: #888;
+    cursor: pointer;
+    display: none;
+}
+
+.shortcut-item:hover .shortcut-delete {
+    display: block;
+}
+
+
+/* =========================
+   AI OVERVIEW
+========================= */
+
+.ai-overview {
+    margin-top: 45px;
+    padding: 20px;
+    border: 1px solid #e1e5ea;
+    border-radius: 15px;
+    background: #fafbfc;
+    display: none;
+}
+
+.ai-overview.show {
+    display: block;
+}
+
+.ai-overview-title {
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.ai-overview-text {
+    color: #555;
+    line-height: 1.65;
+    font-size: 14px;
+}
+
+
 /* =========================
    RESULTS
 ========================= */
 
 .results {
-    margin-top: 55px;
+    margin-top: 35px;
 }
 
 .info {
@@ -250,6 +687,117 @@ main {
     padding: 50px;
 }
 
+
+/* =========================
+   HISTORY
+========================= */
+
+.history-section {
+    margin-top: 15px;
+}
+
+.history-title {
+    font-size: 13px;
+    color: #777;
+    margin: 20px 0 8px;
+}
+
+.history-item {
+    width: 100%;
+    padding: 11px 10px;
+    border: 0;
+    background: #fff;
+    border-radius: 8px;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.history-item:hover {
+    background: #f5f6f7;
+}
+
+.clear-history {
+    margin-top: 15px;
+    border: 0;
+    background: #f1f3f4;
+    border-radius: 8px;
+    padding: 9px 12px;
+    cursor: pointer;
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.35);
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-box {
+    width: min(430px, 100%);
+    background: #fff;
+    border-radius: 17px;
+    padding: 25px;
+    box-shadow: 0 15px 50px rgba(0,0,0,.2);
+}
+
+.modal-title {
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 18px;
+}
+
+.modal-box input {
+    width: 100%;
+    height: 44px;
+    border: 1px solid #dfe1e5;
+    border-radius: 9px;
+    padding: 0 12px;
+    outline: none;
+    margin-bottom: 10px;
+}
+
+.modal-box input:focus {
+    border-color: #0b4fd8;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.modal-actions button {
+    border: 0;
+    border-radius: 9px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.modal-cancel {
+    background: #f1f3f4;
+}
+
+.modal-confirm {
+    background: #222;
+    color: #fff;
+}
+
+
 /* =========================
    MOBILE
 ========================= */
@@ -278,7 +826,16 @@ main {
     }
 
     nav button {
-        padding: 8px 11px;
+        padding: 8px 10px;
+    }
+
+    .profile-name {
+        max-width: 60px;
+    }
+
+    .service-button {
+        width: 40px;
+        height: 40px;
     }
 
     main {
@@ -320,7 +877,13 @@ main {
     .result-description {
         font-size: 13px;
     }
+
+    .shortcut-item {
+        width: calc(25% - 8px);
+        min-width: 70px;
+    }
 }
+
 
 @media (max-width: 420px) {
 
@@ -339,11 +902,28 @@ main {
     main {
         padding-top: 60px;
     }
+
+    .profile-name {
+        display: none;
+    }
+
+    .shortcut-item {
+        width: calc(33.333% - 7px);
+    }
+
 }
+
 </style>
+
 </head>
 
+
 <body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
 
 <header>
 
@@ -353,6 +933,7 @@ main {
     >
         OSCADIA
     </div>
+
 
     <div class="os-cadia-address-bar">
 
@@ -373,19 +954,164 @@ main {
 
     </div>
 
+
     <nav>
 
+        <!-- OSmail -->
         <button
             type="button"
-            onclick="location.href='public/osmail.html'"
+            onclick="openOSmail()"
         >
             OSmail
+        </button>
+
+
+        <!-- PROFILE -->
+        <button
+            id="profileButton"
+            class="profile-button"
+            type="button"
+            onclick="toggleProfilePanel()"
+        >
+
+            <img
+                id="profileAvatarSmall"
+                class="profile-avatar-small"
+                alt=""
+            >
+
+            <span
+                id="profileName"
+                class="profile-name"
+            >
+                로그인
+            </span>
+
+        </button>
+
+
+        <!-- SERVICES -->
+        <button
+            id="serviceButton"
+            class="service-button"
+            type="button"
+            onclick="toggleServicePanel()"
+            aria-label="OSCADIA 서비스"
+        >
+
+            <span class="service-dots">
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+                <span></span>
+                <span></span>
+                <span></span>
+
+            </span>
+
         </button>
 
     </nav>
 
 </header>
 
+
+<!-- =========================
+     OVERLAY
+========================= -->
+
+<div
+    id="panelOverlay"
+    class="panel-overlay"
+    onclick="closePanels()"
+></div>
+
+
+<!-- =========================
+     PROFILE PANEL
+========================= -->
+
+<aside
+    id="profilePanel"
+    class="side-panel"
+>
+
+    <div class="panel-header">
+
+        <div class="panel-title">
+            계정
+        </div>
+
+        <button
+            class="panel-close"
+            type="button"
+            onclick="closePanels()"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <div
+        id="profilePanelContent"
+        class="panel-content"
+    >
+
+        <!-- JS에서 생성 -->
+
+    </div>
+
+</aside>
+
+
+<!-- =========================
+     SERVICE PANEL
+========================= -->
+
+<aside
+    id="servicePanel"
+    class="side-panel"
+>
+
+    <div class="panel-header">
+
+        <div class="panel-title">
+            OSCADIA 서비스
+        </div>
+
+        <button
+            class="panel-close"
+            type="button"
+            onclick="closePanels()"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <div class="panel-content">
+
+        <div
+            id="serviceList"
+            class="service-list"
+        ></div>
+
+    </div>
+
+</aside>
+
+
+<!-- =========================
+     MAIN
+========================= -->
 
 <main>
 
@@ -412,8 +1138,67 @@ main {
             ⌕
         </button>
 
+
+        <div
+            id="suggestions"
+            class="suggestions"
+        ></div>
+
     </div>
 
+
+    <!-- SHORTCUTS -->
+
+    <section
+        id="shortcuts"
+        class="shortcuts"
+    >
+
+        <div class="shortcuts-header">
+
+            <div class="shortcuts-title">
+                바로가기
+            </div>
+
+            <button
+                class="add-shortcut-button"
+                type="button"
+                onclick="openShortcutModal()"
+            >
+                + 추가
+            </button>
+
+        </div>
+
+
+        <div
+            id="shortcutList"
+            class="shortcut-list"
+        ></div>
+
+    </section>
+
+
+    <!-- AI OVERVIEW -->
+
+    <section
+        id="aiOverview"
+        class="ai-overview"
+    >
+
+        <div class="ai-overview-title">
+            AI 개요
+        </div>
+
+        <div
+            id="aiOverviewText"
+            class="ai-overview-text"
+        ></div>
+
+    </section>
+
+
+    <!-- RESULTS -->
 
     <div
         id="results"
@@ -423,7 +1208,61 @@ main {
 </main>
 
 
+<!-- =========================
+     SHORTCUT MODAL
+========================= -->
+
+<div
+    id="shortcutModal"
+    class="modal"
+>
+
+    <div class="modal-box">
+
+        <div class="modal-title">
+            바로가기 추가
+        </div>
+
+        <input
+            id="shortcutName"
+            type="text"
+            placeholder="사이트 이름"
+            maxlength="30"
+        >
+
+        <input
+            id="shortcutUrl"
+            type="url"
+            placeholder="https://example.com"
+        >
+
+        <div class="modal-actions">
+
+            <button
+                class="modal-cancel"
+                type="button"
+                onclick="closeShortcutModal()"
+            >
+                취소
+            </button>
+
+            <button
+                class="modal-confirm"
+                type="button"
+                onclick="addShortcut()"
+            >
+                추가
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
 <script>
+
 
 /* =========================
    OSCADIA API
@@ -434,22 +1273,939 @@ const OSCADIA_API =
 
 
 /* =========================
-   SEARCH
+   OSMAIL
 ========================= */
+
+function openOSmail() {
+
+    const returnUrl =
+        window.location.href;
+
+    const url =
+        "public/osmail.html?returnTo=" +
+        encodeURIComponent(returnUrl);
+
+    window.location.href = url;
+
+}
+
+
+/*
+    로그인하지 않은 상태에서
+    프로필을 누르면 OSmail 로그인으로 이동.
+
+    나중에 OSmail의 실제 로그인 코드와
+    이 부분을 연결하면 된다.
+*/
+
+function openOSmailLogin() {
+
+    const returnUrl =
+        window.location.href;
+
+    const url =
+        "public/osmail.html?returnTo=" +
+        encodeURIComponent(returnUrl) +
+        "&login=1";
+
+    window.location.href = url;
+
+}
+
+
+/* =========================
+   SERVICE LIST
+========================= */
+
+/*
+    서비스 주소는 여기에서 관리한다.
+
+    실제 파일 위치가 다르면
+    url만 바꾸면 된다.
+*/
+
+const OSCADIA_SERVICES = [
+
+    {
+        name: "OSCADIA",
+        description: "웹 검색 서비스",
+        icon: "O",
+        url: "/"
+    },
+
+    {
+        name: "OSmail",
+        description: "OSCADIA 메일",
+        icon: "M",
+        url: "/public/osmail.html"
+    },
+
+    {
+        name: "OscaAI",
+        description: "AI 서비스",
+        icon: "AI",
+        url: "/public/oscaai.html"
+    },
+
+    {
+        name: "Osca Translate",
+        description: "번역 서비스",
+        icon: "T",
+        url: "/public/oscatranslate.html"
+    },
+
+    {
+        name: "OSCADIA Games",
+        description: "게임 서비스",
+        icon: "G",
+        url: "https://cucumber555.github.io/game/index"
+    },
+
+    {
+        name: "NUGU",
+        description: "커뮤니티 서비스",
+        icon: "N",
+        url: "https://cucumber555.github.io/nugu/index"
+    }
+
+];
+
+
+function renderServices() {
+
+    const list =
+        document.getElementById("serviceList");
+
+    list.innerHTML =
+        OSCADIA_SERVICES.map(service => `
+
+            <button
+                class="service-item"
+                type="button"
+                onclick="goService('${escapeAttribute(service.url)}')"
+            >
+
+                <span class="service-icon">
+                    ${escapeHtml(service.icon)}
+                </span>
+
+                <span class="service-info">
+
+                    <span class="service-name">
+                        ${escapeHtml(service.name)}
+                    </span>
+
+                    <span class="service-description">
+                        ${escapeHtml(service.description)}
+                    </span>
+
+                </span>
+
+            </button>
+
+        `).join("");
+
+}
+
+
+function goService(url) {
+
+    window.location.href = url;
+
+}
+
+
+/* =========================
+   PANELS
+========================= */
+
+const profilePanel =
+    document.getElementById("profilePanel");
+
+const servicePanel =
+    document.getElementById("servicePanel");
+
+const panelOverlay =
+    document.getElementById("panelOverlay");
+
+
+function toggleProfilePanel() {
+
+    if (isLoggedIn()) {
+
+        closePanels();
+
+        profilePanel.classList.add("open");
+        panelOverlay.classList.add("show");
+
+        renderProfilePanel();
+
+    } else {
+
+        openOSmailLogin();
+
+    }
+
+}
+
+
+function toggleServicePanel() {
+
+    if (
+        servicePanel.classList.contains("open")
+    ) {
+
+        closePanels();
+
+        return;
+
+    }
+
+    closePanels();
+
+    servicePanel.classList.add("open");
+    panelOverlay.classList.add("show");
+
+}
+
+
+function closePanels() {
+
+    profilePanel.classList.remove("open");
+    servicePanel.classList.remove("open");
+    panelOverlay.classList.remove("show");
+
+}
+
+
+/* =========================
+   LOGIN STATE
+========================= */
+
+/*
+    현재는 OSCADIA가 사용할 수 있는
+    로컬 로그인 상태 구조.
+
+    OSmail 실제 로그인 연동 시
+    이 함수만 Supabase Auth 확인 방식으로
+    교체하면 된다.
+*/
+
+function getStoredProfile() {
+
+    try {
+
+        const value =
+            localStorage.getItem(
+                "osmail_profile"
+            );
+
+        if (!value) {
+            return null;
+        }
+
+        return JSON.parse(value);
+
+    } catch {
+
+        return null;
+
+    }
+
+}
+
+
+function isLoggedIn() {
+
+    return !!getStoredProfile();
+
+}
+
+
+/*
+    테스트 또는 OSmail 연동 시
+    사용할 수 있는 프로필 구조.
+
+    예:
+
+    {
+        name: "cucu",
+        id: "cucu",
+        avatar: "https://..."
+    }
+*/
+
+
+function renderProfileButton() {
+
+    const button =
+        document.getElementById(
+            "profileButton"
+        );
+
+    const name =
+        document.getElementById(
+            "profileName"
+        );
+
+    const avatar =
+        document.getElementById(
+            "profileAvatarSmall"
+        );
+
+    const profile =
+        getStoredProfile();
+
+
+    if (!profile) {
+
+        button.classList.remove(
+            "logged-in"
+        );
+
+        name.textContent =
+            "로그인";
+
+        avatar.removeAttribute(
+            "src"
+        );
+
+        return;
+
+    }
+
+
+    button.classList.add(
+        "logged-in"
+    );
+
+    name.textContent =
+        profile.name ||
+        profile.id ||
+        "사용자";
+
+
+    if (profile.avatar) {
+
+        avatar.src =
+            profile.avatar;
+
+    }
+
+}
+
+
+function renderProfilePanel() {
+
+    const container =
+        document.getElementById(
+            "profilePanelContent"
+        );
+
+    const profile =
+        getStoredProfile();
+
+
+    if (!profile) {
+
+        container.innerHTML = `
+
+            <div class="login-message">
+
+                OSCADIA의 검색 기록과<br>
+                계정 기능을 사용하려면<br>
+                OSmail에 로그인하세요.
+
+                <br><br>
+
+                <button
+                    class="panel-action"
+                    type="button"
+                    onclick="openOSmailLogin()"
+                >
+                    OSmail 로그인
+                </button>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    const avatar =
+        profile.avatar ||
+        "data:image/svg+xml;charset=UTF-8," +
+        encodeURIComponent(`
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="100"
+                 height="100">
+                <rect width="100" height="100"
+                      fill="#eef1f5"/>
+                <text x="50"
+                      y="58"
+                      text-anchor="middle"
+                      font-size="35"
+                      fill="#777">
+                    ${String(
+                        profile.name ||
+                        profile.id ||
+                        "U"
+                    ).charAt(0).toUpperCase()}
+                </text>
+            </svg>
+        `);
+
+
+    container.innerHTML = `
+
+        <div class="profile-card">
+
+            <img
+                class="profile-avatar-large"
+                src="${escapeAttribute(avatar)}"
+                alt=""
+            >
+
+            <div class="profile-card-name">
+                ${escapeHtml(
+                    profile.name ||
+                    profile.id ||
+                    "사용자"
+                )}
+            </div>
+
+            <div class="profile-card-id">
+                ${profile.id
+                    ? "@" + escapeHtml(profile.id)
+                    : ""
+                }
+            </div>
+
+        </div>
+
+
+        <button
+            class="panel-action"
+            type="button"
+            onclick="editProfile()"
+        >
+            프로필 편집
+        </button>
+
+
+        <button
+            class="panel-action"
+            type="button"
+            onclick="showSearchHistory()"
+        >
+            검색 기록
+        </button>
+
+
+        <button
+            class="panel-action"
+            type="button"
+            onclick="showVisitHistory()"
+        >
+            방문 기록
+        </button>
+
+
+        <button
+            class="panel-action"
+            type="button"
+            onclick="accountSettings()"
+        >
+            계정 설정
+        </button>
+
+
+        <button
+            class="panel-action danger"
+            type="button"
+            onclick="logout()"
+        >
+            로그아웃
+        </button>
+
+
+        <div
+            id="profileHistoryArea"
+            class="history-section"
+        ></div>
+
+    `;
+
+}
+
+
+/* =========================
+   PROFILE EDIT
+========================= */
+
+function editProfile() {
+
+    /*
+        실제 프로필 수정은
+        OSmail의 프로필 페이지와 연결한다.
+
+        지금은 OSmail로 이동.
+    */
+
+    const returnUrl =
+        window.location.href;
+
+    window.location.href =
+        "public/osmail.html?profile=1&returnTo=" +
+        encodeURIComponent(returnUrl);
+
+}
+
+
+function accountSettings() {
+
+    const returnUrl =
+        window.location.href;
+
+    window.location.href =
+        "public/osmail.html?settings=1&returnTo=" +
+        encodeURIComponent(returnUrl);
+
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+function logout() {
+
+    localStorage.removeItem(
+        "osmail_profile"
+    );
+
+    renderProfileButton();
+
+    renderProfilePanel();
+
+    alert(
+        "로그아웃되었습니다."
+    );
+
+}
+
+
+/* =========================
+   SEARCH HISTORY
+========================= */
+
+function getSearchHistory() {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem(
+                "oscadia_search_history"
+            ) || "[]"
+        );
+
+    } catch {
+
+        return [];
+
+    }
+
+}
+
+
+function saveSearchHistory(query) {
+
+    let history =
+        getSearchHistory();
+
+    history =
+        history.filter(
+            item => item !== query
+        );
+
+    history.unshift(query);
+
+    history =
+        history.slice(0, 30);
+
+    localStorage.setItem(
+        "oscadia_search_history",
+        JSON.stringify(history)
+    );
+
+}
+
+
+function showSearchHistory() {
+
+    const area =
+        document.getElementById(
+            "profileHistoryArea"
+        );
+
+    const history =
+        getSearchHistory();
+
+
+    if (!history.length) {
+
+        area.innerHTML = `
+            <div class="history-title">
+                검색 기록이 없습니다.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    area.innerHTML = `
+
+        <div class="history-title">
+            최근 검색
+        </div>
+
+        ${history.map(item => `
+
+            <button
+                class="history-item"
+                type="button"
+                onclick="searchFromHistory('${escapeAttribute(item)}')"
+            >
+                ${escapeHtml(item)}
+            </button>
+
+        `).join("")}
+
+
+        <button
+            class="clear-history"
+            type="button"
+            onclick="clearSearchHistory()"
+        >
+            검색 기록 전체 삭제
+        </button>
+
+    `;
+
+}
+
+
+function searchFromHistory(query) {
+
+    queryInput.value =
+        query;
+
+    closePanels();
+
+    search();
+
+}
+
+
+function clearSearchHistory() {
+
+    localStorage.removeItem(
+        "oscadia_search_history"
+    );
+
+    showSearchHistory();
+
+}
+
+
+/* =========================
+   VISIT HISTORY
+========================= */
+
+function getVisitHistory() {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem(
+                "oscadia_visit_history"
+            ) || "[]"
+        );
+
+    } catch {
+
+        return [];
+
+    }
+
+}
+
+
+function saveVisitHistory(page) {
+
+    let history =
+        getVisitHistory();
+
+    history =
+        history.filter(
+            item => item.url !== page.url
+        );
+
+    history.unshift({
+
+        title:
+            page.title ||
+            page.url,
+
+        url:
+            page.url,
+
+        time:
+            new Date().toISOString()
+
+    });
+
+    history =
+        history.slice(0, 50);
+
+    localStorage.setItem(
+        "oscadia_visit_history",
+        JSON.stringify(history)
+    );
+
+}
+
+
+function showVisitHistory() {
+
+    const area =
+        document.getElementById(
+            "profileHistoryArea"
+        );
+
+    const history =
+        getVisitHistory();
+
+
+    if (!history.length) {
+
+        area.innerHTML = `
+            <div class="history-title">
+                방문 기록이 없습니다.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    area.innerHTML = `
+
+        <div class="history-title">
+            최근 방문
+        </div>
+
+        ${history.map(item => `
+
+            <button
+                class="history-item"
+                type="button"
+                onclick="window.open('${escapeAttribute(item.url)}', '_blank')"
+            >
+                ${escapeHtml(item.title)}
+            </button>
+
+        `).join("")}
+
+
+        <button
+            class="clear-history"
+            type="button"
+            onclick="clearVisitHistory()"
+        >
+            방문 기록 전체 삭제
+        </button>
+
+    `;
+
+}
+
+
+function clearVisitHistory() {
+
+    localStorage.removeItem(
+        "oscadia_visit_history"
+    );
+
+    showVisitHistory();
+
+}
+
+
+/* =========================
+   SEARCH SUGGESTIONS
+========================= */
+
+const SEARCH_SUGGESTIONS = [
+
+    "google",
+    "gmail",
+    "google maps",
+    "github",
+    "youtube",
+    "naver",
+    "naver mail",
+    "wikipedia",
+    "instagram",
+    "facebook",
+    "chatgpt",
+    "microsoft",
+    "hotmail",
+    "outlook"
+
+];
+
 
 const queryInput =
     document.getElementById("query");
 
-const results =
-    document.getElementById("results");
+const suggestions =
+    document.getElementById(
+        "suggestions"
+    );
 
+
+queryInput.addEventListener(
+    "input",
+    showSuggestions
+);
+
+
+function showSuggestions() {
+
+    const value =
+        queryInput.value
+            .trim()
+            .toLowerCase();
+
+
+    if (!value) {
+
+        suggestions.innerHTML =
+            "";
+
+        suggestions.classList.remove(
+            "show"
+        );
+
+        return;
+
+    }
+
+
+    const matches =
+        SEARCH_SUGGESTIONS
+            .filter(
+                item =>
+                    item
+                        .toLowerCase()
+                        .includes(value)
+            )
+            .slice(0, 6);
+
+
+    if (!matches.length) {
+
+        suggestions.innerHTML =
+            "";
+
+        suggestions.classList.remove(
+            "show"
+        );
+
+        return;
+
+    }
+
+
+    suggestions.innerHTML =
+        matches.map(item => `
+
+            <div
+                class="suggestion-item"
+                onclick="useSuggestion('${escapeAttribute(item)}')"
+            >
+                ${escapeHtml(item)}
+            </div>
+
+        `).join("");
+
+
+    suggestions.classList.add(
+        "show"
+    );
+
+}
+
+
+function useSuggestion(value) {
+
+    queryInput.value =
+        value;
+
+    suggestions.classList.remove(
+        "show"
+    );
+
+    search();
+
+}
+
+
+document.addEventListener(
+    "click",
+    event => {
+
+        if (
+            !event.target.closest(
+                ".search-box"
+            )
+        ) {
+
+            suggestions.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================
+   SEARCH
+========================= */
 
 queryInput.addEventListener(
     "keydown",
     event => {
 
-        if (event.key === "Enter") {
+        if (
+            event.key === "Enter"
+        ) {
+
+            suggestions.classList.remove(
+                "show"
+            );
+
             search();
+
         }
 
     }
@@ -461,19 +2217,39 @@ async function search() {
     const q =
         queryInput.value.trim();
 
+    const shortcuts =
+        document.getElementById("shortcuts");
+
 
     if (!q) {
 
         results.innerHTML = "";
 
+        document
+            .getElementById("aiOverview")
+            .classList.remove("show");
+
+        // 검색어가 없으면 바로가기 다시 표시
+        shortcuts.style.display = "";
+
         return;
+
     }
 
 
+    // 검색어가 있으면 바로가기 숨김
+    shortcuts.style.display = "none";
+
+
+    saveSearchHistory(q);
+
+
     results.innerHTML = `
+
         <div class="loading">
             검색 중...
         </div>
+
     `;
 
 
@@ -493,6 +2269,7 @@ async function search() {
                 "Search failed: " +
                 response.status
             );
+
         }
 
 
@@ -501,6 +2278,11 @@ async function search() {
 
 
         renderResults(data);
+
+        createAIOverview(
+            q,
+            data
+        );
 
 
     } catch (error) {
@@ -512,11 +2294,84 @@ async function search() {
 
 
         results.innerHTML = `
+
             <div class="empty">
                 검색 서버에 연결할 수 없습니다.
             </div>
+
         `;
+
     }
+
+}
+
+/* =========================
+   AI OVERVIEW
+========================= */
+
+/*
+    현재는 검색 결과의 제목/설명을 이용한
+    기본 개요 UI.
+
+    실제 AI 생성은 나중에 OscaAI API와 연결.
+*/
+
+function createAIOverview(
+    query,
+    data
+) {
+
+    const box =
+        document.getElementById(
+            "aiOverview"
+        );
+
+    const text =
+        document.getElementById(
+            "aiOverviewText"
+        );
+
+
+    if (
+        !data.results ||
+        !data.results.length
+    ) {
+
+        box.classList.remove(
+            "show"
+        );
+
+        return;
+
+    }
+
+
+    const firstResults =
+        data.results
+            .slice(0, 3);
+
+
+    const summary =
+        firstResults
+            .map(
+                page =>
+                    page.title ||
+                    page.description ||
+                    ""
+            )
+            .filter(Boolean)
+            .join(" · ");
+
+
+    text.textContent =
+        `"${query}"에 대한 검색 결과를 바탕으로 한 기본 개요입니다. ` +
+        summary;
+
+
+    box.classList.add(
+        "show"
+    );
+
 }
 
 
@@ -532,24 +2387,35 @@ function renderResults(data) {
     ) {
 
         results.innerHTML = `
+
             <div class="empty">
-                "${escapeHtml(data.query || "")}"
+
+                "${escapeHtml(
+                    data.query || ""
+                )}"
+
                 에 대한 검색 결과가 없습니다.
+
             </div>
+
         `;
 
         return;
+
     }
 
 
     let html = `
+
         <div class="info">
             검색 결과 ${data.count}개
         </div>
+
     `;
 
 
     html += data.results
+
         .map(page => `
 
             <div class="result">
@@ -560,6 +2426,7 @@ function renderResults(data) {
                         href="${escapeAttribute(page.url)}"
                         target="_blank"
                         rel="noopener noreferrer"
+                        onclick="recordResultVisit(event, this)"
                     >
                         ${escapeHtml(
                             page.title ||
@@ -576,21 +2443,69 @@ function renderResults(data) {
 
 
                 <div class="result-description">
+
                     ${escapeHtml(
                         page.description ||
                         makeSnippet(page)
                     )}
+
                 </div>
 
             </div>
 
         `)
+
         .join("");
 
 
-    results.innerHTML = html;
+    results.innerHTML =
+        html;
+
 }
 
+
+/* =========================
+   RESULT VISIT
+========================= */
+
+function recordResultVisit(
+    event,
+    element
+) {
+
+    const result =
+        element.closest(
+            ".result"
+        );
+
+    if (!result) {
+        return;
+    }
+
+
+    const url =
+        element.href;
+
+    const title =
+        element.textContent.trim();
+
+
+    saveVisitHistory({
+
+        title:
+            title || url,
+
+        url:
+            url
+
+    });
+
+}
+
+
+/* =========================
+   SNIPPET
+========================= */
 
 function makeSnippet(page) {
 
@@ -599,7 +2514,11 @@ function makeSnippet(page) {
         page.content ||
         "";
 
-    return text.slice(0, 180);
+    return text.slice(
+        0,
+        180
+    );
+
 }
 
 
@@ -635,12 +2554,280 @@ function escapeHtml(value) {
             "'",
             "&#039;"
         );
+
 }
 
 
 function escapeAttribute(value) {
 
     return escapeHtml(value);
+
+}
+
+
+/* =========================
+   SHORTCUTS
+========================= */
+
+const DEFAULT_SHORTCUTS = [
+
+    {
+        name: "Google",
+        url: "https://www.google.com"
+    },
+
+    {
+        name: "YouTube",
+        url: "https://www.youtube.com"
+    },
+
+    {
+        name: "GitHub",
+        url: "https://github.com"
+    }
+
+];
+
+
+function getShortcuts() {
+
+    try {
+
+        const saved =
+            localStorage.getItem(
+                "oscadia_shortcuts"
+            );
+
+        if (saved) {
+
+            return JSON.parse(
+                saved
+            );
+
+        }
+
+    } catch {}
+
+    return DEFAULT_SHORTCUTS;
+
+}
+
+
+function saveShortcuts(list) {
+
+    localStorage.setItem(
+        "oscadia_shortcuts",
+        JSON.stringify(list)
+    );
+
+}
+
+
+function renderShortcuts() {
+
+    const list =
+        document.getElementById(
+            "shortcutList"
+        );
+
+    const shortcuts =
+        getShortcuts();
+
+
+    list.innerHTML =
+        shortcuts.map(
+            (item, index) => `
+
+                <div
+                    class="shortcut-item"
+                    onclick="openShortcut('${escapeAttribute(item.url)}')"
+                >
+
+                    <button
+                        class="shortcut-delete"
+                        type="button"
+                        onclick="deleteShortcut(event, ${index})"
+                        aria-label="삭제"
+                    >
+                        ×
+                    </button>
+
+
+                    <div class="shortcut-icon">
+                        ${escapeHtml(
+                            getInitial(
+                                item.name
+                            )
+                        )}
+                    </div>
+
+
+                    <div class="shortcut-name">
+                        ${escapeHtml(
+                            item.name
+                        )}
+                    </div>
+
+                </div>
+
+            `
+        ).join("");
+
+}
+
+
+function getInitial(name) {
+
+    return String(
+        name || "?"
+    )
+    .charAt(0)
+    .toUpperCase();
+
+}
+
+
+function openShortcut(url) {
+
+    window.open(
+        url,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
+}
+
+
+function deleteShortcut(
+    event,
+    index
+) {
+
+    event.stopPropagation();
+
+
+    const list =
+        getShortcuts();
+
+
+    list.splice(
+        index,
+        1
+    );
+
+
+    saveShortcuts(list);
+
+    renderShortcuts();
+
+}
+
+
+function openShortcutModal() {
+
+    document
+        .getElementById(
+            "shortcutModal"
+        )
+        .classList.add("show");
+
+    document
+        .getElementById(
+            "shortcutName"
+        )
+        .focus();
+
+}
+
+
+function closeShortcutModal() {
+
+    document
+        .getElementById(
+            "shortcutModal"
+        )
+        .classList.remove("show");
+
+}
+
+
+function addShortcut() {
+
+    const name =
+        document
+            .getElementById(
+                "shortcutName"
+            )
+            .value
+            .trim();
+
+
+    let url =
+        document
+            .getElementById(
+                "shortcutUrl"
+            )
+            .value
+            .trim();
+
+
+    if (!name || !url) {
+
+        alert(
+            "사이트 이름과 주소를 입력하세요."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !/^https?:\/\//i.test(
+            url
+        )
+    ) {
+
+        url =
+            "https://" +
+            url;
+
+    }
+
+
+    const list =
+        getShortcuts();
+
+
+    list.push({
+
+        name:
+            name,
+
+        url:
+            url
+
+    });
+
+
+    saveShortcuts(list);
+
+    renderShortcuts();
+
+    document
+        .getElementById(
+            "shortcutName"
+        )
+        .value = "";
+
+    document
+        .getElementById(
+            "shortcutUrl"
+        )
+        .value = "";
+
+    closeShortcutModal();
+
 }
 
 
@@ -652,6 +2839,7 @@ const addressInput =
     document.getElementById(
         "osAddressInput"
     );
+
 
 const addressGo =
     document.getElementById(
@@ -670,17 +2858,16 @@ async function goAddress() {
     }
 
 
-    /*
-       http:// 또는 https://가
-       없으면 https:// 추가
-    */
-
     if (
-        !/^https?:\/\//i.test(value)
+        !/^https?:\/\//i.test(
+            value
+        )
     ) {
 
         value =
-            "https://" + value;
+            "https://" +
+            value;
+
     }
 
 
@@ -697,16 +2884,22 @@ async function goAddress() {
                 OSCADIA_API +
                 "/api/crawl/queue",
                 {
-                    method: "POST",
+
+                    method:
+                        "POST",
 
                     headers: {
+
                         "Content-Type":
                             "application/json"
+
                     },
 
-                    body: JSON.stringify({
-                        url: value
-                    })
+                    body:
+                        JSON.stringify({
+                            url: value
+                        })
+
                 }
             );
 
@@ -741,6 +2934,7 @@ async function goAddress() {
             );
 
             return;
+
         }
 
 
@@ -755,14 +2949,9 @@ async function goAddress() {
             );
 
             return;
+
         }
 
-
-        /*
-           큐 등록 성공.
-           이제 사용자가 입력한
-           실제 웹사이트로 이동.
-        */
 
         window.location.href =
             value;
@@ -781,13 +2970,11 @@ async function goAddress() {
             "오류: " +
             error.message
         );
+
     }
+
 }
 
-
-/* =========================
-   ADDRESS EVENTS
-========================= */
 
 addressGo.addEventListener(
     "click",
@@ -799,27 +2986,98 @@ addressInput.addEventListener(
     "keydown",
     event => {
 
-        if (event.key === "Enter") {
+        if (
+            event.key === "Enter"
+        ) {
+
             goAddress();
+
         }
 
     }
 );
 
-</script>
-<script>
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-        // Service Worker
-navigator.serviceWorker.register(
-    "/public/apps/oscadia/sw.js"
-).then(registration => {
-            console.log("OSCADIA Service Worker registered:", registration.scope);
-        }).catch(error => {
-            console.error("OSCADIA Service Worker registration failed:", error);
-        });
-    });
+
+/* =========================
+   INITIALIZE
+========================= */
+
+renderServices();
+
+renderProfileButton();
+
+renderShortcuts();
+
+
+/* =========================
+   CLOSE MODAL
+========================= */
+
+document
+    .getElementById(
+        "shortcutModal"
+    )
+    .addEventListener(
+        "click",
+        event => {
+
+            if (
+                event.target.id ===
+                "shortcutModal"
+            ) {
+
+                closeShortcutModal();
+
+            }
+
+        }
+    );
+
+
+/* =========================
+   SERVICE WORKER
+========================= */
+
+if (
+    "serviceWorker" in navigator
+) {
+
+    window.addEventListener(
+        "load",
+        () => {
+
+            navigator.serviceWorker
+                .register(
+                    "/public/apps/oscadia/sw.js"
+                )
+                .then(
+                    registration => {
+
+                        console.log(
+                            "OSCADIA Service Worker registered:",
+                            registration.scope
+                        );
+
+                    }
+                )
+                .catch(
+                    error => {
+
+                        console.error(
+                            "OSCADIA Service Worker registration failed:",
+                            error
+                        );
+
+                    }
+                );
+
+        }
+    );
+
 }
+
 </script>
+
 </body>
+
 </html>
