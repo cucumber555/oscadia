@@ -1935,9 +1935,7 @@ async function submitAuth(){
 
     if(!password){
 
-        toast(
-            "비밀번호를 입력해주세요."
-        );
+        toast("비밀번호를 입력해주세요.");
 
         return;
     }
@@ -1957,9 +1955,7 @@ async function submitAuth(){
 
         if(!signupValue){
 
-            toast(
-                "OSmail 주소 또는 ID를 입력해주세요."
-            );
+            toast("OSmail 주소 또는 ID를 입력해주세요.");
 
             return;
         }
@@ -2019,16 +2015,26 @@ async function submitAuth(){
 
 
         /* =========================
-           OSCADIA에서 시작했는지 확인
+           OSCADIA 로그인에서 들어왔는지
         ========================= */
 
-        const returnTarget =
+        const params =
             new URLSearchParams(
                 window.location.search
-            ).get("return");
+            );
 
 
-        if(returnTarget === "oscadia"){
+        const returnTarget =
+            params.get("return");
+
+        const from =
+            params.get("from");
+
+
+        if(
+            returnTarget === "oscadia" ||
+            from === "oscadia"
+        ){
 
             window.location.replace(
                 "https://oscadia.net/"
@@ -2089,16 +2095,26 @@ async function submitAuth(){
 
 
     /* =========================
-       OSCADIA에서 시작했는지 확인
+       OSCADIA 로그인에서 들어왔는지
     ========================= */
 
-    const returnTarget =
+    const params =
         new URLSearchParams(
             window.location.search
-        ).get("return");
+        );
 
 
-    if(returnTarget === "oscadia"){
+    const returnTarget =
+        params.get("return");
+
+    const from =
+        params.get("from");
+
+
+    if(
+        returnTarget === "oscadia" ||
+        from === "oscadia"
+    ){
 
         window.location.replace(
             "https://oscadia.net/"
@@ -4119,55 +4135,68 @@ async function logout(){
 
 
 supabaseClient.auth.onAuthStateChange(
-
     async (event, session) => {
-
-
 
         if(event === "SIGNED_OUT"){
 
-
-
             currentUser = null;
-
             currentProfile = null;
-
-
 
             showAuth();
 
+            return;
         }
-
 
 
         if(event === "SIGNED_IN"){
 
-
-
             currentUser =
-
                 session?.user || null;
 
 
+            if(!currentUser){
 
-            if(currentUser){
-
-
-
-                setTimeout(
-
-                    () => loadProfile(),
-
-                    0
-
-                );
-
+                return;
             }
 
+
+            /* =========================
+               OSCADIA에서 로그인 시작했는지 확인
+            ========================= */
+
+            const params =
+                new URLSearchParams(
+                    window.location.search
+                );
+
+
+            const returnTarget =
+                params.get("return");
+
+            const from =
+                params.get("from");
+
+
+            if(
+                returnTarget === "oscadia" ||
+                from === "oscadia"
+            ){
+
+                window.location.replace(
+                    "https://oscadia.net/"
+                );
+
+                return;
+            }
+
+
+            setTimeout(
+                () => loadProfile(),
+                0
+            );
         }
 
     }
-
 );
 
 
