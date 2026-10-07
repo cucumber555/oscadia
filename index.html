@@ -1,939 +1,797 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="manifest" href="/public/apps/oscadia/manifest.json">
+<meta name="theme-color" content="#0b4fd8">
 
-<meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
->
-
-<link
-    rel="manifest"
-    href="/public/apps/oscadia/manifest.json"
->
-
-<meta
-    name="theme-color"
-    content="#0b4fd8"
->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <title>OSCADIA</title>
 
-
 <style>
-
-* {
-    box-sizing: border-box;
+*{
+    box-sizing:border-box;
 }
 
-html,
-body {
-    margin: 0;
-    min-height: 100%;
+html,body{
+    margin:0;
+    min-height:100%;
 }
 
-body {
-    min-height: 100vh;
-    font-family: Arial, "Noto Sans KR", sans-serif;
-    color: #202124;
-    background: #fff;
+body{
+    min-height:100vh;
+    font-family:Arial,"Noto Sans KR",sans-serif;
+    color:#202124;
+    background:#fff;
 }
 
+/* HEADER */
 
-/* =========================
-   HEADER
-========================= */
-
-header {
-    min-height: 64px;
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    padding: 10px 28px;
-    border-bottom: 1px solid #eee;
-    background: #fff;
-    position: relative;
-    z-index: 100;
+header{
+    min-height:64px;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding:10px 28px;
+    border-bottom:1px solid #eee;
+    background:#fff;
+    position:relative;
+    z-index:100;
 }
 
-.logo {
-    flex: 0 0 auto;
-    font-size: 25px;
-    font-weight: 700;
-    letter-spacing: -1px;
-    cursor: pointer;
-    white-space: nowrap;
+.logo{
+    flex:0 0 auto;
+    font-size:25px;
+    font-weight:700;
+    letter-spacing:-1px;
+    cursor:pointer;
+    white-space:nowrap;
 }
-
 
-/* =========================
-   ADDRESS BAR
-========================= */
+/* ADDRESS */
 
-.os-cadia-address-bar {
-    flex: 1;
-    min-width: 0;
-    max-width: 600px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+.os-cadia-address-bar{
+    flex:1;
+    min-width:0;
+    max-width:600px;
+    display:flex;
+    align-items:center;
+    gap:6px;
 }
 
-.os-cadia-address-bar input {
-    flex: 1;
-    min-width: 0;
-    width: 100%;
-    height: 40px;
-    border: 1px solid #dfe1e5;
-    border-radius: 20px;
-    padding: 0 15px;
-    outline: none;
-    font-size: 14px;
-    color: #202124;
-    background: #f8f9fa;
+.os-cadia-address-bar input{
+    flex:1;
+    min-width:0;
+    height:40px;
+    border:1px solid #dfe1e5;
+    border-radius:20px;
+    padding:0 15px;
+    outline:none;
+    font-size:14px;
+    background:#f8f9fa;
 }
 
-.os-cadia-address-bar input:focus {
-    border-color: #aaa;
-    background: #fff;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, .08);
+.os-cadia-address-bar input:focus{
+    border-color:#aaa;
+    background:#fff;
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
 }
 
-.os-cadia-address-bar button {
-    flex: 0 0 auto;
-    height: 40px;
-    padding: 0 15px;
-    border: 0;
-    border-radius: 20px;
-    background: #222;
-    color: #fff;
-    cursor: pointer;
-    font-size: 14px;
-    white-space: nowrap;
+.os-cadia-address-bar button{
+    height:40px;
+    padding:0 15px;
+    border:0;
+    border-radius:20px;
+    background:#222;
+    color:#fff;
+    cursor:pointer;
+    white-space:nowrap;
 }
 
-.os-cadia-address-bar button:hover {
-    background: #444;
+.os-cadia-address-bar button:hover{
+    background:#444;
 }
 
+/* NAV */
 
-/* =========================
-   NAV
-========================= */
-
-nav {
-    flex: 0 0 auto;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-left: auto;
+nav{
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    margin-left:auto;
 }
 
-nav button {
-    border: 0;
-    background: #fff;
-    padding: 9px 13px;
-    border-radius: 9px;
-    cursor: pointer;
-    font-size: 14px;
-    white-space: nowrap;
+nav button{
+    border:0;
+    background:#fff;
+    padding:9px 13px;
+    border-radius:9px;
+    cursor:pointer;
+    font-size:14px;
+    white-space:nowrap;
 }
 
-nav button:hover {
-    background: #f1f3f4;
+nav button:hover{
+    background:#f1f3f4;
 }
-
 
-/* =========================
-   PROFILE BUTTON
-========================= */
+/* PROFILE */
 
-.profile-button {
-    display: flex;
-    align-items: center;
-    gap: 7px;
+.profile-button{
+    display:flex;
+    align-items:center;
+    gap:7px;
 }
 
-.profile-avatar-small {
-    width: 27px;
-    height: 27px;
-    border-radius: 50%;
-    object-fit: cover;
-    background: #e8eaed;
-    display: none;
+.profile-avatar-small{
+    width:27px;
+    height:27px;
+    border-radius:50%;
+    object-fit:cover;
+    background:#e8eaed;
+    display:none;
 }
 
-.profile-button.logged-in .profile-avatar-small {
-    display: block;
+.profile-button.logged-in .profile-avatar-small{
+    display:block;
 }
 
-.profile-name {
-    max-width: 100px;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.profile-name{
+    max-width:100px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 
+/* SERVICES BUTTON */
 
-/* =========================
-   SERVICE BUTTON
-========================= */
-
-.service-button {
-    width: 42px;
-    height: 42px;
-    padding: 0;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.service-button{
+    width:42px;
+    height:42px;
+    padding:0;
+    border-radius:10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
-.service-dots {
-    width: 18px;
-    height: 18px;
-    display: grid;
-    grid-template-columns: repeat(3, 4px);
-    grid-template-rows: repeat(3, 4px);
-    gap: 3px;
+.service-dots{
+    width:18px;
+    height:18px;
+    display:grid;
+    grid-template-columns:repeat(3,4px);
+    grid-template-rows:repeat(3,4px);
+    gap:3px;
 }
 
-.service-dots span {
-    width: 4px;
-    height: 4px;
-    background: #444;
-    border-radius: 50%;
+.service-dots span{
+    width:4px;
+    height:4px;
+    background:#444;
+    border-radius:50%;
 }
-
 
-/* =========================
-   SIDE PANELS
-========================= */
+/* PANELS */
 
-.side-panel {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 350px;
-    max-width: 92vw;
-    height: 100vh;
-    background: #fff;
-    box-shadow: -8px 0 30px rgba(0, 0, 0, .14);
-    z-index: 1000;
-    transform: translateX(110%);
-    transition: transform .22s ease;
-    overflow-y: auto;
+.side-panel{
+    position:fixed;
+    top:0;
+    right:0;
+    width:350px;
+    max-width:92vw;
+    height:100vh;
+    background:#fff;
+    box-shadow:-8px 0 30px rgba(0,0,0,.14);
+    z-index:1000;
+    transform:translateX(110%);
+    transition:transform .22s ease;
+    overflow-y:auto;
 }
 
-.side-panel.open {
-    transform: translateX(0);
+.side-panel.open{
+    transform:translateX(0);
 }
 
-.panel-header {
-    height: 70px;
-    padding: 0 22px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid #eee;
-    position: sticky;
-    top: 0;
-    background: #fff;
-    z-index: 2;
+.panel-header{
+    height:70px;
+    padding:0 22px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-bottom:1px solid #eee;
+    position:sticky;
+    top:0;
+    background:#fff;
+    z-index:2;
 }
 
-.panel-title {
-    font-size: 20px;
-    font-weight: 700;
+.panel-title{
+    font-size:20px;
+    font-weight:700;
 }
 
-.panel-close {
-    width: 38px;
-    height: 38px;
-    border: 0;
-    background: #f1f3f4;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 20px;
+.panel-close{
+    width:38px;
+    height:38px;
+    border:0;
+    background:#f1f3f4;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:20px;
 }
 
-.panel-close:hover {
-    background: #e5e7e9;
+.panel-content{
+    padding:22px;
 }
 
-.panel-content {
-    padding: 22px;
+.panel-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.22);
+    z-index:900;
+    display:none;
 }
 
-
-/* =========================
-   PANEL OVERLAY
-========================= */
-
-.panel-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, .22);
-    z-index: 900;
-    display: none;
-}
-
-.panel-overlay.show {
-    display: block;
+.panel-overlay.show{
+    display:block;
 }
 
+/* PROFILE PANEL */
 
-/* =========================
-   PROFILE PANEL
-========================= */
-
-.profile-card {
-    text-align: center;
-    padding: 10px 0 25px;
-    border-bottom: 1px solid #eee;
+.profile-card{
+    text-align:center;
+    padding:10px 0 25px;
+    border-bottom:1px solid #eee;
 }
 
-.profile-avatar-large {
-    width: 82px;
-    height: 82px;
-    border-radius: 50%;
-    object-fit: cover;
-    background: #eef1f5;
-    margin-bottom: 12px;
+.profile-avatar-large{
+    width:82px;
+    height:82px;
+    border-radius:50%;
+    object-fit:cover;
+    background:#eef1f5;
+    margin-bottom:12px;
 }
 
-.profile-card-name {
-    font-size: 20px;
-    font-weight: 700;
+.profile-card-name{
+    font-size:20px;
+    font-weight:700;
 }
 
-.profile-card-id {
-    color: #777;
-    font-size: 13px;
-    margin-top: 5px;
+.profile-card-id{
+    color:#777;
+    font-size:13px;
+    margin-top:5px;
 }
 
-.login-message {
-    text-align: center;
-    padding: 25px 0;
-    color: #666;
-    line-height: 1.6;
+.login-message{
+    text-align:center;
+    padding:25px 0;
+    color:#666;
+    line-height:1.6;
 }
 
-.panel-action {
-    width: 100%;
-    min-height: 48px;
-    border: 0;
-    background: #fff;
-    border-radius: 10px;
-    text-align: left;
-    padding: 12px 14px;
-    cursor: pointer;
-    font-size: 15px;
-    margin-top: 6px;
+.panel-action{
+    width:100%;
+    min-height:48px;
+    border:0;
+    background:#fff;
+    border-radius:10px;
+    text-align:left;
+    padding:12px 14px;
+    cursor:pointer;
+    font-size:15px;
+    margin-top:6px;
 }
 
-.panel-action:hover {
-    background: #f5f6f7;
+.panel-action:hover{
+    background:#f5f6f7;
 }
 
-.panel-action.danger {
-    color: #d93025;
+.panel-action.danger{
+    color:#d93025;
 }
-
 
-/* =========================
-   SERVICE PANEL
-========================= */
+/* SERVICE PANEL */
 
-.service-list {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+.service-list{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
 }
 
-.service-item {
-    display: flex;
-    align-items: center;
-    gap: 13px;
-    width: 100%;
-    min-height: 62px;
-    padding: 9px 12px;
-    border: 0;
-    border-radius: 12px;
-    background: #fff;
-    cursor: pointer;
-    text-align: left;
+.service-item{
+    display:flex;
+    align-items:center;
+    gap:13px;
+    width:100%;
+    min-height:62px;
+    padding:9px 12px;
+    border:0;
+    border-radius:12px;
+    background:#fff;
+    cursor:pointer;
+    text-align:left;
 }
 
-.service-item:hover {
-    background: #f5f6f7;
+.service-item:hover{
+    background:#f5f6f7;
 }
 
-.service-icon {
-    width: 42px;
-    height: 42px;
-    border-radius: 10px;
-    background: #f1f3f4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 17px;
-    font-weight: 700;
+.service-icon{
+    width:42px;
+    height:42px;
+    border-radius:10px;
+    background:#f1f3f4;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:17px;
+    font-weight:700;
+    flex:0 0 auto;
 }
 
-.service-info {
-    min-width: 0;
+.service-info{
+    min-width:0;
 }
 
-.service-name {
-    font-size: 15px;
-    font-weight: 600;
+.service-name{
+    font-size:15px;
+    font-weight:600;
 }
 
-.service-description {
-    color: #777;
-    font-size: 12px;
-    margin-top: 4px;
+.service-description{
+    color:#777;
+    font-size:12px;
+    margin-top:4px;
 }
 
+/* MAIN */
 
-/* =========================
-   MAIN
-========================= */
-
-main {
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 120px 20px 50px;
+main{
+    width:100%;
+    max-width:900px;
+    margin:0 auto;
+    padding:120px 20px 50px;
 }
 
-.brand {
-    text-align: center;
-    font-size: 58px;
-    font-weight: 700;
-    letter-spacing: -3px;
-    margin-bottom: 35px;
+.brand{
+    text-align:center;
+    font-size:58px;
+    font-weight:700;
+    letter-spacing:-3px;
+    margin-bottom:35px;
 }
-
 
-/* =========================
-   SEARCH
-========================= */
+/* SEARCH */
 
-.search-box {
-    position: relative;
-    width: min(680px, 100%);
-    margin: 0 auto;
+.search-box{
+    position:relative;
+    width:min(680px,100%);
+    margin:0 auto;
 }
 
-.search-box input {
-    width: 100%;
-    height: 55px;
-    border: 1px solid #dfe1e5;
-    border-radius: 28px;
-    padding: 0 60px 0 22px;
-    font-size: 17px;
-    outline: none;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, .08);
+.search-box input{
+    width:100%;
+    height:55px;
+    border:1px solid #dfe1e5;
+    border-radius:28px;
+    padding:0 60px 0 22px;
+    font-size:17px;
+    outline:none;
+    box-shadow:0 1px 5px rgba(0,0,0,.08);
 }
 
-.search-box input:focus {
-    box-shadow: 0 2px 10px rgba(0, 0, 0, .15);
+.search-box input:focus{
+    box-shadow:0 2px 10px rgba(0,0,0,.15);
 }
 
-.search-button {
-    position: absolute;
-    right: 7px;
-    top: 7px;
-    width: 41px;
-    height: 41px;
-    border: 0;
-    border-radius: 50%;
-    background: #222;
-    color: #fff;
-    cursor: pointer;
-    font-size: 18px;
+.search-button{
+    position:absolute;
+    right:7px;
+    top:7px;
+    width:41px;
+    height:41px;
+    border:0;
+    border-radius:50%;
+    background:#222;
+    color:#fff;
+    cursor:pointer;
+    font-size:18px;
 }
 
-.search-button:hover {
-    background: #444;
+.search-button:hover{
+    background:#444;
 }
 
+/* SUGGESTIONS */
 
-/* =========================
-   SEARCH SUGGESTIONS
-========================= */
-
-.suggestions {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: calc(100% + 8px);
-    background: #fff;
-    border: 1px solid #e1e4e8;
-    border-radius: 15px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, .10);
-    overflow: hidden;
-    display: none;
-    z-index: 50;
+.suggestions{
+    position:absolute;
+    left:0;
+    right:0;
+    top:calc(100% + 8px);
+    background:#fff;
+    border:1px solid #e1e4e8;
+    border-radius:15px;
+    box-shadow:0 5px 20px rgba(0,0,0,.10);
+    overflow:hidden;
+    display:none;
+    z-index:50;
 }
 
-.suggestions.show {
-    display: block;
+.suggestions.show{
+    display:block;
 }
 
-.suggestion-item {
-    min-height: 44px;
-    padding: 11px 18px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    font-size: 14px;
+.suggestion-item{
+    min-height:44px;
+    padding:11px 18px;
+    display:flex;
+    align-items:center;
+    cursor:pointer;
+    font-size:14px;
 }
 
-.suggestion-item:hover {
-    background: #f5f6f7;
+.suggestion-item:hover{
+    background:#f5f6f7;
 }
-
-
-/* =========================
-   SHORTCUTS
-========================= */
 
-.shortcuts {
-    width: min(680px, 100%);
-    margin: 32px auto 0;
-}
+/* SHORTCUTS */
 
-.shortcuts-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 12px;
+.shortcuts{
+    width:min(680px,100%);
+    margin:32px auto 0;
 }
 
-.shortcuts-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: #555;
+.shortcuts-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:12px;
 }
 
-.add-shortcut-button {
-    border: 0;
-    background: #f1f3f4;
-    border-radius: 8px;
-    padding: 7px 10px;
-    cursor: pointer;
+.shortcuts-title{
+    font-size:14px;
+    font-weight:600;
+    color:#555;
 }
 
-.add-shortcut-button:hover {
-    background: #e5e7e9;
+.add-shortcut-button{
+    border:0;
+    background:#f1f3f4;
+    border-radius:8px;
+    padding:7px 10px;
+    cursor:pointer;
 }
 
-.shortcut-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+.shortcut-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
 }
 
-.shortcut-item {
-    width: 105px;
-    min-height: 82px;
-    border: 1px solid #eee;
-    border-radius: 12px;
-    background: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 7px;
-    cursor: pointer;
-    position: relative;
+.shortcut-item{
+    width:105px;
+    min-height:82px;
+    border:1px solid #eee;
+    border-radius:12px;
+    background:#fff;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    cursor:pointer;
+    position:relative;
 }
 
-.shortcut-item:hover {
-    background: #f7f8f9;
+.shortcut-item:hover{
+    background:#f7f8f9;
 }
 
-.shortcut-icon {
-    width: 31px;
-    height: 31px;
-    border-radius: 8px;
-    background: #f1f3f4;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    font-weight: 700;
+.shortcut-icon{
+    width:31px;
+    height:31px;
+    border-radius:8px;
+    background:#f1f3f4;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:14px;
+    font-weight:700;
 }
 
-.shortcut-name {
-    max-width: 85px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-size: 12px;
+.shortcut-name{
+    max-width:85px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-size:12px;
 }
 
-.shortcut-delete {
-    position: absolute;
-    top: 4px;
-    right: 5px;
-    border: 0;
-    background: transparent;
-    color: #888;
-    cursor: pointer;
-    display: none;
+.shortcut-delete{
+    position:absolute;
+    top:4px;
+    right:5px;
+    border:0;
+    background:transparent;
+    color:#888;
+    cursor:pointer;
+    display:none;
 }
 
-.shortcut-item:hover .shortcut-delete {
-    display: block;
+.shortcut-item:hover .shortcut-delete{
+    display:block;
 }
-
 
-/* =========================
-   AI OVERVIEW
-========================= */
+/* AI */
 
-.ai-overview {
-    margin-top: 45px;
-    padding: 20px;
-    border: 1px solid #e1e5ea;
-    border-radius: 15px;
-    background: #fafbfc;
-    display: none;
+.ai-overview{
+    margin-top:45px;
+    padding:20px;
+    border:1px solid #e1e5ea;
+    border-radius:15px;
+    background:#fafbfc;
+    display:none;
 }
 
-.ai-overview.show {
-    display: block;
+.ai-overview.show{
+    display:block;
 }
 
-.ai-overview-title {
-    font-weight: 700;
-    font-size: 16px;
-    margin-bottom: 10px;
+.ai-overview-title{
+    font-weight:700;
+    font-size:16px;
+    margin-bottom:10px;
 }
 
-.ai-overview-text {
-    color: #555;
-    line-height: 1.65;
-    font-size: 14px;
+.ai-overview-text{
+    color:#555;
+    line-height:1.65;
+    font-size:14px;
 }
-
-
-/* =========================
-   RESULTS
-========================= */
 
-.results {
-    margin-top: 35px;
-}
+/* RESULTS */
 
-.info {
-    color: #777;
-    font-size: 13px;
-    margin-bottom: 20px;
+.results{
+    margin-top:35px;
 }
 
-.result {
-    padding: 17px 0;
-    border-bottom: 1px solid #eee;
+.info{
+    color:#777;
+    font-size:13px;
+    margin-bottom:20px;
 }
 
-.result a {
-    color: #174ea6;
-    text-decoration: none;
+.result{
+    padding:17px 0;
+    border-bottom:1px solid #eee;
 }
 
-.result a:hover {
-    text-decoration: underline;
+.result a{
+    color:#174ea6;
+    text-decoration:none;
 }
 
-.result-title {
-    font-size: 19px;
-    margin-bottom: 6px;
-    word-break: break-word;
+.result a:hover{
+    text-decoration:underline;
 }
 
-.result-url {
-    color: #188038;
-    font-size: 13px;
-    margin-bottom: 6px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+.result-title{
+    font-size:19px;
+    margin-bottom:6px;
+    word-break:break-word;
 }
 
-.result-description {
-    color: #5f6368;
-    font-size: 14px;
-    line-height: 1.5;
-    word-break: break-word;
+.result-url{
+    color:#188038;
+    font-size:13px;
+    margin-bottom:6px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
 }
 
-.empty {
-    text-align: center;
-    padding: 50px 10px;
-    color: #777;
+.result-description{
+    color:#5f6368;
+    font-size:14px;
+    line-height:1.5;
+    word-break:break-word;
 }
 
-.loading {
-    text-align: center;
-    color: #777;
-    padding: 50px;
+.empty,
+.loading{
+    text-align:center;
+    padding:50px 10px;
+    color:#777;
 }
-
 
-/* =========================
-   HISTORY
-========================= */
-
-.history-section {
-    margin-top: 15px;
-}
+/* HISTORY */
 
-.history-title {
-    font-size: 13px;
-    color: #777;
-    margin: 20px 0 8px;
+.history-title{
+    font-size:13px;
+    color:#777;
+    margin:20px 0 8px;
 }
 
-.history-item {
-    width: 100%;
-    padding: 11px 10px;
-    border: 0;
-    background: #fff;
-    border-radius: 8px;
-    text-align: left;
-    cursor: pointer;
-    font-size: 14px;
+.history-item{
+    width:100%;
+    padding:11px 10px;
+    border:0;
+    background:#fff;
+    border-radius:8px;
+    text-align:left;
+    cursor:pointer;
+    font-size:14px;
 }
 
-.history-item:hover {
-    background: #f5f6f7;
+.history-item:hover{
+    background:#f5f6f7;
 }
 
-.clear-history {
-    margin-top: 15px;
-    border: 0;
-    background: #f1f3f4;
-    border-radius: 8px;
-    padding: 9px 12px;
-    cursor: pointer;
+.clear-history{
+    margin-top:15px;
+    border:0;
+    background:#f1f3f4;
+    border-radius:8px;
+    padding:9px 12px;
+    cursor:pointer;
 }
 
+/* MODAL */
 
-/* =========================
-   MODAL
-========================= */
-
-.modal {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,.35);
-    z-index: 2000;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.modal.show {
-    display: flex;
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.35);
+    z-index:2000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
 }
 
-.modal-box {
-    width: min(430px, 100%);
-    background: #fff;
-    border-radius: 17px;
-    padding: 25px;
-    box-shadow: 0 15px 50px rgba(0,0,0,.2);
+.modal.show{
+    display:flex;
 }
 
-.modal-title {
-    font-size: 19px;
-    font-weight: 700;
-    margin-bottom: 18px;
+.modal-box{
+    width:min(430px,100%);
+    background:#fff;
+    border-radius:17px;
+    padding:25px;
+    box-shadow:0 15px 50px rgba(0,0,0,.2);
 }
 
-.modal-box input {
-    width: 100%;
-    height: 44px;
-    border: 1px solid #dfe1e5;
-    border-radius: 9px;
-    padding: 0 12px;
-    outline: none;
-    margin-bottom: 10px;
+.modal-title{
+    font-size:19px;
+    font-weight:700;
+    margin-bottom:18px;
 }
 
-.modal-box input:focus {
-    border-color: #0b4fd8;
+.modal-box input{
+    width:100%;
+    height:44px;
+    border:1px solid #dfe1e5;
+    border-radius:9px;
+    padding:0 12px;
+    outline:none;
+    margin-bottom:10px;
 }
 
-.modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 8px;
-    margin-top: 10px;
+.modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+    margin-top:10px;
 }
 
-.modal-actions button {
-    border: 0;
-    border-radius: 9px;
-    padding: 10px 15px;
-    cursor: pointer;
+.modal-actions button{
+    border:0;
+    border-radius:9px;
+    padding:10px 15px;
+    cursor:pointer;
 }
 
-.modal-cancel {
-    background: #f1f3f4;
+.modal-cancel{
+    background:#f1f3f4;
 }
 
-.modal-confirm {
-    background: #222;
-    color: #fff;
+.modal-confirm{
+    background:#222;
+    color:#fff;
 }
-
 
-/* =========================
-   MOBILE
-========================= */
+/* MOBILE */
 
-@media (max-width: 700px) {
+@media(max-width:700px){
 
-    header {
-        min-height: auto;
-        flex-wrap: wrap;
-        gap: 10px;
-        padding: 12px 15px;
+    header{
+        min-height:auto;
+        flex-wrap:wrap;
+        gap:10px;
+        padding:12px 15px;
     }
 
-    .logo {
-        font-size: 22px;
+    .logo{
+        font-size:22px;
     }
 
-    .os-cadia-address-bar {
-        order: 3;
-        flex-basis: 100%;
-        max-width: none;
+    .os-cadia-address-bar{
+        order:3;
+        flex-basis:100%;
+        max-width:none;
     }
 
-    nav {
-        margin-left: auto;
+    nav{
+        margin-left:auto;
     }
 
-    nav button {
-        padding: 8px 10px;
+    nav button{
+        padding:8px 10px;
     }
 
-    .profile-name {
-        max-width: 60px;
+    .profile-name{
+        max-width:60px;
     }
 
-    .service-button {
-        width: 40px;
-        height: 40px;
+    main{
+        padding:75px 15px 40px;
     }
 
-    main {
-        padding: 75px 15px 40px;
+    .brand{
+        font-size:45px;
+        letter-spacing:-2px;
+        margin-bottom:28px;
     }
 
-    .brand {
-        font-size: 45px;
-        letter-spacing: -2px;
-        margin-bottom: 28px;
+    .search-box input{
+        height:52px;
+        font-size:16px;
     }
 
-    .search-box input {
-        height: 52px;
-        font-size: 16px;
-        padding-left: 18px;
-        padding-right: 58px;
+    .result-title{
+        font-size:17px;
     }
 
-    .search-button {
-        width: 38px;
-        height: 38px;
-        right: 7px;
-        top: 7px;
+    .result-description{
+        font-size:13px;
     }
 
-    .results {
-        margin-top: 40px;
-    }
-
-    .result {
-        padding: 15px 0;
-    }
-
-    .result-title {
-        font-size: 17px;
-    }
-
-    .result-description {
-        font-size: 13px;
-    }
-
-    .shortcut-item {
-        width: calc(25% - 8px);
-        min-width: 70px;
+    .shortcut-item{
+        width:calc(25% - 8px);
+        min-width:70px;
     }
 }
 
+@media(max-width:420px){
 
-@media (max-width: 420px) {
-
-    .brand {
-        font-size: 38px;
+    .brand{
+        font-size:38px;
     }
 
-    .os-cadia-address-bar input {
-        font-size: 13px;
+    .profile-name{
+        display:none;
     }
 
-    .os-cadia-address-bar button {
-        padding: 0 13px;
+    .shortcut-item{
+        width:calc(33.333% - 7px);
     }
-
-    main {
-        padding-top: 60px;
-    }
-
-    .profile-name {
-        display: none;
-    }
-
-    .shortcut-item {
-        width: calc(33.333% - 7px);
-    }
-
 }
-
 </style>
-
 </head>
-
 
 <body>
 
-
-<!-- =========================
-     HEADER
-========================= -->
-
 <header>
 
-    <div
-        class="logo"
-        onclick="location.href='/'"
-    >
+    <div class="logo" onclick="location.href='/'">
         OSCADIA
     </div>
-
 
     <div class="os-cadia-address-bar">
 
@@ -945,28 +803,18 @@ main {
             spellcheck="false"
         >
 
-        <button
-            id="osAddressGo"
-            type="button"
-        >
+        <button id="osAddressGo" type="button">
             이동
         </button>
 
     </div>
 
-
     <nav>
 
-        <!-- OSmail -->
-        <button
-            type="button"
-            onclick="openOSmail()"
-        >
+        <button type="button" onclick="openOSmail()">
             OSmail
         </button>
 
-
-        <!-- PROFILE -->
         <button
             id="profileButton"
             class="profile-button"
@@ -980,17 +828,12 @@ main {
                 alt=""
             >
 
-            <span
-                id="profileName"
-                class="profile-name"
-            >
+            <span id="profileName" class="profile-name">
                 로그인
             </span>
 
         </button>
 
-
-        <!-- SERVICES -->
         <button
             id="serviceButton"
             class="service-button"
@@ -1000,19 +843,9 @@ main {
         >
 
             <span class="service-dots">
-
-                <span></span>
-                <span></span>
-                <span></span>
-
-                <span></span>
-                <span></span>
-                <span></span>
-
-                <span></span>
-                <span></span>
-                <span></span>
-
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
+                <span></span><span></span><span></span>
             </span>
 
         </button>
@@ -1021,26 +854,13 @@ main {
 
 </header>
 
-
-<!-- =========================
-     OVERLAY
-========================= -->
-
 <div
     id="panelOverlay"
     class="panel-overlay"
     onclick="closePanels()"
 ></div>
 
-
-<!-- =========================
-     PROFILE PANEL
-========================= -->
-
-<aside
-    id="profilePanel"
-    class="side-panel"
->
+<aside id="profilePanel" class="side-panel">
 
     <div class="panel-header">
 
@@ -1058,27 +878,14 @@ main {
 
     </div>
 
-
     <div
         id="profilePanelContent"
         class="panel-content"
-    >
-
-        <!-- JS에서 생성 -->
-
-    </div>
+    ></div>
 
 </aside>
 
-
-<!-- =========================
-     SERVICE PANEL
-========================= -->
-
-<aside
-    id="servicePanel"
-    class="side-panel"
->
+<aside id="servicePanel" class="side-panel">
 
     <div class="panel-header">
 
@@ -1096,7 +903,6 @@ main {
 
     </div>
 
-
     <div class="panel-content">
 
         <div
@@ -1108,17 +914,11 @@ main {
 
 </aside>
 
-
-<!-- =========================
-     MAIN
-========================= -->
-
 <main>
 
     <div class="brand">
         OSCADIA
     </div>
-
 
     <div class="search-box">
 
@@ -1138,7 +938,6 @@ main {
             ⌕
         </button>
 
-
         <div
             id="suggestions"
             class="suggestions"
@@ -1146,13 +945,7 @@ main {
 
     </div>
 
-
-    <!-- SHORTCUTS -->
-
-    <section
-        id="shortcuts"
-        class="shortcuts"
-    >
+    <section id="shortcuts" class="shortcuts">
 
         <div class="shortcuts-header">
 
@@ -1170,16 +963,12 @@ main {
 
         </div>
 
-
         <div
             id="shortcutList"
             class="shortcut-list"
         ></div>
 
     </section>
-
-
-    <!-- AI OVERVIEW -->
 
     <section
         id="aiOverview"
@@ -1197,25 +986,11 @@ main {
 
     </section>
 
-
-    <!-- RESULTS -->
-
-    <div
-        id="results"
-        class="results"
-    ></div>
+    <div id="results" class="results"></div>
 
 </main>
 
-
-<!-- =========================
-     SHORTCUT MODAL
-========================= -->
-
-<div
-    id="shortcutModal"
-    class="modal"
->
+<div id="shortcutModal" class="modal">
 
     <div class="modal-box">
 
@@ -1260,164 +1035,42 @@ main {
 
 </div>
 
-
 <script>
 
-
 /* =========================
-   OSCADIA API
+   CONFIG
 ========================= */
 
 const OSCADIA_API =
     "https://oscadia-api.onrender.com";
 
+const SUPABASE_URL =
+    "https://mujmwouyopgxwtezhlzv.supabase.co";
+
+const SUPABASE_ANON_KEY =
+    "sb_publishable_uiChi46cHC53f6QAm8TALQ_MGknEOQ9";
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_ANON_KEY
+    );
+
+let oscadiaUser = null;
+let oscadiaProfile = null;
 
 /* =========================
-   OSMAIL
+   ELEMENTS
 ========================= */
 
-function openOSmail() {
+const queryInput =
+    document.getElementById("query");
 
-    const returnUrl =
-        window.location.href;
+const suggestions =
+    document.getElementById("suggestions");
 
-    const url =
-        "public/osmail.html?returnTo=" +
-        encodeURIComponent(returnUrl);
-
-    window.location.href = url;
-
-}
-
-
-/*
-    로그인하지 않은 상태에서
-    프로필을 누르면 OSmail 로그인으로 이동.
-
-    나중에 OSmail의 실제 로그인 코드와
-    이 부분을 연결하면 된다.
-*/
-
-function openOSmailLogin() {
-
-    const returnUrl =
-        window.location.href;
-
-    const url =
-        "public/osmail.html?returnTo=" +
-        encodeURIComponent(returnUrl) +
-        "&login=1";
-
-    window.location.href = url;
-
-}
-
-
-/* =========================
-   SERVICE LIST
-========================= */
-
-/*
-    서비스 주소는 여기에서 관리한다.
-
-    실제 파일 위치가 다르면
-    url만 바꾸면 된다.
-*/
-
-const OSCADIA_SERVICES = [
-
-    {
-        name: "OSCADIA",
-        description: "웹 검색 서비스",
-        icon: "O",
-        url: "/"
-    },
-
-    {
-        name: "OSmail",
-        description: "OSCADIA 메일",
-        icon: "M",
-        url: "/public/osmail.html"
-    },
-
-    {
-        name: "OscaAI",
-        description: "AI 서비스",
-        icon: "AI",
-        url: "/public/oscaai.html"
-    },
-
-    {
-        name: "Osca Translate",
-        description: "번역 서비스",
-        icon: "T",
-        url: "/public/oscatranslate.html"
-    },
-
-    {
-        name: "OSCADIA Games",
-        description: "게임 서비스",
-        icon: "G",
-        url: "https://cucumber555.github.io/game/index"
-    },
-
-    {
-        name: "NUGU",
-        description: "커뮤니티 서비스",
-        icon: "N",
-        url: "https://cucumber555.github.io/nugu/index"
-    }
-
-];
-
-
-function renderServices() {
-
-    const list =
-        document.getElementById("serviceList");
-
-    list.innerHTML =
-        OSCADIA_SERVICES.map(service => `
-
-            <button
-                class="service-item"
-                type="button"
-                onclick="goService('${escapeAttribute(service.url)}')"
-            >
-
-                <span class="service-icon">
-                    ${escapeHtml(service.icon)}
-                </span>
-
-                <span class="service-info">
-
-                    <span class="service-name">
-                        ${escapeHtml(service.name)}
-                    </span>
-
-                    <span class="service-description">
-                        ${escapeHtml(service.description)}
-                    </span>
-
-                </span>
-
-            </button>
-
-        `).join("");
-
-}
-
-
-function goService(url) {
-
-    window.location.href = url;
-
-}
-
-
-/* =========================
-   PANELS
-========================= */
+const results =
+    document.getElementById("results");
 
 const profilePanel =
     document.getElementById("profilePanel");
@@ -1428,115 +1081,140 @@ const servicePanel =
 const panelOverlay =
     document.getElementById("panelOverlay");
 
-
-function toggleProfilePanel() {
-
-    if (isLoggedIn()) {
-
-        closePanels();
-
-        profilePanel.classList.add("open");
-        panelOverlay.classList.add("show");
-
-        renderProfilePanel();
-
-    } else {
-
-        openOSmailLogin();
-
-    }
-
-}
-
-
-function toggleServicePanel() {
-
-    if (
-        servicePanel.classList.contains("open")
-    ) {
-
-        closePanels();
-
-        return;
-
-    }
-
-    closePanels();
-
-    servicePanel.classList.add("open");
-    panelOverlay.classList.add("show");
-
-}
-
-
-function closePanels() {
-
-    profilePanel.classList.remove("open");
-    servicePanel.classList.remove("open");
-    panelOverlay.classList.remove("show");
-
-}
-
-
 /* =========================
-   LOGIN STATE
+   SECURITY
 ========================= */
 
-/*
-    현재는 OSCADIA가 사용할 수 있는
-    로컬 로그인 상태 구조.
+function escapeHtml(value){
 
-    OSmail 실제 로그인 연동 시
-    이 함수만 Supabase Auth 확인 방식으로
-    교체하면 된다.
-*/
+    return String(value ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
 
-function getStoredProfile() {
+function escapeAttribute(value){
+    return escapeHtml(value);
+}
 
-    try {
+/* =========================
+   OSMAIL
+========================= */
 
-        const value =
-            localStorage.getItem(
-                "osmail_profile"
+function openOSmail(){
+
+    const returnUrl =
+        window.location.href;
+
+    location.href =
+        "public/osmail.html?returnTo=" +
+        encodeURIComponent(returnUrl);
+}
+
+function openOSmailLogin(){
+
+    const returnUrl =
+        window.location.href;
+
+    location.href =
+        "public/osmail.html?returnTo=" +
+        encodeURIComponent(returnUrl) +
+        "&login=1";
+}
+
+/* =========================
+   AUTH
+========================= */
+
+async function loadOSmailSession(){
+
+    try{
+
+        const {
+            data,
+            error
+        } =
+        await supabaseClient.auth.getSession();
+
+        if(error){
+            console.error(
+                "OSmail 세션 오류:",
+                error
             );
 
-        if (!value) {
-            return null;
+            oscadiaUser = null;
+            oscadiaProfile = null;
+
+            renderProfileButton();
+            return;
         }
 
-        return JSON.parse(value);
+        oscadiaUser =
+            data.session?.user || null;
 
-    } catch {
+        if(!osccadiaLoggedIn()){
 
-        return null;
+            oscadiaProfile = null;
 
+            renderProfileButton();
+            return;
+        }
+
+        const {
+            data:profile,
+            error:profileError
+        } =
+        await supabaseClient
+            .from("osmail_profiles")
+            .select("*")
+            .eq("id",oscadiaUser.id)
+            .maybeSingle();
+
+        if(profileError){
+
+            console.error(
+                "OSmail 프로필 오류:",
+                profileError
+            );
+
+            oscadiaProfile = null;
+
+        }else{
+
+            oscadiaProfile = profile;
+        }
+
+        renderProfileButton();
+
+    }catch(error){
+
+        console.error(
+            "로그인 상태 확인 오류:",
+            error
+        );
+
+        oscadiaUser = null;
+        oscadiaProfile = null;
+
+        renderProfileButton();
     }
-
 }
 
-
-function isLoggedIn() {
-
-    return !!getStoredProfile();
-
+function osccadiaLoggedIn(){
+    return !!oscadiaUser;
 }
 
+function isLoggedIn(){
+    return !!oscadiaUser;
+}
 
-/*
-    테스트 또는 OSmail 연동 시
-    사용할 수 있는 프로필 구조.
+/* =========================
+   PROFILE BUTTON
+========================= */
 
-    예:
-
-    {
-        name: "cucu",
-        id: "cucu",
-        avatar: "https://..."
-    }
-*/
-
-
-function renderProfileButton() {
+function renderProfileButton(){
 
     const button =
         document.getElementById(
@@ -1553,11 +1231,7 @@ function renderProfileButton() {
             "profileAvatarSmall"
         );
 
-    const profile =
-        getStoredProfile();
-
-
-    if (!profile) {
+    if(!oscadiaUser){
 
         button.classList.remove(
             "logged-in"
@@ -1566,57 +1240,72 @@ function renderProfileButton() {
         name.textContent =
             "로그인";
 
-        avatar.removeAttribute(
-            "src"
-        );
+        avatar.removeAttribute("src");
 
         return;
-
     }
-
 
     button.classList.add(
         "logged-in"
     );
 
     name.textContent =
-        profile.name ||
-        profile.id ||
+        oscadiaProfile?.display_name ||
+        oscadiaProfile?.osmail_id ||
+        oscadiaUser.email ||
         "사용자";
 
+    const avatarUrl =
+        oscadiaProfile?.avatar_url ||
+        oscadiaProfile?.profile_image ||
+        oscadiaProfile?.avatar ||
+        "";
 
-    if (profile.avatar) {
+    if(avatarUrl){
 
         avatar.src =
-            profile.avatar;
+            avatarUrl;
 
+    }else{
+
+        avatar.removeAttribute("src");
     }
-
 }
 
+/* =========================
+   PROFILE PANEL
+========================= */
 
-function renderProfilePanel() {
+function toggleProfilePanel(){
+
+    if(!isLoggedIn()){
+
+        openOSmailLogin();
+        return;
+    }
+
+    closePanels();
+
+    profilePanel.classList.add("open");
+    panelOverlay.classList.add("show");
+
+    renderProfilePanel();
+}
+
+function renderProfilePanel(){
 
     const container =
         document.getElementById(
             "profilePanelContent"
         );
 
-    const profile =
-        getStoredProfile();
-
-
-    if (!profile) {
+    if(!oscadiaUser){
 
         container.innerHTML = `
-
             <div class="login-message">
 
-                OSCADIA의 검색 기록과<br>
-                계정 기능을 사용하려면<br>
+                OSCADIA의 계정 기능을 사용하려면<br>
                 OSmail에 로그인하세요.
-
-                <br><br>
 
                 <button
                     class="panel-action"
@@ -1627,16 +1316,27 @@ function renderProfilePanel() {
                 </button>
 
             </div>
-
         `;
 
         return;
-
     }
 
+    const displayName =
+        oscadiaProfile?.display_name ||
+        oscadiaProfile?.osmail_id ||
+        oscadiaUser.email ||
+        "사용자";
+
+    const osmailId =
+        oscadiaProfile?.osmail_id || "";
 
     const avatar =
-        profile.avatar ||
+        oscadiaProfile?.avatar_url ||
+        oscadiaProfile?.profile_image ||
+        oscadiaProfile?.avatar ||
+        "";
+
+    const fallback =
         "data:image/svg+xml;charset=UTF-8," +
         encodeURIComponent(`
             <svg xmlns="http://www.w3.org/2000/svg"
@@ -1649,15 +1349,12 @@ function renderProfilePanel() {
                       text-anchor="middle"
                       font-size="35"
                       fill="#777">
-                    ${String(
-                        profile.name ||
-                        profile.id ||
-                        "U"
-                    ).charAt(0).toUpperCase()}
+                    ${String(displayName)
+                        .charAt(0)
+                        .toUpperCase()}
                 </text>
             </svg>
         `);
-
 
     container.innerHTML = `
 
@@ -1665,27 +1362,27 @@ function renderProfilePanel() {
 
             <img
                 class="profile-avatar-large"
-                src="${escapeAttribute(avatar)}"
+                src="${escapeAttribute(
+                    avatar || fallback
+                )}"
                 alt=""
             >
 
             <div class="profile-card-name">
-                ${escapeHtml(
-                    profile.name ||
-                    profile.id ||
-                    "사용자"
-                )}
+                ${escapeHtml(displayName)}
             </div>
 
             <div class="profile-card-id">
-                ${profile.id
-                    ? "@" + escapeHtml(profile.id)
-                    : ""
+                ${
+                    osmailId
+                    ? "@" + escapeHtml(osmailId)
+                    : escapeHtml(
+                        oscadiaUser.email || ""
+                    )
                 }
             </div>
 
         </div>
-
 
         <button
             class="panel-action"
@@ -1695,7 +1392,6 @@ function renderProfilePanel() {
             프로필 편집
         </button>
 
-
         <button
             class="panel-action"
             type="button"
@@ -1703,7 +1399,6 @@ function renderProfilePanel() {
         >
             검색 기록
         </button>
-
 
         <button
             class="panel-action"
@@ -1713,7 +1408,6 @@ function renderProfilePanel() {
             방문 기록
         </button>
 
-
         <button
             class="panel-action"
             type="button"
@@ -1721,7 +1415,6 @@ function renderProfilePanel() {
         >
             계정 설정
         </button>
-
 
         <button
             class="panel-action danger"
@@ -1731,120 +1424,260 @@ function renderProfilePanel() {
             로그아웃
         </button>
 
-
         <div
             id="profileHistoryArea"
-            class="history-section"
         ></div>
-
     `;
-
 }
-
 
 /* =========================
-   PROFILE EDIT
+   PROFILE / SETTINGS
 ========================= */
 
-function editProfile() {
-
-    /*
-        실제 프로필 수정은
-        OSmail의 프로필 페이지와 연결한다.
-
-        지금은 OSmail로 이동.
-    */
+function editProfile(){
 
     const returnUrl =
         window.location.href;
 
-    window.location.href =
+    location.href =
         "public/osmail.html?profile=1&returnTo=" +
         encodeURIComponent(returnUrl);
-
 }
 
-
-function accountSettings() {
+function accountSettings(){
 
     const returnUrl =
         window.location.href;
 
-    window.location.href =
+    location.href =
         "public/osmail.html?settings=1&returnTo=" +
         encodeURIComponent(returnUrl);
-
 }
-
 
 /* =========================
    LOGOUT
 ========================= */
 
-function logout() {
+async function logout(){
 
-    localStorage.removeItem(
-        "osmail_profile"
-    );
+    const {
+        error
+    } =
+    await supabaseClient.auth.signOut();
 
+    if(error){
+
+        console.error(
+            "로그아웃 오류:",
+            error
+        );
+
+        alert(
+            "로그아웃하는 중 오류가 발생했습니다."
+        );
+
+        return;
+    }
+
+    oscadiaUser = null;
+    oscadiaProfile = null;
+
+    closePanels();
     renderProfileButton();
 
-    renderProfilePanel();
-
-    alert(
-        "로그아웃되었습니다."
-    );
-
+    alert("로그아웃되었습니다.");
 }
 
+/* =========================
+   PANELS
+========================= */
+
+function toggleServicePanel(){
+
+    if(servicePanel.classList.contains("open")){
+
+        closePanels();
+        return;
+    }
+
+    closePanels();
+
+    servicePanel.classList.add("open");
+    panelOverlay.classList.add("show");
+}
+
+function closePanels(){
+
+    profilePanel.classList.remove("open");
+    servicePanel.classList.remove("open");
+    panelOverlay.classList.remove("show");
+}
+
+/* =========================
+   SERVICES
+========================= */
+
+const OSCADIA_SERVICES = [
+
+    {
+        name:"OSCADIA",
+        description:"웹 검색 서비스",
+        icon:"O",
+        url:"/"
+    },
+
+    {
+        name:"OSmail",
+        description:"OSCADIA 메일",
+        icon:"M",
+        url:"/public/osmail.html"
+    },
+
+    {
+        name:"OscaAI",
+        description:"AI 서비스",
+        icon:"AI",
+        url:"/public/oscaai.html"
+    },
+
+    {
+        name:"Osca Translate",
+        description:"번역 서비스",
+        icon:"T",
+        url:"/public/oscatranslate.html"
+    },
+
+    {
+        name:"OSCADIA Games",
+        description:"게임 서비스",
+        icon:"G",
+        url:"https://cucumber555.github.io/game/index"
+    },
+
+    {
+        name:"NUGU",
+        description:"커뮤니티 서비스",
+        icon:"N",
+        url:"https://cucumber555.github.io/nugu/index"
+    }
+
+];
+
+function renderServices(){
+
+    const list =
+        document.getElementById(
+            "serviceList"
+        );
+
+    list.innerHTML =
+        OSCADIA_SERVICES.map(
+            service => `
+
+                <button
+                    class="service-item"
+                    type="button"
+                    onclick="goService('${escapeAttribute(
+                        service.url
+                    )}')"
+                >
+
+                    <span class="service-icon">
+                        ${escapeHtml(service.icon)}
+                    </span>
+
+                    <span class="service-info">
+
+                        <span class="service-name">
+                            ${escapeHtml(service.name)}
+                        </span>
+
+                        <span class="service-description">
+                            ${escapeHtml(
+                                service.description
+                            )}
+                        </span>
+
+                    </span>
+
+                </button>
+
+            `
+        ).join("");
+}
+
+function goService(url){
+    location.href = url;
+}
+
+/* =========================
+   HISTORY STORAGE
+========================= */
+
+function getHistoryKey(type){
+
+    if(!oscadiaUser){
+        return "oscadia_" + type + "_guest";
+    }
+
+    return (
+        "oscadia_" +
+        type +
+        "_" +
+        oscadiaUser.id
+    );
+}
 
 /* =========================
    SEARCH HISTORY
 ========================= */
 
-function getSearchHistory() {
+function getSearchHistory(){
 
-    try {
+    try{
 
         return JSON.parse(
             localStorage.getItem(
-                "oscadia_search_history"
+                getHistoryKey("search_history")
             ) || "[]"
         );
 
-    } catch {
+    }catch{
 
         return [];
-
     }
-
 }
 
+function saveSearchHistory(value){
 
-function saveSearchHistory(query) {
+    if(!isLoggedIn()){
+        return;
+    }
 
     let history =
         getSearchHistory();
 
     history =
         history.filter(
-            item => item !== query
+            item => item !== value
         );
 
-    history.unshift(query);
+    history.unshift(value);
 
     history =
-        history.slice(0, 30);
+        history.slice(0,30);
 
     localStorage.setItem(
-        "oscadia_search_history",
+        getHistoryKey("search_history"),
         JSON.stringify(history)
     );
-
 }
 
+function showSearchHistory(){
 
-function showSearchHistory() {
+    if(!isLoggedIn()){
+        return;
+    }
 
     const area =
         document.getElementById(
@@ -1854,8 +1687,7 @@ function showSearchHistory() {
     const history =
         getSearchHistory();
 
-
-    if (!history.length) {
+    if(!history.length){
 
         area.innerHTML = `
             <div class="history-title">
@@ -1864,9 +1696,7 @@ function showSearchHistory() {
         `;
 
         return;
-
     }
-
 
     area.innerHTML = `
 
@@ -1874,18 +1704,21 @@ function showSearchHistory() {
             최근 검색
         </div>
 
-        ${history.map(item => `
+        ${history.map(
+            item => `
 
-            <button
-                class="history-item"
-                type="button"
-                onclick="searchFromHistory('${escapeAttribute(item)}')"
-            >
-                ${escapeHtml(item)}
-            </button>
+                <button
+                    class="history-item"
+                    type="button"
+                    onclick="searchFromHistory('${escapeAttribute(
+                        item
+                    )}')"
+                >
+                    ${escapeHtml(item)}
+                </button>
 
-        `).join("")}
-
+            `
+        ).join("")}
 
         <button
             class="clear-history"
@@ -1894,59 +1727,53 @@ function showSearchHistory() {
         >
             검색 기록 전체 삭제
         </button>
-
     `;
-
 }
 
-
-function searchFromHistory(query) {
+function searchFromHistory(value){
 
     queryInput.value =
-        query;
+        value;
 
     closePanels();
 
     search();
-
 }
 
-
-function clearSearchHistory() {
+function clearSearchHistory(){
 
     localStorage.removeItem(
-        "oscadia_search_history"
+        getHistoryKey("search_history")
     );
 
     showSearchHistory();
-
 }
-
 
 /* =========================
    VISIT HISTORY
 ========================= */
 
-function getVisitHistory() {
+function getVisitHistory(){
 
-    try {
+    try{
 
         return JSON.parse(
             localStorage.getItem(
-                "oscadia_visit_history"
+                getHistoryKey("visit_history")
             ) || "[]"
         );
 
-    } catch {
+    }catch{
 
         return [];
-
     }
-
 }
 
+function saveVisitHistory(page){
 
-function saveVisitHistory(page) {
+    if(!isLoggedIn()){
+        return;
+    }
 
     let history =
         getVisitHistory();
@@ -1971,17 +1798,19 @@ function saveVisitHistory(page) {
     });
 
     history =
-        history.slice(0, 50);
+        history.slice(0,50);
 
     localStorage.setItem(
-        "oscadia_visit_history",
+        getHistoryKey("visit_history"),
         JSON.stringify(history)
     );
-
 }
 
+function showVisitHistory(){
 
-function showVisitHistory() {
+    if(!isLoggedIn()){
+        return;
+    }
 
     const area =
         document.getElementById(
@@ -1991,8 +1820,7 @@ function showVisitHistory() {
     const history =
         getVisitHistory();
 
-
-    if (!history.length) {
+    if(!history.length){
 
         area.innerHTML = `
             <div class="history-title">
@@ -2001,9 +1829,7 @@ function showVisitHistory() {
         `;
 
         return;
-
     }
-
 
     area.innerHTML = `
 
@@ -2011,18 +1837,21 @@ function showVisitHistory() {
             최근 방문
         </div>
 
-        ${history.map(item => `
+        ${history.map(
+            item => `
 
-            <button
-                class="history-item"
-                type="button"
-                onclick="window.open('${escapeAttribute(item.url)}', '_blank')"
-            >
-                ${escapeHtml(item.title)}
-            </button>
+                <button
+                    class="history-item"
+                    type="button"
+                    onclick="window.open('${escapeAttribute(
+                        item.url
+                    )}','_blank','noopener,noreferrer')"
+                >
+                    ${escapeHtml(item.title)}
+                </button>
 
-        `).join("")}
-
+            `
+        ).join("")}
 
         <button
             class="clear-history"
@@ -2031,22 +1860,17 @@ function showVisitHistory() {
         >
             방문 기록 전체 삭제
         </button>
-
     `;
-
 }
 
-
-function clearVisitHistory() {
+function clearVisitHistory(){
 
     localStorage.removeItem(
-        "oscadia_visit_history"
+        getHistoryKey("visit_history")
     );
 
     showVisitHistory();
-
 }
-
 
 /* =========================
    SEARCH SUGGESTIONS
@@ -2071,157 +1895,117 @@ const SEARCH_SUGGESTIONS = [
 
 ];
 
-
-const queryInput =
-    document.getElementById("query");
-
-const suggestions =
-    document.getElementById(
-        "suggestions"
-    );
-
-
 queryInput.addEventListener(
     "input",
     showSuggestions
 );
 
-
-function showSuggestions() {
+function showSuggestions(){
 
     const value =
         queryInput.value
             .trim()
             .toLowerCase();
 
+    if(!value){
 
-    if (!value) {
-
-        suggestions.innerHTML =
-            "";
-
-        suggestions.classList.remove(
-            "show"
-        );
+        suggestions.innerHTML = "";
+        suggestions.classList.remove("show");
 
         return;
-
     }
-
 
     const matches =
         SEARCH_SUGGESTIONS
             .filter(
                 item =>
-                    item
-                        .toLowerCase()
+                    item.toLowerCase()
                         .includes(value)
             )
-            .slice(0, 6);
+            .slice(0,6);
 
+    if(!matches.length){
 
-    if (!matches.length) {
-
-        suggestions.innerHTML =
-            "";
-
-        suggestions.classList.remove(
-            "show"
-        );
+        suggestions.innerHTML = "";
+        suggestions.classList.remove("show");
 
         return;
-
     }
 
-
     suggestions.innerHTML =
-        matches.map(item => `
+        matches.map(
+            item => `
 
-            <div
-                class="suggestion-item"
-                onclick="useSuggestion('${escapeAttribute(item)}')"
-            >
-                ${escapeHtml(item)}
-            </div>
+                <div
+                    class="suggestion-item"
+                    onclick="useSuggestion('${escapeAttribute(
+                        item
+                    )}')"
+                >
+                    ${escapeHtml(item)}
+                </div>
 
-        `).join("");
+            `
+        ).join("");
 
-
-    suggestions.classList.add(
-        "show"
-    );
-
+    suggestions.classList.add("show");
 }
 
-
-function useSuggestion(value) {
+function useSuggestion(value){
 
     queryInput.value =
         value;
 
-    suggestions.classList.remove(
-        "show"
-    );
+    suggestions.classList.remove("show");
 
     search();
-
 }
-
 
 document.addEventListener(
     "click",
     event => {
 
-        if (
-            !event.target.closest(
-                ".search-box"
-            )
-        ) {
+        if(
+            !event.target.closest(".search-box")
+        ){
 
             suggestions.classList.remove(
                 "show"
             );
-
         }
-
     }
 );
-
-
-/* =========================
-   SEARCH
-========================= */
 
 queryInput.addEventListener(
     "keydown",
     event => {
 
-        if (
-            event.key === "Enter"
-        ) {
+        if(event.key === "Enter"){
 
             suggestions.classList.remove(
                 "show"
             );
 
             search();
-
         }
-
     }
 );
 
+/* =========================
+   SEARCH
+========================= */
 
-async function search() {
+async function search(){
 
     const q =
         queryInput.value.trim();
 
     const shortcuts =
-        document.getElementById("shortcuts");
+        document.getElementById(
+            "shortcuts"
+        );
 
-
-    if (!q) {
+    if(!q){
 
         results.innerHTML = "";
 
@@ -2229,31 +2013,22 @@ async function search() {
             .getElementById("aiOverview")
             .classList.remove("show");
 
-        // 검색어가 없으면 바로가기 다시 표시
         shortcuts.style.display = "";
 
         return;
-
     }
 
-
-    // 검색어가 있으면 바로가기 숨김
     shortcuts.style.display = "none";
-
 
     saveSearchHistory(q);
 
-
     results.innerHTML = `
-
         <div class="loading">
             검색 중...
         </div>
-
     `;
 
-
-    try {
+    try{
 
         const response =
             await fetch(
@@ -2262,20 +2037,16 @@ async function search() {
                 encodeURIComponent(q)
             );
 
-
-        if (!response.ok) {
+        if(!response.ok){
 
             throw new Error(
                 "Search failed: " +
                 response.status
             );
-
         }
-
 
         const data =
             await response.json();
-
 
         renderResults(data);
 
@@ -2284,42 +2055,29 @@ async function search() {
             data
         );
 
-
-    } catch (error) {
+    }catch(error){
 
         console.error(
             "OSCADIA 검색 오류:",
             error
         );
 
-
         results.innerHTML = `
-
             <div class="empty">
                 검색 서버에 연결할 수 없습니다.
             </div>
-
         `;
-
     }
-
 }
 
 /* =========================
    AI OVERVIEW
 ========================= */
 
-/*
-    현재는 검색 결과의 제목/설명을 이용한
-    기본 개요 UI.
-
-    실제 AI 생성은 나중에 OscaAI API와 연결.
-*/
-
 function createAIOverview(
     query,
     data
-) {
+){
 
     const box =
         document.getElementById(
@@ -2331,25 +2089,18 @@ function createAIOverview(
             "aiOverviewText"
         );
 
-
-    if (
+    if(
         !data.results ||
         !data.results.length
-    ) {
+    ){
 
-        box.classList.remove(
-            "show"
-        );
+        box.classList.remove("show");
 
         return;
-
     }
 
-
     const firstResults =
-        data.results
-            .slice(0, 3);
-
+        data.results.slice(0,3);
 
     const summary =
         firstResults
@@ -2362,208 +2113,114 @@ function createAIOverview(
             .filter(Boolean)
             .join(" · ");
 
-
     text.textContent =
         `"${query}"에 대한 검색 결과를 바탕으로 한 기본 개요입니다. ` +
         summary;
 
-
-    box.classList.add(
-        "show"
-    );
-
+    box.classList.add("show");
 }
 
-
 /* =========================
-   RESULT RENDERING
+   RESULTS
 ========================= */
 
-function renderResults(data) {
+function renderResults(data){
 
-    if (
+    if(
         !data.results ||
         data.results.length === 0
-    ) {
+    ){
 
         results.innerHTML = `
 
             <div class="empty">
-
                 "${escapeHtml(
                     data.query || ""
-                )}"
-
-                에 대한 검색 결과가 없습니다.
-
+                )}"에 대한 검색 결과가 없습니다.
             </div>
 
         `;
 
         return;
-
     }
-
 
     let html = `
 
         <div class="info">
-            검색 결과 ${data.count}개
+            검색 결과 ${data.count ?? data.results.length}개
         </div>
 
     `;
 
+    html +=
+        data.results
+            .map(
+                page => `
 
-    html += data.results
+                    <div class="result">
 
-        .map(page => `
+                        <div class="result-title">
 
-            <div class="result">
+                            <a
+                                href="${escapeAttribute(
+                                    page.url
+                                )}"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onclick="recordResultVisit(this)"
+                            >
+                                ${escapeHtml(
+                                    page.title ||
+                                    page.url
+                                )}
+                            </a>
 
-                <div class="result-title">
+                        </div>
 
-                    <a
-                        href="${escapeAttribute(page.url)}"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onclick="recordResultVisit(event, this)"
-                    >
-                        ${escapeHtml(
-                            page.title ||
-                            page.url
-                        )}
-                    </a>
+                        <div class="result-url">
+                            ${escapeHtml(page.url)}
+                        </div>
 
-                </div>
+                        <div class="result-description">
+                            ${escapeHtml(
+                                page.description ||
+                                makeSnippet(page)
+                            )}
+                        </div>
 
+                    </div>
 
-                <div class="result-url">
-                    ${escapeHtml(page.url)}
-                </div>
-
-
-                <div class="result-description">
-
-                    ${escapeHtml(
-                        page.description ||
-                        makeSnippet(page)
-                    )}
-
-                </div>
-
-            </div>
-
-        `)
-
-        .join("");
-
+                `
+            )
+            .join("");
 
     results.innerHTML =
         html;
-
 }
 
-
-/* =========================
-   RESULT VISIT
-========================= */
-
-function recordResultVisit(
-    event,
-    element
-) {
-
-    const result =
-        element.closest(
-            ".result"
-        );
-
-    if (!result) {
-        return;
-    }
-
-
-    const url =
-        element.href;
-
-    const title =
-        element.textContent.trim();
-
+function recordResultVisit(element){
 
     saveVisitHistory({
 
         title:
-            title || url,
+            element.textContent.trim() ||
+            element.href,
 
         url:
-            url
+            element.href
 
     });
-
 }
 
-
-/* =========================
-   SNIPPET
-========================= */
-
-function makeSnippet(page) {
+function makeSnippet(page){
 
     const text =
         page.description ||
         page.content ||
         "";
 
-    return text.slice(
-        0,
-        180
-    );
-
+    return text.slice(0,180);
 }
-
-
-/* =========================
-   SECURITY
-========================= */
-
-function escapeHtml(value) {
-
-    return String(value)
-
-        .replaceAll(
-            "&",
-            "&amp;"
-        )
-
-        .replaceAll(
-            "<",
-            "&lt;"
-        )
-
-        .replaceAll(
-            ">",
-            "&gt;"
-        )
-
-        .replaceAll(
-            '"',
-            "&quot;"
-        )
-
-        .replaceAll(
-            "'",
-            "&#039;"
-        );
-
-}
-
-
-function escapeAttribute(value) {
-
-    return escapeHtml(value);
-
-}
-
 
 /* =========================
    SHORTCUTS
@@ -2572,58 +2229,56 @@ function escapeAttribute(value) {
 const DEFAULT_SHORTCUTS = [
 
     {
-        name: "Google",
-        url: "https://www.google.com"
+        name:"Google",
+        url:"https://www.google.com"
     },
 
     {
-        name: "YouTube",
-        url: "https://www.youtube.com"
+        name:"YouTube",
+        url:"https://www.youtube.com"
     },
 
     {
-        name: "GitHub",
-        url: "https://github.com"
+        name:"GitHub",
+        url:"https://github.com"
     }
 
 ];
 
+function getShortcuts(){
 
-function getShortcuts() {
-
-    try {
+    try{
 
         const saved =
             localStorage.getItem(
                 "oscadia_shortcuts"
             );
 
-        if (saved) {
+        if(saved){
 
-            return JSON.parse(
-                saved
-            );
-
+            return JSON.parse(saved);
         }
 
-    } catch {}
+    }catch(error){
+
+        console.error(
+            "바로가기 오류:",
+            error
+        );
+    }
 
     return DEFAULT_SHORTCUTS;
-
 }
 
-
-function saveShortcuts(list) {
+function saveShortcuts(list){
 
     localStorage.setItem(
         "oscadia_shortcuts",
         JSON.stringify(list)
     );
-
 }
 
-
-function renderShortcuts() {
+function renderShortcuts(){
 
     const list =
         document.getElementById(
@@ -2633,203 +2288,147 @@ function renderShortcuts() {
     const shortcuts =
         getShortcuts();
 
-
     list.innerHTML =
-        shortcuts.map(
-            (item, index) => `
+        shortcuts
+            .map(
+                (item,index) => `
 
-                <div
-                    class="shortcut-item"
-                    onclick="openShortcut('${escapeAttribute(item.url)}')"
-                >
-
-                    <button
-                        class="shortcut-delete"
-                        type="button"
-                        onclick="deleteShortcut(event, ${index})"
-                        aria-label="삭제"
+                    <div
+                        class="shortcut-item"
+                        onclick="openShortcut('${escapeAttribute(
+                            item.url
+                        )}')"
                     >
-                        ×
-                    </button>
 
+                        <button
+                            class="shortcut-delete"
+                            type="button"
+                            onclick="deleteShortcut(event,${index})"
+                        >
+                            ×
+                        </button>
 
-                    <div class="shortcut-icon">
-                        ${escapeHtml(
-                            getInitial(
-                                item.name
-                            )
-                        )}
+                        <div class="shortcut-icon">
+                            ${escapeHtml(
+                                getInitial(item.name)
+                            )}
+                        </div>
+
+                        <div class="shortcut-name">
+                            ${escapeHtml(item.name)}
+                        </div>
+
                     </div>
 
-
-                    <div class="shortcut-name">
-                        ${escapeHtml(
-                            item.name
-                        )}
-                    </div>
-
-                </div>
-
-            `
-        ).join("");
-
+                `
+            )
+            .join("");
 }
 
-
-function getInitial(name) {
+function getInitial(name){
 
     return String(
         name || "?"
     )
     .charAt(0)
     .toUpperCase();
-
 }
 
-
-function openShortcut(url) {
+function openShortcut(url){
 
     window.open(
         url,
         "_blank",
         "noopener,noreferrer"
     );
-
 }
-
 
 function deleteShortcut(
     event,
     index
-) {
+){
 
     event.stopPropagation();
-
 
     const list =
         getShortcuts();
 
-
-    list.splice(
-        index,
-        1
-    );
-
+    list.splice(index,1);
 
     saveShortcuts(list);
 
     renderShortcuts();
-
 }
 
-
-function openShortcutModal() {
+function openShortcutModal(){
 
     document
-        .getElementById(
-            "shortcutModal"
-        )
+        .getElementById("shortcutModal")
         .classList.add("show");
 
     document
-        .getElementById(
-            "shortcutName"
-        )
+        .getElementById("shortcutName")
         .focus();
-
 }
 
-
-function closeShortcutModal() {
+function closeShortcutModal(){
 
     document
-        .getElementById(
-            "shortcutModal"
-        )
+        .getElementById("shortcutModal")
         .classList.remove("show");
-
 }
 
-
-function addShortcut() {
+function addShortcut(){
 
     const name =
         document
-            .getElementById(
-                "shortcutName"
-            )
+            .getElementById("shortcutName")
             .value
             .trim();
-
 
     let url =
         document
-            .getElementById(
-                "shortcutUrl"
-            )
+            .getElementById("shortcutUrl")
             .value
             .trim();
 
-
-    if (!name || !url) {
+    if(!name || !url){
 
         alert(
             "사이트 이름과 주소를 입력하세요."
         );
 
         return;
-
     }
 
-
-    if (
-        !/^https?:\/\//i.test(
-            url
-        )
-    ) {
+    if(!/^https?:\/\//i.test(url)){
 
         url =
             "https://" +
             url;
-
     }
-
 
     const list =
         getShortcuts();
 
-
     list.push({
-
-        name:
-            name,
-
-        url:
-            url
-
+        name:name,
+        url:url
     });
 
-
     saveShortcuts(list);
-
     renderShortcuts();
 
     document
-        .getElementById(
-            "shortcutName"
-        )
+        .getElementById("shortcutName")
         .value = "";
 
     document
-        .getElementById(
-            "shortcutUrl"
-        )
+        .getElementById("shortcutUrl")
         .value = "";
 
     closeShortcutModal();
-
 }
-
 
 /* =========================
    ADDRESS BAR
@@ -2840,108 +2439,71 @@ const addressInput =
         "osAddressInput"
     );
 
-
 const addressGo =
     document.getElementById(
         "osAddressGo"
     );
 
-
-async function goAddress() {
+async function goAddress(){
 
     let value =
         addressInput.value.trim();
 
-
-    if (!value) {
+    if(!value){
         return;
     }
 
-
-    if (
-        !/^https?:\/\//i.test(
-            value
-        )
-    ) {
+    if(!/^https?:\/\//i.test(value)){
 
         value =
             "https://" +
             value;
-
     }
 
-
-    try {
-
-        console.log(
-            "[OSCADIA] 주소 큐 등록:",
-            value
-        );
-
+    try{
 
         const response =
             await fetch(
                 OSCADIA_API +
                 "/api/crawl/queue",
                 {
-
-                    method:
-                        "POST",
-
-                    headers: {
-
+                    method:"POST",
+                    headers:{
                         "Content-Type":
                             "application/json"
-
                     },
-
                     body:
                         JSON.stringify({
-                            url: value
+                            url:value
                         })
-
                 }
             );
-
 
         const text =
             await response.text();
 
-
-        console.log(
-            "[OSCADIA] 서버 응답:",
-            response.status,
-            text
-        );
-
-
         let data;
 
-
-        try {
+        try{
 
             data =
                 JSON.parse(text);
 
-        } catch {
+        }catch{
 
             alert(
                 "서버에서 올바른 응답을 받지 못했습니다.\n\n" +
                 "HTTP 상태: " +
-                response.status +
-                "\n\n" +
-                text
+                response.status
             );
 
             return;
-
         }
 
-
-        if (
+        if(
             !response.ok ||
             !data.ok
-        ) {
+        ){
 
             alert(
                 data.error ||
@@ -2949,54 +2511,92 @@ async function goAddress() {
             );
 
             return;
-
         }
 
+        saveVisitHistory({
+            title:value,
+            url:value
+        });
 
-        window.location.href =
+        location.href =
             value;
 
-
-    } catch (error) {
+    }catch(error){
 
         console.error(
-            "[OSCADIA] 주소 처리 오류:",
+            "주소 처리 오류:",
             error
         );
 
-
         alert(
             "주소를 처리하는 중 오류가 발생했습니다.\n\n" +
-            "오류: " +
             error.message
         );
-
     }
-
 }
-
 
 addressGo.addEventListener(
     "click",
     goAddress
 );
 
-
 addressInput.addEventListener(
     "keydown",
     event => {
 
-        if (
-            event.key === "Enter"
-        ) {
-
+        if(event.key === "Enter"){
             goAddress();
-
         }
-
     }
 );
 
+/* =========================
+   MODAL CLOSE
+========================= */
+
+document
+    .getElementById("shortcutModal")
+    .addEventListener(
+        "click",
+        event => {
+
+            if(
+                event.target.id ===
+                "shortcutModal"
+            ){
+
+                closeShortcutModal();
+            }
+        }
+    );
+
+/* =========================
+   AUTH STATE LISTENER
+========================= */
+
+supabaseClient.auth.onAuthStateChange(
+    (event,session) => {
+
+        oscadiaUser =
+            session?.user || null;
+
+        if(!oscadiaUser){
+
+            oscadiaProfile = null;
+
+            renderProfileButton();
+
+            return;
+        }
+
+        setTimeout(
+            () => {
+                loadOSmailSession();
+            },
+            0
+        );
+    }
+);
 
 /* =========================
    INITIALIZE
@@ -3008,39 +2608,13 @@ renderProfileButton();
 
 renderShortcuts();
 
-
-/* =========================
-   CLOSE MODAL
-========================= */
-
-document
-    .getElementById(
-        "shortcutModal"
-    )
-    .addEventListener(
-        "click",
-        event => {
-
-            if (
-                event.target.id ===
-                "shortcutModal"
-            ) {
-
-                closeShortcutModal();
-
-            }
-
-        }
-    );
-
+loadOSmailSession();
 
 /* =========================
    SERVICE WORKER
 ========================= */
 
-if (
-    "serviceWorker" in navigator
-) {
+if("serviceWorker" in navigator){
 
     window.addEventListener(
         "load",
@@ -3064,20 +2638,17 @@ if (
                     error => {
 
                         console.error(
-                            "OSCADIA Service Worker registration failed:",
+                            "Service Worker 오류:",
                             error
                         );
 
                     }
                 );
-
         }
     );
-
 }
 
 </script>
 
 </body>
-
 </html>
