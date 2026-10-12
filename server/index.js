@@ -2477,6 +2477,26 @@ app.get(
 );
 
 
+/* ========================================
+   Omap 지도 설정 API
+======================================== */
+
+app.get("/api/omap/config", (req, res) => {
+    const mapboxToken = process.env.MAPBOX_PUBLIC_TOKEN;
+
+    if (!mapboxToken || !mapboxToken.startsWith("pk.")) {
+        return res.status(503).json({
+            ok: false,
+            error: "Omap 지도 설정이 완료되지 않았습니다."
+        });
+    }
+
+    return res.json({
+        ok: true,
+        mapboxToken
+    });
+});
+
 // ========================================
 // 존재하지 않는 API 처리
 // ========================================
