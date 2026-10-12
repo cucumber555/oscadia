@@ -2477,12 +2477,14 @@ app.get(
 );
 
 
+
 /* ========================================
    Omap 지도 설정 API
 ======================================== */
 
 app.get("/api/omap/config", (req, res) => {
     const mapboxToken = process.env.MAPBOX_PUBLIC_TOKEN;
+    const vworldKey = process.env.VWORLD_API_KEY || "";
 
     if (!mapboxToken || !mapboxToken.startsWith("pk.")) {
         return res.status(503).json({
@@ -2491,11 +2493,20 @@ app.get("/api/omap/config", (req, res) => {
         });
     }
 
+    if (!vworldKey) {
+        return res.status(503).json({
+            ok: false,
+            error: "브이월드 인증키가 설정되지 않았습니다."
+        });
+    }
+
     return res.json({
         ok: true,
-        mapboxToken
+        mapboxToken,
+        vworldKey
     });
 });
+
 
 // ========================================
 // 존재하지 않는 API 처리
